@@ -21,8 +21,8 @@ const MapPath = ({ winSize,
             overflow: 'visible',
             zIndex: -2,
             position: 'fixed',
-            top: winSize === 1 ? '11px' : '0px',
-            marginLeft: winSize === 1 ? '-32px' : '0px',
+            top: winSize === 1 ? '11px' : '60px',
+            marginLeft: winSize === 1 ? '-32px' : '40px',
         }}
     >
         <defs>
