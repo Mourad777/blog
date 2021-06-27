@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StyledFormTextInput, StyledBlueButton, StyledRedButton } from '../blog/StyledComponents';
 import { List, TextArea, Form, Button } from 'semantic-ui-react'
 import { AppUrl } from './utility';
 import axios from 'axios';
 import './tinymceReadonly.css'
 import Avatar from 'react-avatar';
-import { useHistory } from 'react-router';
-import { gsap } from 'gsap/all';
+import { useHistory, useParams } from 'react-router';
+import { gsap,ScrollTrigger } from 'gsap/all';
 
 const Replies = ({ comment, setReplyComment }) => {
     return (
@@ -39,10 +39,13 @@ const Replies = ({ comment, setReplyComment }) => {
     )
 }
 
-const Post = ({ postsFromDB, selectedPost, refPosts }) => {
+const Post = ({ postsFromDB, refPosts }) => {
+
+    const params = useParams();
+    const selectedPost = params.postId;
     console.log('------------------------------------------postsFromDB', postsFromDB)
     const post = (postsFromDB || []).find(p => p.id.toString() === selectedPost);
-
+    const postContainer = useRef(null)
     const [comments, setComments] = useState([]);
     const [name, setName] = useState('');
     const [content, setComment] = useState('');
@@ -80,20 +83,38 @@ const Post = ({ postsFromDB, selectedPost, refPosts }) => {
         setReplyComment('');
     }
     useEffect(() => {
+        // ScrollTrigger.create({
+        //     trigger: postContainer.current,
+        //     start: "top top",
+        //     // end:() => "+=" + (panelsContainer.offsetHeight - innerHeight),
+        //     // endTrigger:panel,
+        //     snap: true,
+        //     markers: true,
+            
+        // });
+        // gsap.to(postContainer.current, {
+        //     ease: "ease-in",
+        //     duration:1,
+        //     delay:1,
+        //     scrollTrigger: {
+        //         trigger: postContainer.current,
+        //         start: 'top',       
+        //     }
+        // });
         const getComments = async () => {
             const commentsRes = await axios.get(`${AppUrl}api/comments/post/${selectedPost}`);
             console.log('commentsRes.data', commentsRes.data)
             setComments(commentsRes.data);
         }
         getComments()
-    }, [selectedPost]);
+    }, []);
 
     console.log('selec post', selectedPost)
     const history = useHistory();
 
     if (!post || !(postsFromDB.length > 0)) return null;
     return (
-        <div style={{ width: '100%', height: '100%', background: 'white', padding: '40px 20px' }}>
+        <div ref={postContainer} style={{ width: '100%', height: '100%', background: '#fff', padding: '40px 20px', position: 'absolute', zIndex: 999 }}>
             <Button labelPosition='left' icon='left chevron' content='Back' onClick={() => {
                 // gsap.to(window, { duration: 1, scrollTo: refPosts.current });
 
@@ -115,7 +136,7 @@ const Post = ({ postsFromDB, selectedPost, refPosts }) => {
                 />} */}
 
             {comments.length > 0 && <p style={{ fontSize: '2.5em', marginTop: 30 }}>{replyComment ? 'Comment' : 'Comments'}</p>}
-            <Form>
+            <Form style={{paddingBottom:20}}>
                 {replyComment ?
                     <div style={{ display: 'flex', margin: '20px 0' }}>
                         <Avatar

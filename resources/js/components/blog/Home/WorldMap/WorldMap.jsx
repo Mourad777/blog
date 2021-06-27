@@ -34,7 +34,7 @@ const WorldMap = ({ winSize, setSelectedSection, reference, postsFromDB=[] }) =>
 
     }
     return (
-        <div style={{ paddingTop: 50, background: '#ece7e2', height: '100%', width: '100%' }} ref={reference}>
+        <div style={{ paddingTop: 50, background: '#ece7e2', height: '100vh', width: '100%' }} ref={reference}>
             <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#daad86', textAlign: 'center' }}>Pick a destination!</p>
             <ComposableMap
                 style={

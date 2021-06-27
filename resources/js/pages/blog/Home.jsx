@@ -55,6 +55,7 @@ import LatestPostsSection from "./LatestsPosts";
 import PostsSection from "./Posts"
 import HorizontalScrollSection from "./HorizontalScroll";
 import HeroSectionContent from "./HeroSectionContent";
+import { Fragment } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
@@ -92,11 +93,8 @@ const Home = ({ }) => {
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
 
-    const [containerWidth, setContainerWidth] = useState(innerWidth * 2)
-
-
     const params = useParams();
-
+    console.log('selectedPost', selectedPost)
     useEffect(() => {
         console.log('params... changed ----------------------', params)
         if (params.postId) {
@@ -139,25 +137,42 @@ const Home = ({ }) => {
     }, [])
 
     useEffect(() => {
+        //reset triggers since 
+        const triggers = ScrollTrigger.getAll()
+        for (let i = 0; i < triggers.length; i++) {
+            console.log('kill trigger ', triggers[i])
+            triggers[i].kill(true);
+        }
+        // if (selectedSection) {
+        //     for (let i = 0; i < triggers.length; i++) {
+        //         triggers[i].disable(true);
+        //     }
+        // } else {
+        //     for (let i = 0; i < triggers.length; i++) {
+        //         triggers[i].disable(false);
+        //     }
+        // }
+        if (!selectedSection) {
+            const sections = [refSection2, refSection3, refSection4, refSection5, refSection6, refSectionX].filter(i => i);
 
-        const sections = [refSection2, refSection3, refSection4, refSection5, refSection6, refSectionX].filter(i => i);
+            sections.forEach((pan, i) => {
+                if (!pan) return;
+                ScrollTrigger.create({
+                    trigger: pan.current,
+                    start: "top top",
+                    // end:() => "+=" + (panelsContainer.offsetHeight - innerHeight),
+                    // endTrigger:panel,
+                    snap: true,
+                    markers: true,
+                });
 
-        sections.forEach((pan, i) => {
-            if (!pan) return;
-            ScrollTrigger.create({
-                trigger: pan.current,
-                start: "top top",
-                // end:() => "+=" + (panelsContainer.offsetHeight - innerHeight),
-                // endTrigger:panel,
-                snap: true,
-                markers: true,
             });
 
-        });
+            animate()
+        }
 
-        animate()
 
-    }, [refSection2, refSection3, refSection4, refSection5, refSection6, refSectionX])
+    }, [refSection2, refSection3, refSection4, refSection5, refSection6, refSectionX, selectedSection])
 
     const [winSize, setWinSize] = useState(
         getWindowSizeInteger(window.innerWidth)
@@ -190,60 +205,70 @@ const Home = ({ }) => {
 
 
     return (
-
-        <div id="main" style={{ overflow: 'hidden' }}>
-            <Loader isAssetLoaded={isAssetLoaded} />
-            {winSize > 1 && (
-                <Navigation
-                    selectedSection={selectedSection}
-                    isPosts={postsFromDB.length > 0}
-                    componentReferences={
-                        {
-                            welcome: refSection1,
-                            posts: refSection2,
-                            destinations: refSection3,
-                            photos: refSection4,
-                            videos: refSection5,
-                            contact: refSection6
-                        }
-                    }
-                />
-            )}
-
-
-            {/* must use a lower resolution map for mobile devices */}
-            <StyledMap windowWidth={winSize} />
-
-            <StyledMapOverlay id="map-overlay" windowWidth={winSize} />
-
-            {/* path drawing on world map svg */}
-            {winSize > 1 && (<MapPath winSize={winSize} />)}
-
-            <div id="container" style={{ position: "relative" }}>
-                <StyledHeroSection ref={refSection1} id="hero-section" >
-                    <HeroSectionContent heroPicMainRef={heroPicMainRef} winSize={winSize} isAssetLoaded={isAssetLoaded} />
-                </StyledHeroSection>
-                {/* the spacer section is so that gsap will snap to latest post section if the top part of that section is in view port */}
-                <div style={{ overflow: 'hidden', width: '100%', height: '100vh' }} ref={refSectionX} />
-                <LatestPostsSection reference={refSection2} postsFromDB={postsFromDB} winSize={winSize} />
-
-                <WorldMap reference={refSection3} postsFromDB={postsFromDB} winSize={winSize} />
-                {/* <Country reference={refSectionDestination} postsFromDB={postsFromDB} /> */}
-
-                <PhotosSection reference={refSection4} winSize={winSize} />
-                {/* <PhotosSectionDetail reference={refSectionPhotos}/> */}
-
-                <VideosSection reference={refSection5} winSize={winSize} />
-                {/* <VideosSectionDetail reference={refSectionVideos}/> */}
-
-                <StyledContactSection ref={refSection6} id="contact-section">
-                    <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#fff', textAlign: 'center' }}>Get In Touch</p>
-                    <ContactForm />
-                </StyledContactSection>
+        <Fragment>
+            {selectedSection ? 
+            <div>
+                {selectedPost && (<Post postsFromDB={postsFromDB} />)}
+                {selectedDestination && (<Country postsFromDB={postsFromDB} />)}
+                {selectedPhoto && (<PhotosSectionDetail postsFromDB={postsFromDB} />)}
+                {selectedVideo && (<VideosSectionDetail postsFromDB={postsFromDB} />)}
             </div>
 
-            {/* floating rotating icons */}
-            {/* {[
+                :
+                <div id="main" style={{ overflow: 'hidden' }}>
+
+                    <Loader isAssetLoaded={isAssetLoaded} />
+                    {winSize > 1 && (
+                        <Navigation
+                            selectedSection={selectedSection}
+                            isPosts={postsFromDB.length > 0}
+                            componentReferences={
+                                {
+                                    welcome: refSection1,
+                                    posts: refSection2,
+                                    destinations: refSection3,
+                                    photos: refSection4,
+                                    videos: refSection5,
+                                    contact: refSection6
+                                }
+                            }
+                        />
+                    )}
+
+
+                    {/* must use a lower resolution map for mobile devices */}
+                    <StyledMap windowWidth={winSize} />
+
+                    <StyledMapOverlay id="map-overlay" windowWidth={winSize} />
+
+                    {/* path drawing on world map svg */}
+                    {winSize > 1 && (<MapPath winSize={winSize} />)}
+
+                    <div id="container" style={{ position: "relative" }}>
+                        <StyledHeroSection ref={refSection1} id="hero-section" >
+                            <HeroSectionContent heroPicMainRef={heroPicMainRef} winSize={winSize} isAssetLoaded={isAssetLoaded} />
+                        </StyledHeroSection>
+                        {/* the spacer section is so that gsap will snap to latest post section if the top part of that section is in view port */}
+                        <div style={{ overflow: 'hidden', width: '100%', height: '100vh' }} ref={refSectionX} />
+                        <LatestPostsSection reference={refSection2} postsFromDB={postsFromDB} winSize={winSize} />
+
+                        <WorldMap reference={refSection3} postsFromDB={postsFromDB} winSize={winSize} />
+                        {/* <Country reference={refSectionDestination} postsFromDB={postsFromDB} /> */}
+
+                        <PhotosSection reference={refSection4} winSize={winSize} />
+                        {/* <PhotosSectionDetail reference={refSectionPhotos}/> */}
+
+                        <VideosSection reference={refSection5} winSize={winSize} />
+                        {/* <VideosSectionDetail reference={refSectionVideos}/> */}
+
+                        <StyledContactSection ref={refSection6} id="contact-section">
+                            <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#fff', textAlign: 'center' }}>Get In Touch</p>
+                            <ContactForm />
+                        </StyledContactSection>
+                    </div>
+
+                    {/* floating rotating icons */}
+                    {/* {[
                 { style: getCompassStyle(winSize), path: compass },
                 { style: getPlaneStyle(winSize), path: airplane },
                 { style: getFeetStyle(winSize), path: footPrints }
@@ -260,7 +285,8 @@ const Home = ({ }) => {
                     </svg>
             ))} */}
 
-        </div>
+                </div>}
+        </Fragment>
 
     );
 };

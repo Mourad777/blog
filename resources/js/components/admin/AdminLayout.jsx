@@ -24,7 +24,10 @@ import StarBorder from '@material-ui/icons/StarBorder'
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import CommentIcon from '@material-ui/icons/Comment';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
-import { useParams,useHistory } from 'react-router';
+
+import PhotoIcon from '@material-ui/icons/PhotoLibrary'
+import VideoIcon from '@material-ui/icons/MovieCreation';
+import { useParams, useHistory } from 'react-router';
 
 const drawerWidth = 240;
 
@@ -159,8 +162,12 @@ export default function PersistentDrawerLeft({ children }) {
                     </ListItem>
                     <Collapse in={nestedOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                            {[{ text: 'New post', icon: PostAddIcon,url:'/admin/create-post' }, { text: 'View posts', icon: DynamicFeedIcon,url:'/admin/posts' }, { text: 'Comments', icon: CommentIcon }].map((item, index) => (
-                                <ListItem onClick={()=>history.push(item.url)} button key={item.text} className={classes.nested}>
+                            {[
+                                { text: 'New post', icon: PostAddIcon, url: '/admin/create-post' },
+                                { text: 'View posts', icon: DynamicFeedIcon, url: '/admin/posts' },
+                                { text: 'Comments', icon: CommentIcon }
+                            ].map((item, index) => (
+                                <ListItem onClick={() => history.push(item.url)} button key={item.text} className={classes.nested}>
                                     <ListItemIcon><item.icon /></ListItemIcon>
                                     <ListItemText primary={item.text} />
                                 </ListItem>
@@ -170,10 +177,13 @@ export default function PersistentDrawerLeft({ children }) {
                     </Collapse>
 
 
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
+                    {[
+                        { text: 'Photos', icon: PhotoIcon, url: '/admin/photos' },
+                        { text: 'Videos', icon: VideoIcon, url: '/admin/videos' },
+                    ].map((item, index) => (
+                        <ListItem onClick={() => history.push(item.url)} button key={item.text}>
+                            <ListItemIcon><item.icon /></ListItemIcon>
+                            <ListItemText primary={item.text} />
                         </ListItem>
                     ))}
                 </List>

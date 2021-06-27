@@ -60,6 +60,29 @@ Route::delete('/api/comments/{id}/delete', 'CommentsController@destroy');
 Route::post('/api/comments/approve-comment', 'CommentsController@approve_comment');
 
 
+Route::get('/api/photos', 'PhotosController@index');
+
+Route::post('/api/photos/save', 'PhotosController@store');
+
+Route::post('/api/photos/update/{id}', 'PhotosController@update');
+
+Route::delete('/api/photos/delete/{id}', 'PhotosController@destroy');
+
+
+Route::get('/api/videos', 'VideosController@index');
+
+Route::post('/api/videos/save', 'VideosController@store');
+
+Route::post('/api/videos/update/{id}', 'VideosController@update');
+
+Route::delete('/api/videos/delete/{id}', 'VideosController@destroy');
+
+
+Route::get('/api/configurations', 'ConfigurationsController@index');
+
+Route::post('/api/configurations/update', 'ConfigurationsController@update');
+
+
 Route::get('/{any?}', function () {
     return view('index');
 })->where('any', '^((?!api).)*$');

@@ -19,7 +19,6 @@ const App = () => {
         <BrowserRouter history={history}>
             <Switch>
                 <Route path="/admin">
-
                     <AdminLayout>
                         <Route exact path="/admin">
                             <Admin />
@@ -39,7 +38,7 @@ const App = () => {
                         <Route exact path="/admin/edit-post/:id">
                             <CreatePost isEditing />
                         </Route>
-                        <Route exact path="/admin/images">
+                        <Route exact path="/admin/photos">
                             <Images />
                         </Route>
                         <Route exact path="/admin/videos">
