@@ -2,48 +2,71 @@ import React, { useState, useEffect } from "react";
 import ReactPaginate from 'react-paginate';
 import { gsap } from 'gsap/all'
 import './pagination.css'
+import { AppUrl } from "./utility";
+import axios from 'axios'
+import { useHistory } from "react-router";
 
-const loremPhotos = [
-    "https://loremflickr.com/320/240/dog",
-    "https://loremflickr.com/g/320/240/paris",
-    "https://loremflickr.com/320/240/brazil,rio",
-    "https://loremflickr.com/320/240?random=1",
-    "https://loremflickr.com/320/240?random=2",
-    "https://loremflickr.com/320/240?random=3",
-    "https://loremflickr.com/320/240?random=4",
-    "https://loremflickr.com/320/240?random=5",
-    "https://loremflickr.com/320/240?random=6",
-    "https://loremflickr.com/320/240?random=7",
-    "https://loremflickr.com/320/240?random=8",
-    "https://loremflickr.com/320/240?random=9",
-    "https://loremflickr.com/320/240?random=10",
-    "https://loremflickr.com/320/240?random=11",
-    "https://loremflickr.com/320/240?random=12",
-    "https://loremflickr.com/320/240?random=13",
-    "https://loremflickr.com/320/240?random=14",
-    "https://loremflickr.com/320/240?random=15",
-    "https://loremflickr.com/320/240?random=16",
-    "https://loremflickr.com/320/240?random=17",
-    "https://loremflickr.com/320/240?random=18",
-    "https://loremflickr.com/320/240?random=19",
-    "https://loremflickr.com/320/240?random=20"
-]
-
-export default ({ winSize, setPhoto, setSelectedSection, selectedSection, reference }) => {
+export default ({ reference }) => {
     // const [photo, setPhoto] = useState("");
     const [data, setData] = useState([]);
     const [offset, setOffset] = useState(0);
     const perPage = 9;
     const [pageCount, setPageCount] = useState(0);
+    const [photos,setPhotos] = useState([]);
+    const history = useHistory();
     const getData = async () => {
-        const slice = loremPhotos.slice(offset === 1 || offset === 0 ? 0 : offset * perPage - perPage, offset === 0 ? perPage : offset * perPage)
+        const slice = photos.slice(offset === 1 || offset === 0 ? 0 : offset * perPage - perPage, offset === 0 ? perPage : offset * perPage);
+        console.log('slice',slice)
         setData(slice)
-        setPageCount(Math.ceil(loremPhotos.length / perPage))
+        console.log('photos.length / perPage)',photos.length / perPage)
+        setPageCount(Math.ceil(photos.length / perPage))
     }
 
     useEffect(() => {
         getData()
-    }, [offset])
+    }, [offset,photos]);
+
+    useEffect(() => {
+        //fetch photos
+        const getPhotos = async () => {
+            const fetchPhotosUrl = `${AppUrl}api/photos`;
+            const resFetchPhotos = await axios.get(fetchPhotosUrl);
+            console.log('Fetch photos response', resFetchPhotos);
+
+            const fetchConfigUrl = `${AppUrl}api/configurations`;
+            const resFetchConfigurations = await axios.get(fetchConfigUrl);
+            console.log('Fetch config response', resFetchConfigurations);
+            const formattedPhotos = resFetchPhotos.data.map(item=>{
+                return {
+                    src:item.src,
+                    id:item.id,
+                }
+            });
+
+            console.log('formattedPhotos',formattedPhotos)
+            if(resFetchConfigurations.data !== 'no_config'){
+                const order = JSON.parse(resFetchConfigurations.data.photo_gallery_order);
+                console.log('saved order: ',order);
+                const orderedFormattedPhotos = [];
+                order.forEach(number=>{
+                    formattedPhotos.forEach(photo=>{
+                        if(photo.id === number){
+                            orderedFormattedPhotos.push(photo);
+                        }
+                    })
+                });
+                console.log('orderedFormattedPhotos',orderedFormattedPhotos);
+                setPhotos(orderedFormattedPhotos)
+            } else {
+                console.log('default order')
+                setPhotos(formattedPhotos)
+            }
+
+
+           
+        }
+        getPhotos()
+    }, [])
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
@@ -52,7 +75,7 @@ export default ({ winSize, setPhoto, setSelectedSection, selectedSection, refere
 
 
     return (
-        <div style={{ height: '100vh', background: 'purple', width: '100%' }} ref={reference}>
+        <div style={{ height: '100vh', background: 'rgb(218, 173, 134)', width: '100%' }} ref={reference}>
             <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }}>Photos</p>
             <div
                 style={{
@@ -63,16 +86,11 @@ export default ({ winSize, setPhoto, setSelectedSection, selectedSection, refere
                     margin: "auto"
                 }}
             >
-                {data.map(p => (
+                {data.map((p,i) => (
                     <div
-                        key={p}
+                        key={`photo-[${i+1}]`}
                         onClick={() => {
-                            setPhoto(p)
-                            setSelectedSection('photos')
-
-                            // gsap.to(window, { duration: 1, scrollTo: refB.current });
-
-
+                            history.push(`/photo/${p.id}`)
                         }}
                         style={{
                             cursor: "pointer",
@@ -83,7 +101,7 @@ export default ({ winSize, setPhoto, setSelectedSection, selectedSection, refere
                                 "30%" /* = width for a 1:1 aspect ratio */,
                             margin: "1.66%",
                             overflow: "hidden",
-                            background: `url('${p}')`,
+                            background: `url('${p.src}')`,
                             backgroundSize: "cover",
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "center"

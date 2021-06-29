@@ -7,7 +7,7 @@ const dummyPhotos = [
 ];
 
 export default ({reference}) => (
-    <div style={{ padding: 50,height:'100vh',background:'blue',width:'100%' }} ref={reference}>
+    <div style={{ padding: 50,height:'100vh',background:'rgb(236, 231, 226)',width:'100%' }} ref={reference}>
         <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#daad86', textAlign: 'center' }}>Videos</p>
         <div className="row" style={{ justifyContent: 'center' }}>
             {dummyPhotos.map((photo, i) => (

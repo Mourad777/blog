@@ -23,9 +23,12 @@ class CreatePhotosTable extends Migration
 
             $table->string('camera')->nullable();
             $table->string('lens')->nullable();
+            $table->string('focal_length')->nullable();
             $table->string('aperture')->nullable();
-            $table->string('shutter')->nullable();
+            $table->string('shutter_speed')->nullable();
             $table->string('iso')->nullable();
+
+            $table->date('date_taken')->nullable();
 
             $table->string('country')->nullable();
             $table->text('tags')->nullable();

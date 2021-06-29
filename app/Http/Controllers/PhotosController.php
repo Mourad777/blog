@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Photo;
+use Illuminate\Support\Facades\Log;
 
 use Storage;
 
@@ -17,13 +18,14 @@ class PhotosController extends Controller
      */
     public function index()
     {
-        
+
         $photos = Photo::all();
 
         $photos->map(function ($photo) {
             $photo->src = Storage::disk(name: 's3')->url($photo->url);
             $photo->height = 1;
             $photo->width = 1.5;
+            $photo->categories = $photo->categories()->get();
             return $photo;
         });
 
@@ -50,20 +52,19 @@ class PhotosController extends Controller
     {
         //
         $photo = new Photo;
-
         if ($request->has('image')) {
-
             $image_base_url = $request->file(key: 'image')->store(path: 'gallery', options: 's3');
-
             Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
-            // return Storage::disk(name:'s3')->url($image_base_url);
-            // return Storage::cloud()->url($image_base_url);
             $photo->url = $image_base_url;
-
+            $photo->camera = $request->camera;
+            $photo->lens = $request->lens;
+            $photo->focal_length = $request->focal_length;
+            $photo->shutter_speed = $request->shutter_speed;
+            $photo->aperture = $request->aperture;
+            $photo->iso = $request->iso;
+            $photo->date_taken = $request->date_taken;
             $photo->save();
-
             $photo->src = Storage::disk(name: 's3')->url($image_base_url);
-
             return $photo;
         }
     }
@@ -77,6 +78,9 @@ class PhotosController extends Controller
     public function show($id)
     {
         //
+        $photo = Photo::find($id);
+        $photo->src = Storage::disk(name: 's3')->url($photo->url);
+        return $photo;
     }
 
     /**
@@ -100,6 +104,28 @@ class PhotosController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $photo = Photo::find($id);
+
+        $photo->title = $request->title;
+        $photo->photographer = $request->photographer;
+        $photo->description = $request->description;
+
+        $photo->camera = $request->camera;
+        $photo->lens = $request->lens;
+        $photo->focal_length = $request->focal_length;
+        $photo->shutter_speed = $request->shutter_speed;
+        $photo->aperture = $request->aperture;
+        $photo->iso = $request->iso;
+        $photo->date_taken = $request->date_taken;
+
+        $photo->tags = $request->tags;
+        $photo->country = $request->country;
+        Log::info('photo 2' . $photo);
+        $photo->save();
+        $photo->categories()->sync(json_decode($request->selected_categories));
+
+
+        return $photo;
     }
 
     /**
@@ -111,5 +137,6 @@ class PhotosController extends Controller
     public function destroy($id)
     {
         //
+        Photo::destroy($id);
     }
 }

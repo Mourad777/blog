@@ -62,6 +62,8 @@ Route::post('/api/comments/approve-comment', 'CommentsController@approve_comment
 
 Route::get('/api/photos', 'PhotosController@index');
 
+Route::get('/api/photo/{id}', 'PhotosController@show');
+
 Route::post('/api/photos/save', 'PhotosController@store');
 
 Route::post('/api/photos/update/{id}', 'PhotosController@update');

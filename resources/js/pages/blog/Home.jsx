@@ -61,7 +61,7 @@ gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
 
 
-const Home = ({ }) => {
+const Home = ({ winSize }) => {
 
     const refSection1 = useRef(null)
     const refSection2 = useRef(null)
@@ -70,57 +70,10 @@ const Home = ({ }) => {
     const refSection5 = useRef(null)
     const refSection6 = useRef(null)
     const refSectionX = useRef(null)
-    const panelsContainer = useRef(null)
-    const refSectionPosts = useRef(null)
-    const refSectionDestination = useRef(null)
-    const refSectionPhotos = useRef(null)
-    const refSectionVideos = useRef(null)
-
-    const refSpacerOne = useRef(null)
-
-    const panelOneHRef = useRef(null)
-    const panelTwoHRef = useRef(null)
-    const horizontalScrollContainerRef = useRef(null)
-
     const heroPicMainRef = useRef(null);
 
     const [isAssetLoaded, setIsAssetLoaded] = useState(false);
     const [postsFromDB, setPostsFromDB] = useState([]);
-    const [selectedSection, setSelectedSection] = useState('');
-
-    const [selectedPost, setSelectedPost] = useState(null);
-    const [selectedDestination, setSelectedDestination] = useState(null);
-    const [selectedPhoto, setSelectedPhoto] = useState(null);
-    const [selectedVideo, setSelectedVideo] = useState(null);
-
-    const params = useParams();
-    console.log('selectedPost', selectedPost)
-    useEffect(() => {
-        console.log('params... changed ----------------------', params)
-        if (params.postId) {
-            setSelectedPost(params.postId)
-            setSelectedSection('posts')
-        }
-        else if (params.country) {
-            setSelectedDestination(params.country)
-            setSelectedSection('destination')
-        }
-        else if (params.photoId) {
-            setSelectedPhoto(params.photoId)
-            setSelectedSection('photos')
-        }
-        else if (params.videoId) {
-            setSelectedVideo(params.videoId)
-            setSelectedSection('videos')
-        } else {
-            setSelectedSection('')
-            setSelectedPost(null)
-            setSelectedDestination(null)
-            setSelectedPhoto(null)
-            setSelectedVideo(null)
-        }
-    }, [params])
-
 
     useEffect(() => {
         //function that inserts placeholders in the posts array when necessary
@@ -137,55 +90,28 @@ const Home = ({ }) => {
     }, [])
 
     useEffect(() => {
-        //reset triggers since 
-        const triggers = ScrollTrigger.getAll()
-        for (let i = 0; i < triggers.length; i++) {
-            console.log('kill trigger ', triggers[i])
-            triggers[i].kill(true);
-        }
-        // if (selectedSection) {
-        //     for (let i = 0; i < triggers.length; i++) {
-        //         triggers[i].disable(true);
-        //     }
-        // } else {
-        //     for (let i = 0; i < triggers.length; i++) {
-        //         triggers[i].disable(false);
-        //     }
-        // }
-        if (!selectedSection) {
-            const sections = [refSection2, refSection3, refSection4, refSection5, refSection6, refSectionX].filter(i => i);
-
-            sections.forEach((pan, i) => {
-                if (!pan) return;
-                ScrollTrigger.create({
-                    trigger: pan.current,
-                    start: "top top",
-                    // end:() => "+=" + (panelsContainer.offsetHeight - innerHeight),
-                    // endTrigger:panel,
-                    snap: true,
-                    markers: true,
-                });
-
+        const sections = [refSection2, refSection3, refSection4, refSection5, refSection6, refSectionX].filter(i => i);
+        sections.forEach((pan, i) => {
+            if (!pan) return;
+            ScrollTrigger.create({
+                trigger: pan.current,
+                start: "top top",
+                // end:() => "+=" + (panelsContainer.offsetHeight - innerHeight),
+                // endTrigger:panel,
+                snap: true,
+                markers: true,
             });
 
-            animate()
-        }
+        });
 
-
+        animate()
     }, [refSection2, refSection3, refSection4, refSection5, refSection6, refSectionX, selectedSection])
-
-    const [winSize, setWinSize] = useState(
-        getWindowSizeInteger(window.innerWidth)
-    );
 
     const assetLoadedHandler = () => {
         setIsAssetLoaded(true);
     };
 
-    const getWindowSize = () => {
-        const windowSizeInt = getWindowSizeInteger(window.innerWidth);
-        setWinSize(windowSizeInt);
-    };
+
 
     useEffect(() => {
         //function that determines when heavy images are loaded
@@ -200,19 +126,19 @@ const Home = ({ }) => {
             if (img.complete) img.onload();
         }
         //function to listen to viewport width changes
-        addEventListener("resize", getWindowSize, { passive: true });
+        // addEventListener("resize", getWindowSize, { passive: true });
     }, [postsFromDB])
 
 
     return (
         <Fragment>
-            {selectedSection ? 
-            <div>
-                {selectedPost && (<Post postsFromDB={postsFromDB} />)}
-                {selectedDestination && (<Country postsFromDB={postsFromDB} />)}
-                {selectedPhoto && (<PhotosSectionDetail postsFromDB={postsFromDB} />)}
-                {selectedVideo && (<VideosSectionDetail postsFromDB={postsFromDB} />)}
-            </div>
+            {selectedSection ?
+                <div>
+                    {selectedPost && (<Post postsFromDB={postsFromDB} />)}
+                    {selectedDestination && (<Country postsFromDB={postsFromDB} />)}
+                    {selectedPhoto && (<PhotosSectionDetail postsFromDB={postsFromDB} />)}
+                    {selectedVideo && (<VideosSectionDetail postsFromDB={postsFromDB} />)}
+                </div>
 
                 :
                 <div id="main" style={{ overflow: 'hidden' }}>

@@ -1,9 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { DownArrow, Camera, Aperture, ShutterSpeed, Iso } from "./svgs";
 import { FaWindowClose } from "react-icons/fa";
+import { useParams } from 'react-router';
+import axios from 'axios'
+import { AppUrl } from './utility';
 
-const Photo = ({photo,winSize}) => {
-    return (<div style={{ background: '#ece7e2', height: '100%',width:'100%' }}>
+const Photo = ({ winSize }) => {
+    const params = useParams();
+    console.log('photo params', params);
+    const [photo, setPhoto] = useState({});
+
+    useEffect(() => {
+        const getPhoto = async () => {
+            const photoResponse = await axios.get(`${AppUrl}api/photo/${params.photoId}`);
+            console.log('photo response', photoResponse)
+            setPhoto(photoResponse.data);
+        }
+        getPhoto()
+    }, [])
+
+    return (<div style={{ background: '#ece7e2', height: '100%', width: '100%' }}>
         <div
             style={{
                 opacity: photo ? 1 : 0,
@@ -32,7 +48,7 @@ const Photo = ({photo,winSize}) => {
                     style={{
                         display: "flex",
                         flexDirection:
-                            winSize === 1 ? "column" : "initial",
+                            winSize < 2 ? "column" : "initial",
                         height: "100%"
                     }}
                 >
@@ -45,7 +61,7 @@ const Photo = ({photo,winSize}) => {
                         }}
                         className="image-container"
                     >
-                        <div>
+                        <div className="image">
                             {/* <FaWindowClose onClick={() => setPhoto("")} size="2em" color="white" cursor="pointer" /> */}
                             <img
                                 style={{
@@ -68,7 +84,7 @@ const Photo = ({photo,winSize}) => {
                                                 : 800,
                                     objectFit: "cover"
                                 }}
-                                src={photo}
+                                src={photo.src}
                                 alt=""
                             />{" "}
 
@@ -88,7 +104,11 @@ const Photo = ({photo,winSize}) => {
                         <div
                             style={{
                                 color: "white",
-                                padding: winSize === 1 ? 30 : ""
+                                padding: winSize === 1 ? 30 : "",
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-around',
+                                minHeight: 200,
                             }}
                             className="photo-icon-container"
                         >
@@ -109,7 +129,7 @@ const Photo = ({photo,winSize}) => {
                             >
                                 <Camera />
                                 <p style={{ marginLeft: 10 }}>
-                                    Camera <span>Sony A6400</span>
+                                    Camera <span>{photo.camera}</span>
                                 </p>
                             </div>
                             <div
@@ -117,7 +137,7 @@ const Photo = ({photo,winSize}) => {
                             >
                                 <Aperture />
                                 <p style={{ marginLeft: 10 }}>
-                                    Aperture <span>f4</span>
+                                    Aperture <span>{photo.aperture}</span>
                                 </p>
                             </div>
                             <div
@@ -125,7 +145,7 @@ const Photo = ({photo,winSize}) => {
                             >
                                 <ShutterSpeed />
                                 <p style={{ marginLeft: 10 }}>
-                                    Shutter <span>1/100</span>
+                                    Shutter <span>{photo.shutter_speed}</span>
                                 </p>
                             </div>
                             <div
@@ -133,9 +153,18 @@ const Photo = ({photo,winSize}) => {
                             >
                                 <Iso />
                                 <p style={{ marginLeft: 10 }}>
-                                    Iso <span>200</span>
+                                    Iso <span>{photo.iso}</span>
                                 </p>
                             </div>
+                        </div>
+                        <div>
+                            <span>Title: {photo.title}</span>
+                        </div>
+                        <div>
+                            <span>Photographer: {photo.photographer}</span>
+                        </div>
+                        <div>
+                            <span>Description: {photo.description}</span>
                         </div>
                     </div>
                 </div>

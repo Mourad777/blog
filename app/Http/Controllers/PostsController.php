@@ -84,7 +84,7 @@ class PostsController extends Controller
     {
         // permanently delete
         // dd($request);
-        // Log::info($request->tags);
+        
         $post = new Post;
 
         if ($request->has('image')) {
@@ -103,6 +103,7 @@ class PostsController extends Controller
         if (!$request->title) {
             $post->title = 'Untitled';
         }
+        Log::info('author creating post'.$request->author);
         $post->author = $request->author;
         $post->content = $request->content;
         $post->country = $request->country;
@@ -158,6 +159,8 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         $post = Post::find($id);
+        Log::info('author updating post'.$request->author);
+        Log::info('has author?'.$request->has('author'));
         $post->title = $request->title;
         $post->content = $request->content;
 

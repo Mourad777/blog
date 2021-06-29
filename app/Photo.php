@@ -14,9 +14,11 @@ class Photo extends Model
         'description',
         'camera',
         'lens',
+        'focal_length',
         'aperture',
-        'shutter',
+        'shutter_speed',
         'iso',
+        'date_taken',
         'country',
         'tags'
     ];

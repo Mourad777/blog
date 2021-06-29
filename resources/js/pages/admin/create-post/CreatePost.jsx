@@ -128,13 +128,14 @@ const CreatePost = ({ isEditing }) => {
                 formData.append('image', 'sameImage');
             }
         }
+        console.log('author-----------',author)
         const selectedCategoriesIds = categories.filter(cat=>selectedCategories.includes(cat.text)).map(cat=>cat._id); 
-        formData.append('title', title);
-        formData.append('author', author);
+        formData.append('title', title||'');
+        formData.append('author', author||'');
         formData.append('content', content || 'Write something...');
         formData.append('selected_categories', JSON.stringify(selectedCategoriesIds));
         formData.append('tags', JSON.stringify(tags));
-        formData.append('country', country);
+        formData.append('country', country||'');
         formData.append('is_published', 0);
         let url = `${AppUrl}api/posts/save`;
         if (isEditing) url = `${AppUrl}api/posts/update/${params.id}`;
@@ -206,7 +207,7 @@ const CreatePost = ({ isEditing }) => {
                     </StyledBlueButton>
                 <StyledRedButton onClick={() => setFile(null)}
                 >
-                    <i class="trash icon"></i>
+                    <i className="trash icon"></i>
                 </StyledRedButton>
                 <input
                     ref={fileInputRef}
@@ -271,7 +272,6 @@ const CreatePost = ({ isEditing }) => {
             <div style={{ marginTop: 20 }}>
                 <label style={{fontSize:'1.2em'}}>Tags</label>
                 <TagInput values={tags} onChange={handleTags} />
-
             </div>
 
             <div style={{ marginTop: 20 }}>
