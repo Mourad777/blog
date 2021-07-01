@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Photo;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
 
 use Storage;
 
@@ -53,18 +54,55 @@ class PhotosController extends Controller
         //
         $photo = new Photo;
         if ($request->has('image')) {
-            $image_base_url = $request->file(key: 'image')->store(path: 'gallery', options: 's3');
-            Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
-            $photo->url = $image_base_url;
+            // $img = Image::make($request->image);
+            // $resized_image = $img->resize(50, null, function ($constraint) {
+            //     $constraint->aspectRatio();
+            // });
+            // $image_base_url = $resized_image->store(path: 'gallery', options: 's3');
+
+            // Storage::disk('s3')->put('gallery', $resized_image)->setVisibility($image_base_url, visibility: 'public');
+
+            //////////////////////////////////////////////////////////////////////////////////////////////
+            $image = $request->file('image');
+            $extension = $request->file('image')->extension();
+
+            $filename = md5(time()) . '_' . $image->getClientOriginalName();
+
+            $resized_file = Image::make($image)->resize(800, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->encode($extension);
+
+            // //$path = '/users/'.Auth::user()->uuid.'/avatar/normal/'.$filename;
+
+            // //dd($normal);
+            $file_key = 'gallery/' . $filename;
+            $s3 = Storage::disk('s3');
+            $s3->put($file_key, (string)$resized_file, 'public');
+            // $s3->setVisibility($file_key, visibility: 'public');
+
+            /////////////////////////////////////////////////////////// ->stream();
+
+            // $imageFile = $imageFile->__toString();
+
+            // $filename = 'aUniqueFilename.png';
+
+            // $s3 = Storage::disk('s3');
+            // $s3->put($filename, $imageFile, 'public');
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            // $image_base_url = $request->file(key: 'image')->store(path: 'gallery', options: 's3');
+            // Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
+            $photo->url = $file_key;
             $photo->camera = $request->camera;
             $photo->lens = $request->lens;
             $photo->focal_length = $request->focal_length;
             $photo->shutter_speed = $request->shutter_speed;
             $photo->aperture = $request->aperture;
             $photo->iso = $request->iso;
-            $photo->date_taken = $request->date_taken;
+            if ($request->has('date_taken') && $request->date_taken !== 'undefined') {
+                $photo->date_taken = $request->date_taken;
+            }
             $photo->save();
-            $photo->src = Storage::disk(name: 's3')->url($image_base_url);
+            $photo->src = Storage::disk(name: 's3')->url($file_key);
             return $photo;
         }
     }

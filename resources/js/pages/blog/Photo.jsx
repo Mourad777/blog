@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { DownArrow, Camera, Aperture, ShutterSpeed, Iso } from "./svgs";
+import { DownArrow, Camera, Aperture, ShutterSpeed, Iso, Lens, FocalLength, Location } from "./svgs";
 import { FaWindowClose } from "react-icons/fa";
 import { useParams } from 'react-router';
 import axios from 'axios'
 import { AppUrl } from './utility';
+import { Typography } from '@material-ui/core';
+import { countries } from './countries';
 
 const Photo = ({ winSize }) => {
     const params = useParams();
@@ -57,18 +59,15 @@ const Photo = ({ winSize }) => {
                             position: "relative",
                             display: "flex",
                             alignItems: "center",
-                            padding: 30
+                            padding: '30px 30px 0 30px'
                         }}
                         className="image-container"
                     >
-                        <div className="image">
+                        <div className="image" style={{ display: 'flex', flexDirection: 'column' }}>
                             {/* <FaWindowClose onClick={() => setPhoto("")} size="2em" color="white" cursor="pointer" /> */}
                             <img
                                 style={{
-                                    border:
-                                        winSize > 1
-                                            ? "10px solid white"
-                                            : "",
+                                    border: "10px solid white",
                                     height:
                                         winSize === 1
                                             ? "auto"
@@ -87,7 +86,28 @@ const Photo = ({ winSize }) => {
                                 src={photo.src}
                                 alt=""
                             />{" "}
-
+                            <div className="extra-img-info-container" style={{ color: 'white', padding: 10 }}>
+                                {photo.photographer && (
+                                    <div style={{color:"#fff4e1"}}>
+                                        <Typography style={{ fontStyle: 'italic' }} variant="subtitle1">Taken by {photo.photographer} {photo.date_taken ? ' on ' + new Date(photo.date_taken).toDateString() : ''}</Typography>
+                                    </div>
+                                )}
+                                {photo.country && (
+                                    <div style={{display:'flex',color:"#fff4e1"}}>
+                                        <Location />
+                                        <Typography variant="body1">{countries.find(c=>c.value === photo.country).text}</Typography>
+                                        
+                                    </div>
+                                )}
+                                {photo.title && (
+                                    <div>
+                                        <Typography variant="h5">{photo.title}</Typography>
+                                    </div>
+                                )}
+                                <div>
+                                    <Typography variant="h6">{photo.description}</Typography>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -97,8 +117,8 @@ const Photo = ({ winSize }) => {
                             backgroundColor: "rgb(218, 173, 134)",
                             width: "100%",
                             display: "flex",
-                            alignItems: "center",
-                            justifyContent: winSize > 1 ? "center" : ""
+                            alignItems: winSize === 1 ? 'start' : "center",
+                            // justifyContent: winSize > 1 ? "center" : ""
                         }}
                     >
                         <div
@@ -116,7 +136,8 @@ const Photo = ({ winSize }) => {
                                 style={{
                                     display: "flex",
                                     width: 200,
-                                    cursor: "pointer"
+                                    cursor: "pointer",
+                                    padding: 5,
                                 }}
                             >
                                 <DownArrow />
@@ -125,7 +146,7 @@ const Photo = ({ winSize }) => {
                                         </p>
                             </div>
                             <div
-                                style={{ display: "flex", width: 200 }}
+                                style={{ display: "flex", width: 200, padding: 5 }}
                             >
                                 <Camera />
                                 <p style={{ marginLeft: 10 }}>
@@ -133,7 +154,23 @@ const Photo = ({ winSize }) => {
                                 </p>
                             </div>
                             <div
-                                style={{ display: "flex", width: 200 }}
+                                style={{ display: "flex", width: 200, padding: 5 }}
+                            >
+                                <Lens />
+                                <p style={{ marginLeft: 10 }}>
+                                    Lens <span>{(photo.lens || '').substring(0, 18)}</span>
+                                </p>
+                            </div>
+                            <div
+                                style={{ display: "flex", width: 200, padding: 5 }}
+                            >
+                                <FocalLength />
+                                <p style={{ marginLeft: 10 }}>
+                                    Focal Length <span>{photo.focal_length}</span>
+                                </p>
+                            </div>
+                            <div
+                                style={{ display: "flex", width: 200, padding: 5 }}
                             >
                                 <Aperture />
                                 <p style={{ marginLeft: 10 }}>
@@ -141,7 +178,7 @@ const Photo = ({ winSize }) => {
                                 </p>
                             </div>
                             <div
-                                style={{ display: "flex", width: 200 }}
+                                style={{ display: "flex", width: 200, padding: 5 }}
                             >
                                 <ShutterSpeed />
                                 <p style={{ marginLeft: 10 }}>
@@ -149,22 +186,13 @@ const Photo = ({ winSize }) => {
                                 </p>
                             </div>
                             <div
-                                style={{ display: "flex", width: 200 }}
+                                style={{ display: "flex", width: 200, padding: 5 }}
                             >
                                 <Iso />
                                 <p style={{ marginLeft: 10 }}>
                                     Iso <span>{photo.iso}</span>
                                 </p>
                             </div>
-                        </div>
-                        <div>
-                            <span>Title: {photo.title}</span>
-                        </div>
-                        <div>
-                            <span>Photographer: {photo.photographer}</span>
-                        </div>
-                        <div>
-                            <span>Description: {photo.description}</span>
                         </div>
                     </div>
                 </div>

@@ -154,13 +154,13 @@ function PhotoGallery() {
                     Make,
                     Model,
                     undefined: Lens,
-                    FocalLength,
-                    FNumber,
-                    ExposureTime,
+                    FocalLength={},
+                    FNumber={},
+                    ExposureTime={},
                     ISOSpeedRatings,
                     DateTime,
                 } = this.exifdata
-
+                console.log('this.exifdata',this.exifdata)
                 //   console.log(EXIF.getTag(this, "Orientation"));
                 newPhotoFormData.append('image', file);
                 newPhotoFormData.append('camera', Make + ' ' + Model);

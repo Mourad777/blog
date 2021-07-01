@@ -98,6 +98,7 @@ const Home = ({ winSize }) => {
                 start: "top top",
                 // end:() => "+=" + (panelsContainer.offsetHeight - innerHeight),
                 // endTrigger:panel,
+                scrub:0.5,
                 snap: true,
                 markers: true,
             });
@@ -110,8 +111,6 @@ const Home = ({ winSize }) => {
     const assetLoadedHandler = () => {
         setIsAssetLoaded(true);
     };
-
-
 
     useEffect(() => {
         //function that determines when heavy images are loaded
