@@ -5,7 +5,6 @@ import './pagination.css'
 import { AppUrl } from "./utility";
 import axios from 'axios'
 import { useHistory } from "react-router";
-import LazyLoad from 'react-lazyload';
 
 export default ({ reference }) => {
     // const [photo, setPhoto] = useState("");
