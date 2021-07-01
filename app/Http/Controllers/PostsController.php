@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Post;
-
+use Intervention\Image\Facades\Image;
 use Storage;
 
 class PostsController extends Controller
@@ -88,13 +88,25 @@ class PostsController extends Controller
         $post = new Post;
 
         if ($request->has('image')) {
+            $image = $request->file('image');
+            $extension = $request->file('image')->extension();
+            $filename = md5(time()) . '_' . $image->getClientOriginalName();
+            $resized_file = Image::make($image)->resize(800, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->encode($extension);
+            $file_key = 'post-thumbnails/' . $filename;
+            $s3 = Storage::disk('s3');
+            $s3->put($file_key, (string)$resized_file, 'public');
 
-            $image_base_url = $request->file(key: 'image')->store(path: 'images', options: 's3');
 
-            Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
+
+
+            // $image_base_url = $request->file(key: 'image')->store(path: 'images', options: 's3');
+
+            // Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
             // return Storage::disk(name:'s3')->url($image_base_url);
             // return Storage::cloud()->url($image_base_url);
-            $post->image = $image_base_url;
+            $post->image = $file_key;
         }
 
 
@@ -159,8 +171,6 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         $post = Post::find($id);
-        Log::info('author updating post'.$request->author);
-        Log::info('has author?'.$request->has('author'));
         $post->title = $request->title;
         $post->content = $request->content;
 
@@ -182,12 +192,23 @@ class PostsController extends Controller
                 if ($post->image) {
                     //delete previous image
                 }
+                $image = $request->file('image');
+                $extension = $request->file('image')->extension();
+                $filename = md5(time()) . '_' . $image->getClientOriginalName();
+                $resized_file = Image::make($image)->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->encode($extension);
+                $file_key = 'post-thumbnails/' . $filename;
+                $s3 = Storage::disk('s3');
+                $s3->put($file_key, (string)$resized_file, 'public');
 
-                $image_base_url = $request->file(key: 'image')->store(path: 'images', options: 's3');
 
-                Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
 
-                $post->image = $image_base_url;
+                // $image_base_url = $request->file(key: 'image')->store(path: 'images', options: 's3');
+
+                // Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
+
+                $post->image = $file_key;
             } else {
                 $post->image = null;
 

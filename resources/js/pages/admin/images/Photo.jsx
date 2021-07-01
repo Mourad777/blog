@@ -1,23 +1,22 @@
 import React from "react";
 import { StyledBlueButton, StyledRedButton } from "../../blog/StyledComponents";
+import axios from 'axios'
 
 const imgWithClick = { cursor: "pointer" };
 
-const Photo = ({ index, onClick, photo, margin, direction, top, left, handleImageDetails }) => {
+const Photo = ({ index, onClick, photo, margin, direction, top, left, handleImageDetails,handleDeleteImage }) => {
   const imgStyle = { margin: margin, padding: 20 };
   if (direction === "column") {
     imgStyle.position = "absolute";
     imgStyle.left = left;
     imgStyle.top = top;
+    imgStyle.objectFit = 'cover'
   }
 
   const handleClick = event => {
     onClick(event, { photo, index });
   };
 
-  const handleDeleteImage = async () => {
-    console.log('delete image', photo.id)
-  }
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <img
@@ -31,9 +30,10 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left, handleImag
         >
           Details
         </StyledBlueButton>
-        <StyledRedButton style={{ maxWidth: 60, }} onClick={() => handleDeleteImage()}
+        <StyledRedButton style={{ maxWidth: 100, }} onClick={() => handleDeleteImage(photo.id)}
         >
-          <i className="trash icon"></i>
+          Delete
+          {/* <i className="trash icon" onClick={() => handleDeleteImage(photo.id)}></i> */}
         </StyledRedButton>
       </div>
     </div>

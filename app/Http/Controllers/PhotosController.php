@@ -65,16 +65,10 @@ class PhotosController extends Controller
             //////////////////////////////////////////////////////////////////////////////////////////////
             $image = $request->file('image');
             $extension = $request->file('image')->extension();
-
             $filename = md5(time()) . '_' . $image->getClientOriginalName();
-
             $resized_file = Image::make($image)->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();
             })->encode($extension);
-
-            // //$path = '/users/'.Auth::user()->uuid.'/avatar/normal/'.$filename;
-
-            // //dd($normal);
             $file_key = 'gallery/' . $filename;
             $s3 = Storage::disk('s3');
             $s3->put($file_key, (string)$resized_file, 'public');

@@ -27,9 +27,9 @@ const processCategories = (categories) => {
 }
 
 const SortablePhoto = SortableElement(item => <Photo {...item} />);
-const SortableGallery = SortableContainer(({ items, handleImageDetails }) => (
+const SortableGallery = SortableContainer(({ items, handleImageDetails, handleDeleteImage }) => (
     <Gallery photos={items} renderImage={props => (
-        <SortablePhoto handleImageDetails={handleImageDetails} {...props} />
+        <SortablePhoto handleImageDetails={handleImageDetails} handleDeleteImage={handleDeleteImage} {...props} />
     )} />
 ));
 
@@ -154,13 +154,13 @@ function PhotoGallery() {
                     Make,
                     Model,
                     undefined: Lens,
-                    FocalLength={},
-                    FNumber={},
-                    ExposureTime={},
+                    FocalLength = {},
+                    FNumber = {},
+                    ExposureTime = {},
                     ISOSpeedRatings,
                     DateTime,
                 } = this.exifdata
-                console.log('this.exifdata',this.exifdata)
+                console.log('this.exifdata', this.exifdata)
                 //   console.log(EXIF.getTag(this, "Orientation"));
                 newPhotoFormData.append('image', file);
                 newPhotoFormData.append('camera', Make + ' ' + Model);
@@ -234,7 +234,7 @@ function PhotoGallery() {
         setDateTaken(photo.date_taken)
 
         setTags(Array.isArray(JSON.parse(photo.tags)) ? JSON.parse(photo.tags) : [])
-        setSelectedCategories(photo.categories.map(cat=>cat.name));
+        setSelectedCategories(photo.categories.map(cat => cat.name));
         setCountry(photo.country)
 
         setSelectedPhoto(photo)
@@ -242,28 +242,28 @@ function PhotoGallery() {
 
     const submitImageDetails = async (photo) => {
         console.log('set photo: ', photo);
-        const selectedCategoriesIds = categories.filter(cat=>selectedCategories.includes(cat.text)).map(cat=>cat._id); 
+        const selectedCategoriesIds = categories.filter(cat => selectedCategories.includes(cat.text)).map(cat => cat._id);
         const formData = new FormData();
-        formData.append('title', title||'');
-        formData.append('photographer', photographer||'');
-        formData.append('description', description||'');
-        formData.append('camera', camera||'');
-        formData.append('lens', lens||'');
-        formData.append('focal_length', focalLength||'');
-        formData.append('shutter_speed', shutterSpeed||'');
-        formData.append('iso', iso||'');
-        formData.append('aperture', aperture||'');
+        formData.append('title', title || '');
+        formData.append('photographer', photographer || '');
+        formData.append('description', description || '');
+        formData.append('camera', camera || '');
+        formData.append('lens', lens || '');
+        formData.append('focal_length', focalLength || '');
+        formData.append('shutter_speed', shutterSpeed || '');
+        formData.append('iso', iso || '');
+        formData.append('aperture', aperture || '');
         formData.append('tags', JSON.stringify(tags));
-        formData.append('country', country||'');
-        formData.append('date_taken', dateTaken||'');
-        formData.append('selected_categories',JSON.stringify(selectedCategoriesIds))
+        formData.append('country', country || '');
+        formData.append('date_taken', dateTaken || '');
+        formData.append('selected_categories', JSON.stringify(selectedCategoriesIds))
 
         const updatePhotoDetailsResponse = await axios.post(`${AppUrl}api/photos/update/${selectedPhoto.id}`, formData,
             {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-        console.log('updatePhotoDetailsResponse',updatePhotoDetailsResponse)
+        console.log('updatePhotoDetailsResponse', updatePhotoDetailsResponse)
         setSelectedPhoto(null);
         getPhotos(setItems)
     }
@@ -289,6 +289,19 @@ function PhotoGallery() {
         const processedCategories = processCategories(categoriesResponse.data);
         setCategories(processedCategories)
         setNewCategory('')
+    }
+
+    const handleDeleteImage = async (id) => {
+        console.log('delete image', id)
+        // await axios.delete(`${AppUrl}api/photos/delete/${id}`, {
+        //     headers: { 'Content-Type': 'multipart/form-data' }
+        // })
+        //     .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
+        // setItems(newArray);
+        // //update order 
+
+        // updateOrder(newArray)
+        console.log('curr array',items,'updated array',items.filter(p=>p.id !== id))
     }
 
     return (
@@ -415,7 +428,7 @@ function PhotoGallery() {
                                 onChange={handleImageUpload}
                             />
                         </div>
-                        <SortableGallery handleImageDetails={handleImageDetails} items={items} onSortEnd={onSortEnd} axis={"xy"} />
+                        <SortableGallery handleImageDetails={handleImageDetails} handleDeleteImage={handleDeleteImage} items={items} onSortEnd={onSortEnd} axis={"xy"} />
                     </Fragment>
                 )}
         </div>
