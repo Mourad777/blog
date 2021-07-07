@@ -73,6 +73,8 @@ Route::delete('/api/photos/delete/{id}', 'PhotosController@destroy');
 
 Route::get('/api/videos', 'VideosController@index');
 
+Route::get('/api/video/{id}', 'VideosController@show');
+
 Route::post('/api/videos/save', 'VideosController@store');
 
 Route::post('/api/videos/update/{id}', 'VideosController@update');

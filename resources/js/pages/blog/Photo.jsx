@@ -6,9 +6,13 @@ import axios from 'axios'
 import { AppUrl } from './utility';
 import { Typography } from '@material-ui/core';
 import { countries } from './countries';
+import { ScrollTrigger } from 'gsap/all';
+import { Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom';
 
 const Photo = ({ winSize }) => {
     const params = useParams();
+    const history = useHistory();
     console.log('photo params', params);
     const [photo, setPhoto] = useState({});
 
@@ -18,7 +22,12 @@ const Photo = ({ winSize }) => {
             console.log('photo response', photoResponse)
             setPhoto(photoResponse.data);
         }
-        getPhoto()
+        getPhoto();
+
+        const triggers = ScrollTrigger.getAll();
+        triggers.forEach(tr => {
+            tr.kill()
+        });
     }, [])
 
     return (<div style={{ background: '#ece7e2', height: '100%', width: '100%' }}>
@@ -36,6 +45,9 @@ const Photo = ({ winSize }) => {
             }}
             className="photo-preview-container"
         >
+            <div style={{padding:20}}>
+            <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => { history.push('/') }} />
+            </div>
             <div
                 style={{
                     left: 0,
@@ -88,15 +100,15 @@ const Photo = ({ winSize }) => {
                             />{" "}
                             <div className="extra-img-info-container" style={{ color: 'white', padding: 10 }}>
                                 {photo.photographer && (
-                                    <div style={{color:"#fff4e1"}}>
+                                    <div style={{ color: "#fff4e1" }}>
                                         <Typography style={{ fontStyle: 'italic' }} variant="subtitle1">Taken by {photo.photographer} {photo.date_taken ? ' on ' + new Date(photo.date_taken).toDateString() : ''}</Typography>
                                     </div>
                                 )}
                                 {photo.country && (
-                                    <div style={{display:'flex',color:"#fff4e1"}}>
+                                    <div style={{ display: 'flex', color: "#fff4e1" }}>
                                         <Location />
-                                        <Typography variant="body1">{countries.find(c=>c.value === photo.country).text}</Typography>
-                                        
+                                        <Typography variant="body1">{countries.find(c => c.value === photo.country).text}</Typography>
+
                                     </div>
                                 )}
                                 {photo.title && (
@@ -143,7 +155,7 @@ const Photo = ({ winSize }) => {
                                 <DownArrow />
                                 <p style={{ marginLeft: 10 }}>
                                     Download
-                                        </p>
+                                </p>
                             </div>
                             <div
                                 style={{ display: "flex", width: 200, padding: 5 }}

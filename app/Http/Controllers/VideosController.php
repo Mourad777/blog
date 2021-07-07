@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Video;
+use Storage;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Log;
 
 class VideosController extends Controller
 {
@@ -19,6 +22,9 @@ class VideosController extends Controller
 
         $videos->map(function ($video) {
             $video->src = Storage::disk(name: 's3')->url($video->url);
+            if ($video->thumbnail) {
+                $video->thumbnail = Storage::disk(name: 's3')->url($video->thumbnail);
+            }
             $video->categories = $video->categories()->get();
             return $video;
         });
@@ -46,7 +52,7 @@ class VideosController extends Controller
     {
         //
         $video = new Video;
-        if ($request->has('image')) {
+        if ($request->has('video')) {
             $video_base_url = $request->file(key: 'video')->store(path: 'videos', options: 's3');
             Storage::disk(name: 's3')->setVisibility($video_base_url, visibility: 'public');
             $video->url = $video_base_url;
@@ -96,6 +102,56 @@ class VideosController extends Controller
         $video->description = $request->description;
         $video->tags = $request->tags;
         $video->country = $request->country;
+
+
+        Log::info(' thumbnail'.$request->thumbnail);
+
+        if ($request->thumbnail === 'sameThumbnail') {
+            //same image
+            Log::info('same thumbnail');
+        } else {
+            if ($request->has('thumbnail')) {
+
+                if ($video->thumbnail) {
+                    //delete previous image
+                }
+                $thumbnail = $request->file('thumbnail');
+                $extension = $request->file('thumbnail')->extension();
+                $filename = md5(time()) . '_' . $thumbnail->getClientOriginalName();
+                $resized_file = Image::make($thumbnail)->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->encode($extension);
+                $file_key = 'video-thumbnails/' . $filename;
+                $s3 = Storage::disk('s3');
+                $s3->put($file_key, (string)$resized_file, 'public');
+
+
+
+                // $image_base_url = $request->file(key: 'image')->store(path: 'images', options: 's3');
+
+                // Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
+
+                $video->thumbnail = $file_key;
+            } else {
+                $video->thumbnail = null;
+
+                if ($video->thumbnail) {
+                    //delete thumbnail from aws if there was an image on the post prior to updating
+                    Log::info('delete thumbnail from aws');
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
         $video->save();
         $video->categories()->sync(json_decode($request->selected_categories));
 

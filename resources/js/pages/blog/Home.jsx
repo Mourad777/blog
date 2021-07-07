@@ -13,7 +13,7 @@ import VideosSection from "./VideosSection";
 
 import DestinationSection from "./Destination";
 import PhotosSectionDetail from "./Photo";
-import VideosSectionDetail from "./Videos";
+import VideosSectionDetail from "./Video";
 import {
     getWindowSizeInteger,
     AppUrl,
@@ -74,7 +74,8 @@ const Home = ({ winSize }) => {
 
     const [isAssetLoaded, setIsAssetLoaded] = useState(false);
     const [postsFromDB, setPostsFromDB] = useState([]);
-
+    const [photos, setPhotos] = useState([]);
+    const [videos, setVideos] = useState([]);
     useEffect(() => {
         //function that inserts placeholders in the posts array when necessary
         //for example if there are no posts
@@ -87,6 +88,87 @@ const Home = ({ winSize }) => {
             }
         }
         getPosts()
+
+        //fetch photos
+        const getPhotos = async () => {
+            const fetchPhotosUrl = `${AppUrl}api/photos`;
+            const resFetchPhotos = await axios.get(fetchPhotosUrl);
+            console.log('Fetch photos response', resFetchPhotos);
+
+            const fetchConfigUrl = `${AppUrl}api/configurations`;
+            const resFetchConfigurations = await axios.get(fetchConfigUrl);
+            console.log('Fetch config response', resFetchConfigurations);
+            const formattedPhotos = resFetchPhotos.data.map(item => {
+                return {
+                    src: item.src,
+                    id: item.id,
+                }
+            });
+
+            console.log('formattedPhotos', formattedPhotos)
+            if (resFetchConfigurations.data !== 'no_config') {
+                const order = JSON.parse(resFetchConfigurations.data.photo_gallery_order);
+                console.log('saved order: ', order);
+                const orderedFormattedPhotos = [];
+                order.forEach(number => {
+                    formattedPhotos.forEach(photo => {
+                        if (photo.id === number) {
+                            orderedFormattedPhotos.push(photo);
+                        }
+                    })
+                });
+                console.log('orderedFormattedPhotos', orderedFormattedPhotos);
+                setPhotos(orderedFormattedPhotos)
+            } else {
+                console.log('default order')
+                setPhotos(formattedPhotos)
+            }
+
+
+
+        }
+        getPhotos()
+
+        //fetch videos
+        const getVideos = async () => {
+            const fetchVideosUrl = `${AppUrl}api/videos`;
+            const resFetchVideos = await axios.get(fetchVideosUrl);
+            console.log('Fetch videos response', resFetchVideos);
+
+            const fetchConfigUrl = `${AppUrl}api/configurations`;
+            const resFetchConfigurations = await axios.get(fetchConfigUrl);
+            console.log('Fetch config response', resFetchConfigurations);
+            const formattedVideos = resFetchVideos.data.map(item => {
+                return {
+                    src: item.src,
+                    id: item.id,
+                    thumbnail:item.thumbnail,
+                }
+            });
+
+            console.log('formattedVideos', formattedVideos)
+            if (resFetchConfigurations.data !== 'no_config') {
+                const order = JSON.parse(resFetchConfigurations.data.video_gallery_order);
+                console.log('saved order: ', order);
+                const orderedFormattedVideos = [];
+                order.forEach(number => {
+                    formattedVideos.forEach(video => {
+                        if (video.id === number) {
+                            orderedFormattedVideos.push(video);
+                        }
+                    })
+                });
+                console.log('orderedFormattedVideos', orderedFormattedVideos);
+                setVideos(orderedFormattedVideos)
+            } else {
+                console.log('default order')
+                setVideos(formattedVideos)
+            }
+
+
+
+        }
+        getVideos()
     }, [])
 
     useEffect(() => {
@@ -98,7 +180,7 @@ const Home = ({ winSize }) => {
                 start: "top top",
                 // end:() => "+=" + (panelsContainer.offsetHeight - innerHeight),
                 // endTrigger:panel,
-                scrub:0.5,
+                scrub: 0.5,
                 snap: true,
                 markers: true,
             });
@@ -168,13 +250,13 @@ const Home = ({ winSize }) => {
                     <div style={{ overflow: 'hidden', width: '100%', height: '100vh' }} ref={refSectionX} />
                     <LatestPostsSection reference={refSection2} postsFromDB={postsFromDB} winSize={winSize} />
 
-                    <WorldMap reference={refSection3} postsFromDB={postsFromDB} winSize={winSize} />
+                    <WorldMap reference={refSection3} postsFromDB={postsFromDB} videos={videos} photos={photos} winSize={winSize} />
                     {/* <Country reference={refSectionDestination} postsFromDB={postsFromDB} /> */}
 
-                    <PhotosSection reference={refSection4} winSize={winSize} />
+                    <PhotosSection photos={photos} reference={refSection4} winSize={winSize} />
                     {/* <PhotosSectionDetail reference={refSectionPhotos}/> */}
 
-                    <VideosSection reference={refSection5} winSize={winSize} />
+                    <VideosSection videos={videos} reference={refSection5} winSize={winSize} />
                     {/* <VideosSectionDetail reference={refSectionVideos}/> */}
 
                     <StyledContactSection ref={refSection6} id="contact-section">

@@ -21,10 +21,10 @@ const highlighted = [
 const geoUrl =
     "https://raw.githubusercontent.com/zcreat";
 
-const WorldMap = ({ winSize, setSelectedSection, reference, postsFromDB=[] }) => {
+const WorldMap = ({ winSize, setSelectedSection, reference, postsFromDB=[],photos,videos }) => {
     const history = useHistory();
     const handleClick = (geo) => () => {
-        const highlightedCountries = postsFromDB.map(p=>p.country);
+        const highlightedCountries = [...postsFromDB.map(p=>p.country),...photos.map(p=>p.country),...videos.map(p=>p.country)];
         if ( highlightedCountries.includes(geo.ISO_A2) ) {
             history.push(`/destination/${geo.NAME.toLowerCase()}`)
             setSelectedSection('destination');
@@ -46,7 +46,9 @@ const WorldMap = ({ winSize, setSelectedSection, reference, postsFromDB=[] }) =>
                 <Geographies geography={geo}>
                     {({ geographies }) =>
                         geographies.map(geo => {
-                            const isHighlighted = postsFromDB.findIndex(p => p.country === geo.properties.ISO_A2) > -1;
+                            const isHighlighted = postsFromDB.findIndex(p => p.country === geo.properties.ISO_A2) > -1 ||
+                            videos.findIndex(p => p.country === geo.properties.ISO_A2) > -1 ||
+                            photos.findIndex(p => p.country === geo.properties.ISO_A2) > -1 ;
 
                             return (
                                 <Geography

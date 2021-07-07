@@ -7,14 +7,15 @@ import Admin from './pages/admin/index'
 import './style.css'
 import { Switch, Route } from "react-router-dom";
 import Posts from "./pages/admin/posts/Posts"
-import Post from "./pages/admin/post/Post"
+import AdminPost from "./pages/admin/post/Post"
 import Comments from "./pages/admin/comments/Comments"
 import CreatePost from "./pages/admin/create-post/CreatePost"
 import Images from "./pages/admin/images/Images"
 import Videos from "./pages/admin/videos/Videos"
+import Post from "./pages/blog/Post"
 import Country from "./pages/blog/Country";
 import Photo from "./pages/blog/Photo";
-import Video from "./pages/blog/Country";
+import Video from "./pages/blog/Video";
 import { getWindowSizeInteger } from "./pages/blog/utility";
 
 const App = () => {
@@ -41,7 +42,7 @@ const App = () => {
                             <Posts />
                         </Route>
                         <Route exact path="/admin/post/:id">
-                            <Post />
+                            <AdminPost />
                         </Route>
                         <Route exact path="/admin/post/:id/comments">
                             <Comments />

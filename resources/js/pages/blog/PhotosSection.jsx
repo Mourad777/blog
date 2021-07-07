@@ -6,13 +6,13 @@ import { AppUrl } from "./utility";
 import axios from 'axios'
 import { useHistory } from "react-router";
 
-export default ({ reference }) => {
+export default ({ reference, photos }) => {
+    console.log('photos ---------------',photos)
     // const [photo, setPhoto] = useState("");
     const [data, setData] = useState([]);
     const [offset, setOffset] = useState(0);
     const perPage = 9;
     const [pageCount, setPageCount] = useState(0);
-    const [photos, setPhotos] = useState([]);
     const history = useHistory();
     const getData = async () => {
         const slice = photos.slice(offset === 1 || offset === 0 ? 0 : offset * perPage - perPage, offset === 0 ? perPage : offset * perPage);
@@ -25,48 +25,6 @@ export default ({ reference }) => {
     useEffect(() => {
         getData()
     }, [offset, photos]);
-
-    useEffect(() => {
-        //fetch photos
-        const getPhotos = async () => {
-            const fetchPhotosUrl = `${AppUrl}api/photos`;
-            const resFetchPhotos = await axios.get(fetchPhotosUrl);
-            console.log('Fetch photos response', resFetchPhotos);
-
-            const fetchConfigUrl = `${AppUrl}api/configurations`;
-            const resFetchConfigurations = await axios.get(fetchConfigUrl);
-            console.log('Fetch config response', resFetchConfigurations);
-            const formattedPhotos = resFetchPhotos.data.map(item => {
-                return {
-                    src: item.src,
-                    id: item.id,
-                }
-            });
-
-            console.log('formattedPhotos', formattedPhotos)
-            if (resFetchConfigurations.data !== 'no_config') {
-                const order = JSON.parse(resFetchConfigurations.data.photo_gallery_order);
-                console.log('saved order: ', order);
-                const orderedFormattedPhotos = [];
-                order.forEach(number => {
-                    formattedPhotos.forEach(photo => {
-                        if (photo.id === number) {
-                            orderedFormattedPhotos.push(photo);
-                        }
-                    })
-                });
-                console.log('orderedFormattedPhotos', orderedFormattedPhotos);
-                setPhotos(orderedFormattedPhotos)
-            } else {
-                console.log('default order')
-                setPhotos(formattedPhotos)
-            }
-
-
-
-        }
-        getPhotos()
-    }, [])
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;

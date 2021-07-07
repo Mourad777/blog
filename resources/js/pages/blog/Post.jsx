@@ -44,9 +44,10 @@ const Post = ({ postsFromDB, refPosts }) => {
     const params = useParams();
     const selectedPost = params.postId;
     console.log('------------------------------------------postsFromDB', postsFromDB)
-    const post = (postsFromDB || []).find(p => p.id.toString() === selectedPost);
+
     const postContainer = useRef(null)
     const [comments, setComments] = useState([]);
+    const [post, setPost] = useState({});
     const [name, setName] = useState('');
     const [content, setComment] = useState('');
     const [email, setEmail] = useState('');
@@ -83,15 +84,10 @@ const Post = ({ postsFromDB, refPosts }) => {
         setReplyComment('');
     }
     useEffect(() => {
-        // ScrollTrigger.create({
-        //     trigger: postContainer.current,
-        //     start: "top top",
-        //     // end:() => "+=" + (panelsContainer.offsetHeight - innerHeight),
-        //     // endTrigger:panel,
-        //     snap: true,
-        //     markers: true,
-            
-        // });
+        const triggers = ScrollTrigger.getAll();
+        triggers.forEach(tr=>{
+            tr.kill()
+        })
         // gsap.to(postContainer.current, {
         //     ease: "ease-in",
         //     duration:1,
@@ -101,6 +97,14 @@ const Post = ({ postsFromDB, refPosts }) => {
         //         start: 'top',       
         //     }
         // });
+
+        const getPost =  async() => {
+            const postRes = await axios.get(`${AppUrl}api/posts/show/${selectedPost}`);
+            console.log('postRes',postRes);
+            setPost(postRes.data)
+        }
+        getPost()
+
         const getComments = async () => {
             const commentsRes = await axios.get(`${AppUrl}api/comments/post/${selectedPost}`);
             console.log('commentsRes.data', commentsRes.data)
@@ -112,14 +116,9 @@ const Post = ({ postsFromDB, refPosts }) => {
     console.log('selec post', selectedPost)
     const history = useHistory();
 
-    if (!post || !(postsFromDB.length > 0)) return null;
     return (
         <div ref={postContainer} style={{ width: '100%', height: '100%', background: '#fff', padding: '40px 20px', position: 'absolute', zIndex: 999 }}>
-            <Button labelPosition='left' icon='left chevron' content='Back' onClick={() => {
-                // gsap.to(window, { duration: 1, scrollTo: refPosts.current });
-
-                history.push('/')
-            }} />
+            <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => {history.push('/')}} />
             <h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: '3em' }}>{post.title}</h1>
             <div dangerouslySetInnerHTML={{ __html: "<style>@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');</style>" + post.content }} />
             {/* {!!(post.content) && <Editor
