@@ -75,7 +75,7 @@ const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection
     return (<div ref={reference}>
         <div style={{ overflow: 'hidden',width:'100%',maxHeight:'100vh' }}>
             <StyledLatestPostsTopLayer >
-                <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#fff', textAlign: 'center' }}>Latest Posts</p>
+                <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#fff', textAlign: 'center' }}>Posts</p>
                 {/* <Link
                     activeClass="activeLink"
                     to="posts-section"
@@ -83,13 +83,13 @@ const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection
                     smooth={true}
                     duration={2000}
                 > */}
-                    <StyledSeeAllPostsText 
+                    {/* <StyledSeeAllPostsText 
                     onClick={() => {
                         // if (selectedSection === 'posts') return;
                         setSelectedSection('posts');
                         gsap.to(window,{duration:1, scrollTo:refB.current});
                     }}
-                    >See all posts</StyledSeeAllPostsText>
+                    >See all posts</StyledSeeAllPostsText> */}
                 {/* </Link> */}
                 {/* <p style={{fontFamily: 'Mulish', fontSize: '1em', color: '#fff', textAlign: 'center',position:'absolute'}}>See all posts</p> */}
             </StyledLatestPostsTopLayer>

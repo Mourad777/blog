@@ -4,7 +4,7 @@ import { StyledBlueButton, StyledRedButton } from "../../blog/StyledComponents";
 const imgWithClick = { cursor: "pointer" };
 
 const Photo = ({ index, onClick, photo, margin, direction, top, left, handleVideoDetails,handleDeleteVideo }) => {
-  const imgStyle = { margin: margin, padding: 20 };
+  const imgStyle = { margin: margin, padding: 20, objectFit:'cover' };
   if (direction === "column") {
     imgStyle.position = "absolute";
     imgStyle.left = left;

@@ -175,8 +175,8 @@ function VideoGallery() {
         setDescription(video.description)
         // setDateTaken(video.date_taken)
 
-        setTags(Array.isArray(JSON.parse(video.tags)) ? JSON.parse(video.tags) : [])
-        setSelectedCategories(video.categories.map(cat => cat.name));
+        setTags(Array.isArray(video.tags) ? JSON.parse(video.tags) : [])
+        setSelectedCategories((video.categories||[]).map(cat => cat.name));
         setCountry(video.country)
 
         setSelectedVideo(video)
@@ -236,16 +236,20 @@ function VideoGallery() {
     }
 
     const handleDeleteVideo = async (id) => {
-        console.log('delete video', id)
-        // await axios.delete(`${AppUrl}api/photos/delete/${id}`, {
-        //     headers: { 'Content-Type': 'multipart/form-data' }
-        // })
-        //     .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-        // setItems(newArray);
+        console.log('delete image', id)
+        await axios.delete(`${AppUrl}api/photos/delete/${id}`, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+            .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
+        
         // //update order 
 
-        // updateOrder(newArray)
-        console.log('curr array', items, 'updated array', items.filter(p => p.id !== id))
+        
+        const newArray = items.filter(p=>p.id !== id);
+        console.log('new array--------------------------',newArray)
+        updateOrder(newArray)
+        setItems(newArray);
+        // console.log('curr array',items,'updated array',items.filter(p=>p.id !== id))
     }
     console.log('selec video', selectedVideo)
     const handleThumbnailChange = e => {

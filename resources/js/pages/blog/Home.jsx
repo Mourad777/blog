@@ -100,6 +100,7 @@ const Home = ({ winSize }) => {
             console.log('Fetch config response', resFetchConfigurations);
             const formattedPhotos = resFetchPhotos.data.map(item => {
                 return {
+                    ...item,
                     src: item.src,
                     id: item.id,
                 }
@@ -140,9 +141,11 @@ const Home = ({ winSize }) => {
             console.log('Fetch config response', resFetchConfigurations);
             const formattedVideos = resFetchVideos.data.map(item => {
                 return {
+                    ...item,
                     src: item.src,
                     id: item.id,
                     thumbnail:item.thumbnail,
+
                 }
             });
 

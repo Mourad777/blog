@@ -18,7 +18,7 @@ import {
     DateTimeInput,
     DatesRangeInput
 } from 'semantic-ui-calendar-react';
-
+//json.parse
 const processCategories = (categories) => {
     const processedCategories = categories.map(cat => {
         return { key: cat.name, value: cat.name, text: cat.name, _id: cat.id }
@@ -148,8 +148,11 @@ function PhotoGallery() {
 
         EXIF.getData(file, async function () {
             const exifData = EXIF.pretty(this);
-            console.log('this', this)
-            if (this.exifdata) {
+            console.log('this.exifdata', this.exifdata)
+            const photoMetaData = this.exifdata;
+            const isMetaDataEmpty = photoMetaData && Object.keys(photoMetaData).length === 0 && photoMetaData.constructor === Object;
+            console.log('isMetaDataEmpty',isMetaDataEmpty)
+            if (!isMetaDataEmpty) {
                 const {
                     Make,
                     Model,
@@ -184,7 +187,7 @@ function PhotoGallery() {
                 setIsLoading(false)
                 console.log('upload photo response: ', resUploadPhoto.data);
                 console.log('cur items', items);
-                const newArray = [{ src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
+                const newArray = [{...resUploadPhoto.data, src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
                 console.log('new array', newArray);
                 setItems(newArray);
                 //update order 
@@ -233,8 +236,8 @@ function PhotoGallery() {
         setDescription(photo.description)
         setDateTaken(photo.date_taken)
 
-        setTags(Array.isArray(JSON.parse(photo.tags)) ? JSON.parse(photo.tags) : [])
-        setSelectedCategories(photo.categories.map(cat => cat.name));
+        setTags(Array.isArray(photo.tags) ? JSON.parse(photo.tags) : [])
+        setSelectedCategories((photo.categories||[]).map(cat => cat.name));
         setCountry(photo.country)
 
         setSelectedPhoto(photo)
@@ -293,15 +296,19 @@ function PhotoGallery() {
 
     const handleDeleteImage = async (id) => {
         console.log('delete image', id)
-        // await axios.delete(`${AppUrl}api/photos/delete/${id}`, {
-        //     headers: { 'Content-Type': 'multipart/form-data' }
-        // })
-        //     .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-        // setItems(newArray);
+        await axios.delete(`${AppUrl}api/photos/delete/${id}`, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+            .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
+        
         // //update order 
 
-        // updateOrder(newArray)
-        console.log('curr array',items,'updated array',items.filter(p=>p.id !== id))
+        
+        const newArray = items.filter(p=>p.id !== id);
+        console.log('new array--------------------------',newArray)
+        updateOrder(newArray)
+        setItems(newArray);
+        // console.log('curr array',items,'updated array',items.filter(p=>p.id !== id))
     }
 
     return (

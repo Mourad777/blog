@@ -1,22 +1,7 @@
 import React from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import { StyledWorldMapTitle } from '../../../../pages/blog/StyledComponents'
 import { useHistory } from 'react-router-dom';
 import geo from "../../../../pages/blog/geo.json"
-import { gsap } from 'gsap/all';
-
-const highlighted = [
-    "MEX",
-    "GTM",
-    "HND",
-    "NIC",
-    "CRI",
-    "PAN",
-    "COL",
-    "SWE",
-    "DZA",
-    "BLR"
-];
 
 const geoUrl =
     "https://raw.githubusercontent.com/zcreat";
@@ -46,6 +31,10 @@ const WorldMap = ({ winSize, setSelectedSection, reference, postsFromDB=[],photo
                 <Geographies geography={geo}>
                     {({ geographies }) =>
                         geographies.map(geo => {
+                            console.log('****************** photos',photos)
+                            console.log('****************** videos',videos)
+                            console.log('****************** postsFromDB',postsFromDB)
+
                             const isHighlighted = postsFromDB.findIndex(p => p.country === geo.properties.ISO_A2) > -1 ||
                             videos.findIndex(p => p.country === geo.properties.ISO_A2) > -1 ||
                             photos.findIndex(p => p.country === geo.properties.ISO_A2) > -1 ;

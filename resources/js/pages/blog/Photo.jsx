@@ -45,8 +45,8 @@ const Photo = ({ winSize }) => {
             }}
             className="photo-preview-container"
         >
-            <div style={{padding:20}}>
-            <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => { history.push('/') }} />
+            <div style={{ padding: 20 }}>
+                <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => { history.push('/') }} />
             </div>
             <div
                 style={{
@@ -75,17 +75,77 @@ const Photo = ({ winSize }) => {
                         }}
                         className="image-container"
                     >
-                        <div className="image" style={{ display: 'flex', flexDirection: 'column' }}>
+                        <div className="image" style={{ display: 'flex', flexDirection: 'column', background: 'black', position: 'relative' }}>
                             {/* <FaWindowClose onClick={() => setPhoto("")} size="2em" color="white" cursor="pointer" /> */}
+                            <div style={{
+                                position: 'absolute',
+                                top: 10,
+                                left: 10,
+                                color: 'rgb(255, 255, 255)',
+                                background: '#997d6a',
+                                margin: 10,
+                                opacity: 0.8,
+                                borderRadius: 10,
+                            }}>
+                                <div
+                                    style={{ display: "flex", width: 200, padding: 5 }}
+                                >
+                                    <Camera />
+                                    <p style={{ marginLeft: 10 }}>
+                                        Camera <span>{photo.camera}</span>
+                                    </p>
+                                </div>
+                                <div
+                                    style={{ display: "flex", width: 200, padding: 5 }}
+                                >
+                                    <Lens />
+                                    <p style={{ marginLeft: 10 }}>
+                                        Lens <span>{(photo.lens || '').substring(0, 18)}</span>
+                                    </p>
+                                </div>
+                                <div
+                                    style={{ display: "flex", width: 200, padding: 5 }}
+                                >
+                                    <FocalLength />
+                                    <p style={{ marginLeft: 10 }}>
+                                        Focal Length <span>{photo.focal_length}</span>
+                                    </p>
+                                </div>
+                                <div
+                                    style={{ display: "flex", width: 200, padding: 5 }}
+                                >
+                                    <Aperture />
+                                    <p style={{ marginLeft: 10 }}>
+                                        Aperture <span>{photo.aperture}</span>
+                                    </p>
+                                </div>
+                                <div
+                                    style={{ display: "flex", width: 200, padding: 5 }}
+                                >
+                                    <ShutterSpeed />
+                                    <p style={{ marginLeft: 10 }}>
+                                        Shutter <span>{photo.shutter_speed}</span>
+                                    </p>
+                                </div>
+                                <div
+                                    style={{ display: "flex", width: 200, padding: 5 }}
+                                >
+                                    <Iso />
+                                    <p style={{ marginLeft: 10 }}>
+                                        Iso <span>{photo.iso}</span>
+                                    </p>
+                                </div>
+                            </div>
                             <img
                                 style={{
                                     border: "10px solid white",
-                                    height:
-                                        winSize === 1
-                                            ? "auto"
-                                            : winSize === 2
-                                                ? 333
-                                                : 533,
+                                    height: '60vh',
+                                    // height:
+                                    //     winSize === 1
+                                    //         ? "auto"
+                                    //         : winSize === 2
+                                    //             ? 333
+                                    //             : 533,
                                     // width: winSize > 1 ? "500px" : "100%",
                                     width:
                                         winSize === 1
@@ -93,12 +153,12 @@ const Photo = ({ winSize }) => {
                                             : winSize === 2
                                                 ? 500
                                                 : 800,
-                                    objectFit: "cover"
+                                    objectFit: "contain"
                                 }}
                                 src={photo.src}
                                 alt=""
                             />{" "}
-                            <div className="extra-img-info-container" style={{ color: 'white', padding: 10 }}>
+                            <div className="extra-img-info-container" style={{ color: 'white', }}>
                                 {photo.photographer && (
                                     <div style={{ color: "#fff4e1" }}>
                                         <Typography style={{ fontStyle: 'italic' }} variant="subtitle1">Taken by {photo.photographer} {photo.date_taken ? ' on ' + new Date(photo.date_taken).toDateString() : ''}</Typography>
@@ -136,11 +196,10 @@ const Photo = ({ winSize }) => {
                         <div
                             style={{
                                 color: "white",
-                                padding: winSize === 1 ? 30 : "",
+                                paddingLeft: 30,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'space-around',
-                                minHeight: 200,
                             }}
                             className="photo-icon-container"
                         >
@@ -157,60 +216,13 @@ const Photo = ({ winSize }) => {
                                     Download
                                 </p>
                             </div>
-                            <div
-                                style={{ display: "flex", width: 200, padding: 5 }}
-                            >
-                                <Camera />
-                                <p style={{ marginLeft: 10 }}>
-                                    Camera <span>{photo.camera}</span>
-                                </p>
-                            </div>
-                            <div
-                                style={{ display: "flex", width: 200, padding: 5 }}
-                            >
-                                <Lens />
-                                <p style={{ marginLeft: 10 }}>
-                                    Lens <span>{(photo.lens || '').substring(0, 18)}</span>
-                                </p>
-                            </div>
-                            <div
-                                style={{ display: "flex", width: 200, padding: 5 }}
-                            >
-                                <FocalLength />
-                                <p style={{ marginLeft: 10 }}>
-                                    Focal Length <span>{photo.focal_length}</span>
-                                </p>
-                            </div>
-                            <div
-                                style={{ display: "flex", width: 200, padding: 5 }}
-                            >
-                                <Aperture />
-                                <p style={{ marginLeft: 10 }}>
-                                    Aperture <span>{photo.aperture}</span>
-                                </p>
-                            </div>
-                            <div
-                                style={{ display: "flex", width: 200, padding: 5 }}
-                            >
-                                <ShutterSpeed />
-                                <p style={{ marginLeft: 10 }}>
-                                    Shutter <span>{photo.shutter_speed}</span>
-                                </p>
-                            </div>
-                            <div
-                                style={{ display: "flex", width: 200, padding: 5 }}
-                            >
-                                <Iso />
-                                <p style={{ marginLeft: 10 }}>
-                                    Iso <span>{photo.iso}</span>
-                                </p>
-                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>)
+    </div >)
 }
 
 export default Photo

@@ -37,7 +37,6 @@ export default ({ reference, photos }) => {
             <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }}>Photos</p>
             <div
                 style={{
-                    // padding: '50px 150px',
                     overflow: "hidden",
                     width: "85vw",
                     maxWidth: 700,
@@ -56,15 +55,8 @@ export default ({ reference, photos }) => {
                             position: "relative",
                             width: "30%",
                             height: "30%",
-                            // paddingBottom:
-                            //     "30%" 
-                            //     /* = width for a 1:1 aspect ratio */,
                             margin: "1.66%",
                             overflow: "hidden",
-                            // background: `url('${p.src}')`,
-                            // backgroundSize: "cover",
-                            // backgroundRepeat: "no-repeat",
-                            // backgroundPosition: "center"
                         }}
                     >
                             <img src={p.src} style={{ width: 200, height: 200, objectFit: 'cover' }} />
