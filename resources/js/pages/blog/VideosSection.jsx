@@ -4,13 +4,26 @@ import VideoIcon from '../../../../public/assets/video-icon.jpg'
 import ReactPaginate from 'react-paginate';
 
 
-export default ({ reference, videos }) => {
+export default ({ reference, videos, winSize }) => {
     const history = useHistory();
     const [offset, setOffset] = useState(0);
     const [data, setData] = useState([]);
     const [pageCount, setPageCount] = useState(0);
+    console.log('win size',winSize)
+    let perPage = 3;
+    let margin = '1.66%'
+    let width = '30%'
+    if(winSize === 1){
+        width = '80%'
+        perPage = 1
+        margin = '6.66%'
+    }
+    if(winSize === 2) {
+        perPage = 2
+        width = '40%'
+        margin = '3.33%'
+    }
 
-    const perPage = 3;
     const getData = async () => {
         const slice = videos.slice(offset === 1 || offset === 0 ? 0 : offset * perPage - perPage, offset === 0 ? perPage : offset * perPage);
         console.log('slice', slice)
@@ -22,13 +35,18 @@ export default ({ reference, videos }) => {
     useEffect(() => {
         getData()
     }, [offset, videos]);
+    console.log('offset',offset)
+    useEffect(()=>{
+        getData()
+        setOffset(1)
+    },[winSize])
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
         setOffset(selectedPage + 1)
     };
     return (
-        <div style={{ padding: 50, height: '100vh', background: 'rgb(236, 231, 226)', width: '100%' }} ref={reference}>
+        <div style={{ paddingTop: 50, height: '100vh', background: 'rgb(236, 231, 226)', width: '100%' }} ref={reference}>
             <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#daad86', textAlign: 'center' }}>Videos</p>
             {/* <div className="row" style={{ justifyContent: 'center' }}>
                 {data.map((video, i) => (
@@ -52,8 +70,10 @@ export default ({ reference, videos }) => {
                 style={{
                     overflow: "hidden",
                     width: "85vw",
-                    maxWidth: 700,
-                    margin: "auto"
+                    maxWidth: 900,
+                    margin: "auto",
+                    display:'flex',
+                    justifyContent:'space-around'
                 }}
             >
                 {data.map((video, i) => (
@@ -67,9 +87,8 @@ export default ({ reference, videos }) => {
                             cursor: "pointer",
                             float: "left",
                             position: "relative",
-                            width: "30%",
+                            width,
                             height: "50vh",
-                            margin: "1.66%",
                             overflow: "hidden",
                         }}
                     >

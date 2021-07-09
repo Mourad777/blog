@@ -7,7 +7,7 @@ import { AppUrl } from './utility';
 import { Typography } from '@material-ui/core';
 import { countries } from './countries';
 import { ScrollTrigger } from 'gsap/all';
-import { Button } from 'semantic-ui-react'
+import { Button, Checkbox } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 
 const Photo = ({ winSize }) => {
@@ -15,7 +15,7 @@ const Photo = ({ winSize }) => {
     const history = useHistory();
     console.log('photo params', params);
     const [photo, setPhoto] = useState({});
-
+    const [isHideCameraInfo, setisHideCameraInfo] = useState(false);
     useEffect(() => {
         const getPhoto = async () => {
             const photoResponse = await axios.get(`${AppUrl}api/photo/${params.photoId}`);
@@ -29,6 +29,10 @@ const Photo = ({ winSize }) => {
             tr.kill()
         });
     }, [])
+
+    const handleCameraInfo = (e) => {
+        setisHideCameraInfo(!isHideCameraInfo)
+    }
 
     return (<div style={{ background: '#ece7e2', height: '100%', width: '100%' }}>
         <div
@@ -61,8 +65,7 @@ const Photo = ({ winSize }) => {
                 <div
                     style={{
                         display: "flex",
-                        flexDirection:
-                            winSize < 2 ? "column" : "initial",
+                        flexDirection: "column",
                         height: "100%"
                     }}
                 >
@@ -77,65 +80,68 @@ const Photo = ({ winSize }) => {
                     >
                         <div className="image" style={{ display: 'flex', flexDirection: 'column', background: 'black', position: 'relative' }}>
                             {/* <FaWindowClose onClick={() => setPhoto("")} size="2em" color="white" cursor="pointer" /> */}
-                            <div style={{
-                                position: 'absolute',
-                                top: 10,
-                                left: 10,
-                                color: 'rgb(255, 255, 255)',
-                                background: '#997d6a',
-                                margin: 10,
-                                opacity: 0.8,
-                                borderRadius: 10,
-                            }}>
-                                <div
-                                    style={{ display: "flex", width: 200, padding: 5 }}
-                                >
-                                    <Camera />
-                                    <p style={{ marginLeft: 10 }}>
-                                        Camera <span>{photo.camera}</span>
-                                    </p>
+                            {!isHideCameraInfo && (
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 10,
+                                    left: 10,
+                                    color: 'rgb(255, 255, 255)',
+                                    background: 'rgb(36,36,36)',
+                                    margin: 10,
+                                    opacity: 0.6,
+                                    borderRadius: 10,
+                                }}>
+                                    <div
+                                        style={{ display: "flex", width: 200, padding: 5 }}
+                                    >
+                                        <Camera />
+                                        <p style={{ marginLeft: 10 }}>
+                                            Camera <span>{photo.camera}</span>
+                                        </p>
+                                    </div>
+                                    <div
+                                        style={{ display: "flex", width: 200, padding: 5 }}
+                                    >
+                                        <Lens />
+                                        <p style={{ marginLeft: 10 }}>
+                                            Lens <span>{(photo.lens || '').substring(0, 18)}</span>
+                                        </p>
+                                    </div>
+                                    <div
+                                        style={{ display: "flex", width: 200, padding: 5 }}
+                                    >
+                                        <FocalLength />
+                                        <p style={{ marginLeft: 10 }}>
+                                            Focal Length <span>{photo.focal_length}</span>
+                                        </p>
+                                    </div>
+                                    <div
+                                        style={{ display: "flex", width: 200, padding: 5 }}
+                                    >
+                                        <Aperture />
+                                        <p style={{ marginLeft: 10 }}>
+                                            Aperture <span>{photo.aperture}</span>
+                                        </p>
+                                    </div>
+                                    <div
+                                        style={{ display: "flex", width: 200, padding: 5 }}
+                                    >
+                                        <ShutterSpeed />
+                                        <p style={{ marginLeft: 10 }}>
+                                            Shutter <span>{photo.shutter_speed}</span>
+                                        </p>
+                                    </div>
+                                    <div
+                                        style={{ display: "flex", width: 200, padding: 5 }}
+                                    >
+                                        <Iso />
+                                        <p style={{ marginLeft: 10 }}>
+                                            Iso <span>{photo.iso}</span>
+                                        </p>
+                                    </div>
                                 </div>
-                                <div
-                                    style={{ display: "flex", width: 200, padding: 5 }}
-                                >
-                                    <Lens />
-                                    <p style={{ marginLeft: 10 }}>
-                                        Lens <span>{(photo.lens || '').substring(0, 18)}</span>
-                                    </p>
-                                </div>
-                                <div
-                                    style={{ display: "flex", width: 200, padding: 5 }}
-                                >
-                                    <FocalLength />
-                                    <p style={{ marginLeft: 10 }}>
-                                        Focal Length <span>{photo.focal_length}</span>
-                                    </p>
-                                </div>
-                                <div
-                                    style={{ display: "flex", width: 200, padding: 5 }}
-                                >
-                                    <Aperture />
-                                    <p style={{ marginLeft: 10 }}>
-                                        Aperture <span>{photo.aperture}</span>
-                                    </p>
-                                </div>
-                                <div
-                                    style={{ display: "flex", width: 200, padding: 5 }}
-                                >
-                                    <ShutterSpeed />
-                                    <p style={{ marginLeft: 10 }}>
-                                        Shutter <span>{photo.shutter_speed}</span>
-                                    </p>
-                                </div>
-                                <div
-                                    style={{ display: "flex", width: 200, padding: 5 }}
-                                >
-                                    <Iso />
-                                    <p style={{ marginLeft: 10 }}>
-                                        Iso <span>{photo.iso}</span>
-                                    </p>
-                                </div>
-                            </div>
+                            )}
+
                             <img
                                 style={{
                                     border: "10px solid white",
@@ -188,9 +194,6 @@ const Photo = ({ winSize }) => {
                             height: "100%",
                             backgroundColor: "rgb(218, 173, 134)",
                             width: "100%",
-                            display: "flex",
-                            alignItems: winSize === 1 ? 'start' : "center",
-                            // justifyContent: winSize > 1 ? "center" : ""
                         }}
                     >
                         <div
@@ -203,6 +206,10 @@ const Photo = ({ winSize }) => {
                             }}
                             className="photo-icon-container"
                         >
+                            <div style={{ marginTop: 20, display: 'flex' }}>
+                                <Checkbox checked={isHideCameraInfo} onChange={handleCameraInfo} toggle />
+                                <span style={{ color: '#fff',marginLeft:10,fontSize:'1.2em' }}>Hide camera info</span>
+                            </div>
                             <div
                                 style={{
                                     display: "flex",
@@ -212,7 +219,7 @@ const Photo = ({ winSize }) => {
                                 }}
                             >
                                 <DownArrow />
-                                <p style={{ marginLeft: 10 }}>
+                                <p style={{ marginLeft: 33,fontSize:'1.2em' }}>
                                     Download
                                 </p>
                             </div>

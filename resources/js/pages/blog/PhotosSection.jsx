@@ -6,7 +6,7 @@ import { AppUrl } from "./utility";
 import axios from 'axios'
 import { useHistory } from "react-router";
 
-export default ({ reference, photos }) => {
+export default ({ reference, photos, winSize }) => {
     console.log('photos ---------------',photos)
     // const [photo, setPhoto] = useState("");
     const [data, setData] = useState([]);

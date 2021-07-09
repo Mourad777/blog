@@ -6,7 +6,7 @@ import axios from 'axios';
 import './tinymceReadonly.css'
 import Avatar from 'react-avatar';
 import { useHistory, useParams } from 'react-router';
-import { gsap,ScrollTrigger } from 'gsap/all';
+import { gsap, ScrollTrigger } from 'gsap/all';
 
 const Replies = ({ comment, setReplyComment }) => {
     return (
@@ -23,7 +23,16 @@ const Replies = ({ comment, setReplyComment }) => {
                             />
                             <div style={{ padding: '0 20px' }}>
                                 <span style={{ display: 'block', fontSize: '1.6em', fontWeight: 'bold', marginBottom: 10 }}>{reply.user}</span>
-                                {reply.content}
+                                <textarea readOnly rows="4" cols="50" style={{
+                                            fontWeight: 600,
+                                            border: 'none',
+                                            background: '#efefef',
+                                            fontFamily: 'Mulish',
+                                            fontSize: '1.1em',
+                                            lineHeight: 1.8,
+                                        }}>
+                                            {reply.content}
+                                        </textarea>
                             </div>
                         </div>
 
@@ -85,7 +94,7 @@ const Post = ({ postsFromDB, refPosts }) => {
     }
     useEffect(() => {
         const triggers = ScrollTrigger.getAll();
-        triggers.forEach(tr=>{
+        triggers.forEach(tr => {
             tr.kill()
         })
         // gsap.to(postContainer.current, {
@@ -98,9 +107,9 @@ const Post = ({ postsFromDB, refPosts }) => {
         //     }
         // });
 
-        const getPost =  async() => {
+        const getPost = async () => {
             const postRes = await axios.get(`${AppUrl}api/posts/show/${selectedPost}`);
-            console.log('postRes',postRes);
+            console.log('postRes', postRes);
             setPost(postRes.data)
         }
         getPost()
@@ -118,7 +127,7 @@ const Post = ({ postsFromDB, refPosts }) => {
 
     return (
         <div ref={postContainer} style={{ width: '100%', height: '100%', background: '#fff', padding: '40px 20px', position: 'absolute', zIndex: 999 }}>
-            <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => {history.push('/')}} />
+            <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => { history.push('/') }} />
             <h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: '3em' }}>{post.title}</h1>
             <div dangerouslySetInnerHTML={{ __html: "<style>@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');</style>" + post.content }} />
             {/* {!!(post.content) && <Editor
@@ -135,7 +144,7 @@ const Post = ({ postsFromDB, refPosts }) => {
                 />} */}
 
             {comments.length > 0 && <p style={{ fontSize: '2.5em', marginTop: 30 }}>{replyComment ? 'Comment' : 'Comments'}</p>}
-            <Form style={{paddingBottom:20}}>
+            <Form style={{ paddingBottom: 20 }}>
                 {replyComment ?
                     <div style={{ display: 'flex', margin: '20px 0' }}>
                         <Avatar
@@ -160,7 +169,16 @@ const Post = ({ postsFromDB, refPosts }) => {
                                     />
                                     <div style={{ padding: '0 20px' }}>
                                         <span style={{ display: 'block', fontSize: '1.6em', fontWeight: 'bold', marginBottom: 10 }}>{item.user}</span>
-                                        {item.content}
+                                        <textarea readOnly rows="4" cols="50" style={{
+                                            fontWeight: 600,
+                                            border: 'none',
+                                            background: '#efefef',
+                                            fontFamily: 'Mulish',
+                                            fontSize: '1.1em',
+                                            lineHeight: 1.8,
+                                        }}>
+                                            {item.content}
+                                        </textarea>
                                     </div>
                                 </div>
 
@@ -197,7 +215,7 @@ const Post = ({ postsFromDB, refPosts }) => {
                     <StyledBlueButton onClick={submitComment} icon="image"
                     >
                         Submit
-                </StyledBlueButton>
+                    </StyledBlueButton>
                     {replyComment.content && (
                         <StyledRedButton onClick={() => setReplyComment('')} icon="image"
                         >

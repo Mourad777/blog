@@ -73,7 +73,7 @@ const Comments = () => {
                                 padding: 20,
                             }} key={c.id}>
                                 <td>{i + 1}</td>
-                               
+
                                 <td>{c.user}</td>
                                 <td>{c.email}</td>
                                 <td> <div style={{ display: 'flex', justifyContent: 'space-around' }}><Checkbox checked={!!c.is_approved} onChange={() => handleCommentApproval(c.id)} /></div></td>
@@ -88,14 +88,25 @@ const Comments = () => {
                             }}
                             >
                                 <td></td>
-                                <td style={{ background: '#efefef', paddingLeft: 20 }} colSpan="4"><p>{c.content}</p></td>
+                                <td style={{ background: '#efefef', paddingLeft: 20 }} colSpan="4">
+                                    <textarea readOnly rows="4" cols="50" style={{
+                                        fontWeight: 600,
+                                        border: 'none',
+                                        background: '#efefef',
+                                        fontFamily: 'Mulish',
+                                        fontSize: '1.1em',
+                                        lineHeight: 1.8,
+                                    }}>
+                                        {c.content}
+                                    </textarea>
+                                </td>
                             </tr>
                         </Fragment>
                     ))}
 
                 </tbody>
             </table>
-        </div>
+        </div >
     )
 }
 
