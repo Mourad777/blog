@@ -14,7 +14,7 @@ export const getWindowSizeInteger = windowWidth => {
     return widthInteger;
 };
 
-export const getHeroSectionPicStyle = (windowWidth, scroll) => {
+export const getHeroSectionPicStyle = (windowWidth) => {
     let top, right, width, height;
     if (windowWidth === 1) {
         top = "calc(100vh - 654px)";
@@ -100,20 +100,11 @@ export const getHeroSectionPicPiecesStyle = (windowWidth, piece, scroll) => {
     if (piece === 1) image = herSectionPieceOne;
     if (piece === 2) image = herSectionPieceTwo;
     if (piece === 3) image = herSectionPieceThree;
-    // let visibility = 'visible';
-    const opacity =1- scroll*100;
-    let transform;
-    if (piece === 1 || piece === 3) {
-        transform = `translateY(${-5000 * scroll}px)`
-    }
-    if (piece === 2) {
-        transform = `translateY(${5000 * scroll}px)`
-    }
+
     return {
         background: `url('${image}')`,
         position: "fixed",
         backgroundPosition: "center center",
-        // visibility,
         backgroundRepeat: "no-repeat",
         backgroundSize: "100%",
         top,
@@ -121,13 +112,10 @@ export const getHeroSectionPicPiecesStyle = (windowWidth, piece, scroll) => {
         height,
         width,
         zIndex: -4,
-        transform,
-        transition: "all 1s ease-out",
-        // opacity,
     };
 };
 
-export const getHeroSectionNameStyle = (windowWidth, scroll) => {
+export const getHeroSectionNameStyle = (windowWidth) => {
     let top, right, height, width;
     if (windowWidth === 1) {
         top = "calc(100vh - 218px)";
@@ -168,12 +156,10 @@ export const getHeroSectionNameStyle = (windowWidth, scroll) => {
         top,
         right,
         width,
-        transform: `translateX(${5000 * scroll}px)`,
-        transition: "transform 1s ease-out",
     };
 };
 
-export const getHeroSectionTextStyle = (windowWidth, isAssetLoaded, scroll) => {
+export const getHeroSectionTextStyle = (windowWidth) => {
     let top, right, fontSize, width;
     if (windowWidth === 1) {
         top = "calc(100vh - 127px)";
@@ -214,10 +200,7 @@ export const getHeroSectionTextStyle = (windowWidth, isAssetLoaded, scroll) => {
         right,
         fontSize,
         width,
-        opacity: isAssetLoaded ? 1 : 0,
         zIndex: -4,
-        transform: `translateX(${5000 * scroll}px)`,
-        transition: "transform 1s ease-out",
 
     };
 };

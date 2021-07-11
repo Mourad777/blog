@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use stdClass;
 
 class CategoriesController extends Controller
 {
@@ -53,6 +54,13 @@ class CategoriesController extends Controller
     public function show($id)
     {
         //
+        $category = Category::find($id);
+        $category_content = new stdClass();
+        $category_content->posts = $category->posts();
+        $category_content->photos = $category->photos();
+        $category_content->videos = $category->videos();
+        return $category_content;
+
     }
 
     /**

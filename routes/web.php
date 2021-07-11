@@ -42,11 +42,16 @@ Route::delete('/api/posts/delete/{id}', 'PostsController@destroy');
 
 Route::get('/api/categories', 'CategoriesController@index');
 
+Route::get('/api/category/{id}', 'CategoriesController@show');
+
 Route::post('/api/categories/save', 'CategoriesController@store');
 
 Route::post('/api/categories/update/{id}', 'CategoriesController@update');
 
 Route::delete('/api/categories/delete/{id}', 'CategoriesController@destroy');
+
+
+Route::get('/api/countries/{country_iso}', 'CountriesController@show');
 
 
 Route::get('/api/comments/post/{id}', 'CommentsController@index');

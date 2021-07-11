@@ -15,8 +15,8 @@ import axios from 'axios'
 import './editor.css'
 import { useParams, useHistory } from 'react-router';
 import { AppUrl } from '../../blog/utility';
-import { countries } from '../../blog/countries';
-import TagInput from '../../blog/TagInput';
+import { countries } from '../util/countries-iso';
+import TagInput from '../../../components/TagInput/TagInput';
 
 const processCategories = (categories) => {
     const processedCategories = categories.map(cat => {

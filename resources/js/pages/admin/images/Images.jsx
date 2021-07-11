@@ -9,8 +9,8 @@ import {
 import axios from 'axios';
 import { AppUrl } from '../../blog/utility';
 import { Checkbox, Segment, Dropdown } from 'semantic-ui-react'
-import { countries } from "../../blog/countries";
-import TagInput from "../../blog/TagInput";
+import { countries } from "../util/countries-iso";
+import TagInput from "../../../components/TagInput/TagInput";
 import EXIF from "exif-js";
 import {
     DateInput,
@@ -37,9 +37,7 @@ const updateOrder = async (items) => {
     const updateOrderUrl = `${AppUrl}api/configurations/update`;
     const order = items.map(item => item.id);
     const configFormData = new FormData();
-    console.log('order to upload', order);
     configFormData.append('photo_gallery_order', JSON.stringify(order));
-    console.log('order', order)
     const resUpdateOrder = await axios.post(updateOrderUrl, configFormData,
         {
             headers: { 'Content-Type': 'multipart/form-data' }

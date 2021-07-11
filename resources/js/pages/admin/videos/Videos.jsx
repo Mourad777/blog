@@ -13,14 +13,8 @@ import {
 import axios from 'axios';
 import { AppUrl } from '../../blog/utility';
 import { Checkbox, Segment, Dropdown } from 'semantic-ui-react'
-import { countries } from "../../blog/countries";
-import TagInput from "../../blog/TagInput";
-import {
-    DateInput,
-    TimeInput,
-    DateTimeInput,
-    DatesRangeInput
-} from 'semantic-ui-calendar-react';
+import { countries } from "../util/countries-iso";
+import TagInput from "../../../components/TagInput/TagInput";
 import ReactPlayer from 'react-player'
 import VideoIcon from '../../../../../public/assets/video-icon.jpg'
 

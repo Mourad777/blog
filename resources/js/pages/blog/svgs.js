@@ -1,4 +1,3 @@
-import { divide } from "lodash";
 import React from "react";
 
 export const lineSmallDevice = `M25.3,109.1c1.3,1.9,15.4-7.5,16.6-5.6c1.7,2.5,1.3,10,4,11.5c2.3,1.3,8.2-1.7,10.5-0.4c2.4,1.4,3.9,7.9,6.5,9

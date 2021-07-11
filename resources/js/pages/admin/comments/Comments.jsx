@@ -27,8 +27,7 @@ const Comments = () => {
     const history = useHistory();
     const params = useParams();
     const [comments, setComments] = useState([]);
-    const [selectedPost, setSelectedPost] = useState(null);
-
+    const [post, setPost] = useState({});
 
     const getComments = async (postId) => {
         const res = await axios.get(`${AppUrl}api/comments/post/${postId}`);
@@ -37,9 +36,16 @@ const Comments = () => {
         setComments(processComments(comments));
     }
 
+    const getPost = async (postId) => {
+        const res = await axios.get(`${AppUrl}api/posts/show/${postId}`);
+        console.log('res post', res)
+        const post = res.data;
+        setPost(post);
+    }
+
     useEffect(() => {
         const postId = params.id;
-        setSelectedPost(postId);
+        getPost(postId);
         getComments(postId);
     }, [])
 
@@ -60,7 +66,7 @@ const Comments = () => {
 
     return (
         <div style={{ margin: 'auto', maxWidth: 800 }}>
-            <h1>Comments</h1>
+            <h1>Post Comments from {post.title}</h1>
             <table style={{ margin: 'auto', width: '100%' }}>
                 <tbody>
 

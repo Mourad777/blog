@@ -99,8 +99,8 @@ height: 2000px;
 width: 100%;
 background-repeat: no-repeat;
 position: fixed;
-background-position: ${props => props.windowWidth === 1 ? 'left 160px top -180px' : 'left -160px top -680px'};
-background-size: ${props => props.windowWidth === 1 ? 'auto' : '300em'};
+background-position: ${props => props.windowWidth === 1 ? 'left -100px top -290px' : 'left -160px top -680px'};
+background-size: ${props => props.windowWidth === 1 ? '150em' : '300em'};
 z-index: ${props => props.layer === 'top' ? -3 : -10};
 will-change: transform;
   }
