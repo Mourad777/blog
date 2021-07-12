@@ -55,15 +55,16 @@ class CategoriesController extends Controller
     public function show($category)
     {
 
-        $categoryId = Category::firstWhere('name', Str::lower($category))->get()[0]->id;
+        $categoryId = Category::where('name', Str::lower($category))->get()[0]->id;
 
         $category = Category::find($categoryId);
-        $posts = $category->videos()->get();
-        Log::info($posts);
-        $posts = $category->posts()->get();
-        $photos = $category->photos()->get();
-        $videos = $category->videos()->get();
 
+        Log::info('cat--- *&'.$category);
+        $posts = $category->posts;
+        $photos = $category->photos;
+        $videos = $category->videos;
+        Log::info($videos);
+        Log::info($photos);
         $posts->map(function ($post) {
             if ($post->image) {
                 $post->image = Storage::disk(name: 's3')->url($post->image);

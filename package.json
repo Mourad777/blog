@@ -34,7 +34,6 @@
         "array-move": "^3.0.1",
         "d3-geo-projection": "^3.0.0",
         "exif-js": "^2.3.0",
-        "font-awesome": "^4.7.0",
         "gsap": "^3.7.0",
         "moment": "^2.29.1",
         "react-alice-carousel": "^2.5.1",

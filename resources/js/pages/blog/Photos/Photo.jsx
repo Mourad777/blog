@@ -50,7 +50,7 @@ const Photo = ({ winSize }) => {
             className="photo-preview-container"
         >
             <div style={{ padding: 20 }}>
-                <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => { history.push('/') }} />
+                <Button content='Home' onClick={() => { history.push('/') }} />
             </div>
             <div
                 style={{

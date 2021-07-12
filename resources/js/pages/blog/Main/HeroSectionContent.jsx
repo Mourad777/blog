@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import SearchInput from '../../../components/blog/SearchInput/SearchInput';
 import { heroTextPathOne } from '../svgs';
 import {
     getHeroSectionPicPiecesStyle,
@@ -6,9 +7,21 @@ import {
     getHeroSectionNameStyle,
     getHeroSectionTextStyle,
 } from "../utility";
-const HeroSectionContent = ({winSize,heroPicMainRef,isAssetLoaded}) => {
+const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
     return (
         <Fragment>
+            <div
+                style={{
+                    margin: 'auto',
+                    bottom: 85,
+                    transform: 'translateX(-50%)',
+                    left: '50%',
+                    position:'absolute'
+                }}
+            >
+                <SearchInput />
+            </div>
+
             <div id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize), position: 'fixed' }} />
             {["One", "Two", "One"].map((piece, i) => (
                 <div

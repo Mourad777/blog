@@ -15,23 +15,27 @@ const PostText = ({ post, isMobile }) => {
                     alignItems: "center",
                     minHeight: isMobile ? 'calc(100vh - 461px)' : 200,
                     minWidth: isMobile ? '' : 478,
+                    position: 'relative'
                 }}
             >
                 <div
                     style={{
                         color: "white",
-                        width: "80%",
+                        // width: "80%",
                         padding: 5,
                         textAlign: isMobile ? 'center' : '',
                         zIndex: 2,
                         fontSize: 16,
-                        background: 'transparent !important'
+                        background: 'transparent !important',
+                        position: 'absolute',
+                        top: 60,
+                        left: '20%',
                     }}
 
                 >
-                    <div>
-                        <p style={{ fontSize: '1.5em' }}>{post.title}</p>
-                        <p style={{ fontStyle: 'italic', color: 'rgb(251,251,251)', }}>{moment(new Date(post.created_at).getTime()).format("MMMM DD YYYY")}</p>
+                    <div >
+                        {!!post.title && <p style={{ fontSize: '1.5em' }}>{post.title}</p>}
+                        {!!post.created_at && <p style={{ fontStyle: 'italic', color: 'rgb(251,251,251)', }}>{moment(new Date(post.created_at).getTime()).format("MMMM DD YYYY")}</p>}
 
                     </div>
                 </div>

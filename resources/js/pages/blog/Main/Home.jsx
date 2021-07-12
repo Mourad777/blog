@@ -213,7 +213,7 @@ const Home = ({ scrollWidth,winSize }) => {
                 <StyledMapOverlay id="map-overlay" windowWidth={winSize} />
 
                 {/* path drawing on world map svg */}
-                 <MapPath winSize={winSize} />
+                 {/* <MapPath winSize={winSize} /> */}
 
                 <div id="container" style={{ position: "relative" }}>
                     <StyledHeroSection ref={refSection1} id="hero-section" >

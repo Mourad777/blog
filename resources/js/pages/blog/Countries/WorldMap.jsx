@@ -44,7 +44,7 @@ const WorldMap = ({ winSize, reference, postsFromDB = [], photos, videos }) => {
                                             ? "#840404"
                                             : "rgb(218, 173, 134)"
                                     }
-
+                                    cursor={isHighlighted ? 'pointer' : 'default'}
                                     onClick={handleClick(geo.properties)}
                                 // stroke="#840404"
                                 />

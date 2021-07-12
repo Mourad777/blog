@@ -119,9 +119,9 @@ export const getHeroSectionPicPiecesStyle = (windowWidth, piece, scroll) => {
 export const getHeroSectionNameStyle = (windowWidth) => {
     let top, right, height, width;
     if (windowWidth === 1) {
-        top = "calc(100vh - 218px)";
-        right = -470;
-        width = 800;
+        top = "calc(100vh - 590px)";
+        right = -660;
+        width = 1000;
     }
     if (windowWidth === 2) {
         top = "calc(100vh - 220px)";
@@ -163,9 +163,9 @@ export const getHeroSectionNameStyle = (windowWidth) => {
 export const getHeroSectionTextStyle = (windowWidth) => {
     let top, right, fontSize, width;
     if (windowWidth === 1) {
-        top = "calc(100vh - 127px)";
-        right = 10;
-        fontSize = "0.8em";
+        top = "calc(100vh - 470px)";
+        right = 25;
+        fontSize = "1em";
         width = 300;
     }
     if (windowWidth === 2) {

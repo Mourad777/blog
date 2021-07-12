@@ -26,7 +26,7 @@ const Video = () => {
     return (
         <div style={{ background: '#ece7e2', height: '100vh', width: '100%' }}>
             <div style={{ padding: 20 }}>
-                <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => { history.push('/') }} />
+                <Button content='Home' onClick={() => { history.push('/') }} />
             </div>
             <p style={{ color: 'rgb(218, 173, 134)', fontSize: '4em', fontFamily: 'Mulish', textAlign: 'center', paddingTop: 56 }}>{video.title}</p>
             <div style={{
