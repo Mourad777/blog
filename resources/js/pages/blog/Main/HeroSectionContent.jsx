@@ -24,25 +24,27 @@ const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
                 <SearchInput />
             </div>
             <div
+                className="scroll-arrows"
                 style={{
                     position: 'absolute',
                     bottom: 55,
                     textAlign: 'center',
                     /* width: 100%, */
                     left: '3%',
-                    
+
                 }}
             >
                 <ScrollDownArrow />
             </div>
             <div
+                className="scroll-arrows"
                 style={{
                     position: 'absolute',
                     bottom: 55,
                     textAlign: 'center',
                     /* width: 100%, */
                     right: '3%',
-                    
+
                 }}
             >
                 <ScrollDownArrow />

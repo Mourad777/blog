@@ -6,7 +6,7 @@ import ReactPaginate from 'react-paginate';
 import { Link } from "react-scroll";
 import { gsap } from 'gsap/all';
 
-const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection,setPhoto,reference }) => {
+const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection, setPhoto, reference }) => {
 
     const [offset, setOffset] = useState(0);
     const [pageCount, setPageCount] = useState(0);
@@ -72,62 +72,62 @@ const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection
         setOffset(selectedPage + 1)
     };
 
-    return (<div ref={reference} style={{height:'100vh',overflow:'hidden'}}>
-        
-            <StyledLatestPostsTopLayer >
-                <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#fff', textAlign: 'center' }}>Posts</p>
-                {/* <Link
+    return (<div ref={reference} style={{ height: '100vh', overflow: 'hidden' }}>
+
+        <StyledLatestPostsTopLayer >
+            <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#fff', textAlign: 'center' }}>Posts</p>
+            {/* <Link
                     activeClass="activeLink"
                     to="posts-section"
                     spy={true}
                     smooth={true}
                     duration={2000}
                 > */}
-                    {/* <StyledSeeAllPostsText 
+            {/* <StyledSeeAllPostsText 
                     onClick={() => {
                         // if (selectedSection === 'posts') return;
                         setSelectedSection('posts');
                         gsap.to(window,{duration:1, scrollTo:refB.current});
                     }}
                     >See all posts</StyledSeeAllPostsText> */}
-                {/* </Link> */}
-                {/* <p style={{fontFamily: 'Mulish', fontSize: '1em', color: '#fff', textAlign: 'center',position:'absolute'}}>See all posts</p> */}
-            </StyledLatestPostsTopLayer>
-            <div style={{
-                display: 'flex', background: '#DAAD86',
-                height:
-                    // 'calc(100vh - 760px)'
-                    '100%',
-                maxHeight: 50,
-            }}>
-                <ReactPaginate
-                    previousLabel={"prev"}
-                    nextLabel={"next"}
-                    breakLabel={"..."}
-                    breakClassName={"break-me"}
-                    pageCount={pageCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={handlePageClick}
-                    containerClassName={"pagination"}
-                    subContainerClassName={"pages pagination"}
-                    activeClassName={"active"} />
-            </div>
-            <StyledLatestPostsOuterWrapper >
-                {winSize > 1 &&<OuterColumn isLeft />}
-                <StyledLatestPostsInnerWrapper >
-                    {posts.map((post, index) => (
-                        <StyledPostRow key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >
+            {/* </Link> */}
+            {/* <p style={{fontFamily: 'Mulish', fontSize: '1em', color: '#fff', textAlign: 'center',position:'absolute'}}>See all posts</p> */}
+        </StyledLatestPostsTopLayer>
+        <div style={{
+            display: 'flex', background: '#DAAD86',
+            height:
+                // 'calc(100vh - 760px)'
+                '100%',
+            maxHeight: 50,
+        }}>
+            {postsFromDB.length > 1 && <ReactPaginate
+                previousLabel={"prev"}
+                nextLabel={"next"}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={pageCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={handlePageClick}
+                containerClassName={"pagination"}
+                subContainerClassName={"pages pagination"}
+                activeClassName={"active"} />}
+        </div>
+        <StyledLatestPostsOuterWrapper >
+            {winSize > 1 && <OuterColumn isLeft />}
+            <StyledLatestPostsInnerWrapper >
+                {posts.map((post, index) => (
+                    <StyledPostRow key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >
 
-                            <RowLayout winSize={winSize} post={post} index={index} />
+                        <RowLayout winSize={winSize} post={post} index={index} />
 
-                        </StyledPostRow>
-                    ))}
-                    <div style={{ background: '#daad86', height: '100%' }} />
-                </StyledLatestPostsInnerWrapper>
-                {winSize > 1 &&<OuterColumn />}
-            </StyledLatestPostsOuterWrapper>
- 
+                    </StyledPostRow>
+                ))}
+                <div style={{ background: '#daad86', height: '100%' }} />
+            </StyledLatestPostsInnerWrapper>
+            {winSize > 1 && <OuterColumn />}
+        </StyledLatestPostsOuterWrapper>
+
 
 
 

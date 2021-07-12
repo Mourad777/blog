@@ -153,7 +153,7 @@ const Home = ({ scrollWidth,winSize }) => {
                     // endTrigger:panel,
                     scrub: 0.5,
                     snap: true,
-                    markers: true,
+                    // markers: true,
                     pin: false,
                 });
 
@@ -213,7 +213,7 @@ const Home = ({ scrollWidth,winSize }) => {
                 <StyledMapOverlay id="map-overlay" windowWidth={winSize} />
 
                 {/* path drawing on world map svg */}
-                 {/* <MapPath winSize={winSize} /> */}
+                 <MapPath winSize={winSize} />
 
                 <div id="container" style={{ position: "relative" }}>
                     <StyledHeroSection ref={refSection1} id="hero-section" >
