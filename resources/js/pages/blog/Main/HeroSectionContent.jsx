@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import ScrollDownArrow from '../../../components/blog/ScrollDownArrow/ScrollDownArrow';
 import SearchInput from '../../../components/blog/SearchInput/SearchInput';
 import { heroTextPathOne } from '../svgs';
 import {
@@ -6,6 +7,7 @@ import {
     getHeroSectionPicStyle,
     getHeroSectionNameStyle,
     getHeroSectionTextStyle,
+    getSearchInputStyle,
 } from "../utility";
 const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
     return (
@@ -13,15 +15,38 @@ const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
             <div
                 style={{
                     margin: 'auto',
-                    bottom: 85,
                     transform: 'translateX(-50%)',
                     left: '50%',
-                    position:'absolute'
+                    position: 'absolute',
+                    ...getSearchInputStyle(winSize)
                 }}
             >
                 <SearchInput />
             </div>
-
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: 55,
+                    textAlign: 'center',
+                    /* width: 100%, */
+                    left: '3%',
+                    
+                }}
+            >
+                <ScrollDownArrow />
+            </div>
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: 55,
+                    textAlign: 'center',
+                    /* width: 100%, */
+                    right: '3%',
+                    
+                }}
+            >
+                <ScrollDownArrow />
+            </div>
             <div id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize), position: 'fixed' }} />
             {["One", "Two", "One"].map((piece, i) => (
                 <div

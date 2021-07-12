@@ -15,6 +15,34 @@ export const getWindowSizeInteger = windowWidth => {
     return widthInteger;
 };
 
+export const getSearchInputStyle = (windowWidth) => {
+    let top = 20;
+    if (windowWidth === 1) {
+        top = 20;
+    }
+    // if (windowWidth === 2) {
+    //     top = ;
+    //     left = -390;
+    //     width = 1000;
+    // }
+    // if (windowWidth === 3) {
+    //     top = "calc(100vh - 350px)";
+    //     left = -710;
+    //     width = 1800;
+    // }
+    // if (windowWidth === 4) {
+    //     top = "calc(100vh - 600px)";
+    //     left = -1020;
+    //     width = 2800;
+    // }
+    // if (windowWidth === 5) {
+    //     top = "calc(100vh - 1700px)";
+    //     left = -1000;
+    //     width = 2900;
+    // }
+    return {top}
+}
+
 export const getHeroSectionPicStyle = (windowWidth) => {
     let top, right, width, height;
     if (windowWidth === 1) {
@@ -119,7 +147,7 @@ export const getHeroSectionPicPiecesStyle = (windowWidth, piece, scroll) => {
 export const getHeroSectionNameStyle = (windowWidth) => {
     let top, right, height, width;
     if (windowWidth === 1) {
-        top = "calc(100vh - 590px)";
+        top = "calc(100vh - 550px)";
         right = -660;
         width = 1000;
     }
@@ -163,7 +191,7 @@ export const getHeroSectionNameStyle = (windowWidth) => {
 export const getHeroSectionTextStyle = (windowWidth) => {
     let top, right, fontSize, width;
     if (windowWidth === 1) {
-        top = "calc(100vh - 470px)";
+        top = "calc(100vh - 440px)";
         right = 25;
         fontSize = "1em";
         width = 300;
