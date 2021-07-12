@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-// import Carousel from 'react-gallery-carousel';
-import 'react-gallery-carousel/dist/index.css';
-import CameraInfo from "../../../components/blog/Photo/CameraInfo";
 import 'react-alice-carousel/lib/alice-carousel.css';
 import Carousel from 'react-alice-carousel';
 import { useHistory } from "react-router-dom";

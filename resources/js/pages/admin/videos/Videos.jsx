@@ -299,7 +299,7 @@ function VideoGallery() {
                         <label style={{ fontSize: '1.2em' }}>Create a new category</label>
                         <StyledFormTextInput value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder='New Category' />
                         <div style={{ marginTop: 10 }}>
-                            <StyledBlueButton onClick={handleNewCategorySubmit} icon="image"
+                            <StyledBlueButton disabled={!newCategory} onClick={handleNewCategorySubmit} icon="image"
                             >
                                 Create Category
                             </StyledBlueButton>

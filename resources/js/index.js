@@ -6,7 +6,6 @@ import Home from './pages/blog/Main/Home'
 import './style.css'
 import { Switch, Route } from "react-router-dom";
 import Posts from "./pages/admin/posts/Posts"
-import AdminPost from "./pages/admin/post/Post"
 import Comments from "./pages/admin/comments/Comments"
 import CreatePost from "./pages/admin/create-post/CreatePost"
 import Images from "./pages/admin/images/Images"
@@ -53,9 +52,6 @@ const App = () => {
                     <AdminLayout>
                         <Route exact path="/admin/posts">
                             <Posts />
-                        </Route>
-                        <Route exact path="/admin/post/:id">
-                            <AdminPost />
                         </Route>
                         <Route exact path="/admin/post/:id/comments">
                             <Comments />

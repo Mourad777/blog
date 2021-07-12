@@ -1,7 +1,8 @@
-import herSectionPic from '../../../../public/assets/hero-section-blur-1-min.png'
+// import herSectionPic from '../../../../public/assets/hero-section-blur-1-min.png'
+import herSectionPic from '../../../../public/assets/hero-section-main-new-small.png'
 import herSectionPieceOne from '../../../../public/assets/hero-section-piece-1-min.png'
 import herSectionPieceTwo from '../../../../public/assets/hero-section-piece-2-min.png'
-import herSectionPieceThree from '../../../../public/assets/hero-section-piece-3-min.png'
+import herSectionPieceThree from '../../../../public/assets/hero-section-piece-3-min.png';
 
 
 export const getWindowSizeInteger = windowWidth => {
@@ -17,15 +18,15 @@ export const getWindowSizeInteger = windowWidth => {
 export const getHeroSectionPicStyle = (windowWidth) => {
     let top, right, width, height;
     if (windowWidth === 1) {
-        top = "calc(100vh - 654px)";
-        right = -332;
-        width = 982;
+        top = "calc(100vh - 825px)";
+        right = -500;
+        width = 1360;
         height = "calc(100vh + 200px)";
     }
     if (windowWidth === 2) {
-        top = "calc(100vh - 927px)";
-        right = -400;
-        width = 1450;
+        top = "calc(100vh - 1020px)";
+        right = -460;
+        width = 1650;
         height = "calc(100vh + 400px)";
     }
     if (windowWidth === 3) {

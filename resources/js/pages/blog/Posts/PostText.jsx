@@ -1,5 +1,5 @@
 import React from "react";
-
+import moment from "moment";
 const PostText = ({ post, isMobile }) => {
     return (
         <div
@@ -22,14 +22,18 @@ const PostText = ({ post, isMobile }) => {
                         color: "white",
                         width: "80%",
                         padding: 5,
-                        textAlign:isMobile ? 'center' : '',
+                        textAlign: isMobile ? 'center' : '',
                         zIndex: 2,
                         fontSize: 16,
                         background: 'transparent !important'
                     }}
 
                 >
-                    <span style={{fontSize:'1.3em'}}>{post.title}</span>
+                    <div>
+                        <p style={{ fontSize: '1.5em' }}>{post.title}</p>
+                        <p style={{ fontStyle: 'italic', color: 'rgb(251,251,251)', }}>{moment(new Date(post.created_at).getTime()).format("MMMM DD YYYY")}</p>
+
+                    </div>
                 </div>
 
             </div>

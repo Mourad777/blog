@@ -117,6 +117,7 @@ class PostsController extends Controller
         }
         Log::info('author creating post'.$request->author);
         $post->author = $request->author;
+        $post->summary = $request->summary;
         $post->content = $request->content;
         $post->country = $request->country;
         $post->tags = $request->tags;
@@ -180,7 +181,7 @@ class PostsController extends Controller
         $post->is_published = $request->is_published;
 
         $post->author = $request->author;
-
+        $post->summary = $request->summary;
 
         $post->country = $request->country;
 

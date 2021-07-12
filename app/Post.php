@@ -13,7 +13,7 @@ class Post extends Model
         'title',
         'author',
         'is_published',
-        // 'selected_categories',
+        'summary',
         'country',
         'tags',
         'content',

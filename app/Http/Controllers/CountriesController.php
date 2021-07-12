@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Post;
 use App\Photo;
 use App\Video;
-use \stdClass;
 use Storage;
 
 use Illuminate\Support\Facades\Log;
@@ -27,7 +26,6 @@ class CountriesController extends Controller
             Log::info('counting comments for each post' . count($post->comments));
             $post->categories = $post->categories()->get();
             $post->comments = $post->comments()->get();
-            $post->comment_count = getCommentCount($post->comments);
 
             return $post;
         });

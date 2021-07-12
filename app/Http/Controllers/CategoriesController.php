@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
-use stdClass;
+use Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class CategoriesController extends Controller
 {
@@ -40,9 +42,8 @@ class CategoriesController extends Controller
     {
         //
         $category = new Category;
-        $category->name = $request->name;
+        $category->name = Str::lower($request->name);
         $category->save();
-
     }
 
     /**
@@ -51,16 +52,46 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($category)
     {
-        //
-        $category = Category::find($id);
-        $category_content = new stdClass();
-        $category_content->posts = $category->posts();
-        $category_content->photos = $category->photos();
-        $category_content->videos = $category->videos();
-        return $category_content;
 
+        $categoryId = Category::firstWhere('name', Str::lower($category))->get()[0]->id;
+
+        $category = Category::find($categoryId);
+        $posts = $category->videos()->get();
+        Log::info($posts);
+        $posts = $category->posts()->get();
+        $photos = $category->photos()->get();
+        $videos = $category->videos()->get();
+
+        $posts->map(function ($post) {
+            if ($post->image) {
+                $post->image = Storage::disk(name: 's3')->url($post->image);
+            }
+            Log::info('counting comments for each post' . count($post->comments));
+            $post->categories = $post->categories()->get();
+            $post->comments = $post->comments()->get();
+
+            return $post;
+        });
+
+        $photos->map(function ($photo) {
+            $photo->src = Storage::disk(name: 's3')->url($photo->url);
+            $photo->height = 1;
+            $photo->width = 1.5;
+            $photo->categories = $photo->categories()->get();
+            return $photo;
+        });
+
+        $videos->map(function ($video) {
+            $video->src = Storage::disk(name: 's3')->url($video->url);
+            if ($video->thumbnail) {
+                $video->thumbnail = Storage::disk(name: 's3')->url($video->thumbnail);
+            }
+            $video->categories = $video->categories()->get();
+            return $video;
+        });
+        return ["posts" => $posts, "photos" => $photos, "videos" => $videos];
     }
 
     /**

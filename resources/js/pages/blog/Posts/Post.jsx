@@ -14,15 +14,19 @@ const Replies = ({ comment, setReplyComment }) => {
             {(comment.replies || []).map(reply => {
                 if (!reply.is_approved) return null;
                 return (
-                    <div style={{ marginLeft: 10 }} key={reply.id}>
+                    <div style={{ marginLeft:30}} key={reply.id}>
                         <div style={{ display: 'flex', margin: '20px 0' }}>
-                            <Avatar
-                                size={60}
-                                md5Email={reply.encryptedEmail}
-                                round={true}
-                            />
+                            <div style={{ width: 60, 
+                                borderLeft:'5px solid #cecece',paddingLeft:5
+                                }}>
+                                <Avatar
+                                    size={60}
+                                    md5Email={reply.encryptedEmail}
+                                    round={true}
+                                />
+                            </div>
                             <div style={{ padding: '0 20px' }}>
-                                <span style={{ display: 'block', fontSize: '1.6em', fontWeight: 'bold', marginBottom: 10 }}>{reply.user}</span>
+                                <span style={{ display: 'block', fontSize: '1.6em', fontWeight: 'bold', marginBottom: 10,lineHeight:1.1 }}>{reply.user}</span>
                                 <textarea readOnly rows="4" cols="50" style={{
                                     fontWeight: 600,
                                     border: 'none',
@@ -117,7 +121,7 @@ const Post = ({ postsFromDB, refPosts }) => {
 
     return (
         <div ref={postContainer} style={{ width: '100%', height: '100%', background: '#fff', padding: '40px 20px', position: 'absolute', zIndex: 999 }}>
-            <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => { history.push('/') }} />
+            <Button content='Home' onClick={() => { history.push('/') }} />
             <h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: '3em' }}>{post.title}</h1>
             <div dangerouslySetInnerHTML={{ __html: "<style>@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');</style>" + post.content }} />
 
@@ -125,12 +129,13 @@ const Post = ({ postsFromDB, refPosts }) => {
             <Form style={{ paddingBottom: 20 }}>
                 {replyComment ?
                     <div style={{ display: 'flex', margin: '20px 0' }}>
-                        <Avatar
-                            size={100}
-                            md5Email={replyComment.encryptedEmail}
+                        <div style={{ width: 60 }}>
+                            <Avatar
+                                size={100}
+                                md5Email={replyComment.encryptedEmail}
 
-                        />
-
+                            />
+                        </div>
                         <textarea readOnly rows="3" cols="50" style={{
                             fontWeight: 600,
                             border: 'none',
@@ -138,10 +143,10 @@ const Post = ({ postsFromDB, refPosts }) => {
                             fontFamily: 'Mulish',
                             fontSize: '1.1em',
                             lineHeight: 1.8,
-                            marginLeft:20
-   
+                            marginLeft: 20
+
                         }}>
-                           {replyComment.content}
+                            {replyComment.content}
                         </textarea>
 
                     </div>
@@ -150,13 +155,15 @@ const Post = ({ postsFromDB, refPosts }) => {
                             if (!item.is_approved) return null;
                             return (<List.Item style={{ marginTop: 20 }} key={item.id}>
                                 <div style={{ display: 'flex', marginBottom: 20 }}>
-                                    <Avatar
-                                        size={60}
-                                        md5Email={item.encryptedEmail}
-                                        round={true}
-                                    />
+                                    <div style={{ width: 60 }}>
+                                        <Avatar
+                                            size={60}
+                                            md5Email={item.encryptedEmail}
+                                            round={true}
+                                        />
+                                    </div>
                                     <div style={{ padding: '0 20px' }}>
-                                        <span style={{ display: 'block', fontSize: '1.6em', fontWeight: 'bold', marginBottom: 10 }}>{item.user}</span>
+                                        <span style={{ display: 'block', fontSize: '1.6em', fontWeight: 'bold', marginBottom: 10,lineHeight:1.1 }}>{item.user}</span>
                                         <textarea readOnly rows="4" cols="50" style={{
                                             fontWeight: 600,
                                             border: 'none',
@@ -176,12 +183,9 @@ const Post = ({ postsFromDB, refPosts }) => {
                                 </StyledBlueButton>
                                 {(item.replies || []).length > 0 && (
                                     <div style={{ marginLeft: 20, marginTop: 10 }}>
-
                                         <Replies comment={item} setReplyComment={setReplyComment} />
-
                                     </div>
                                 )}
-
                             </List.Item>)
                         })}
                     </List>}

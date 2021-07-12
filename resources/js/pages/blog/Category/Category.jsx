@@ -9,6 +9,7 @@ import Photos from './Photos'
 import axios from 'axios'
 import { AppUrl } from '../utility';
 import countryCodes from '../Countries/country-codes.json';
+import moment from 'moment';
 
 function capitalize(str) {
     const capStr = str.charAt(0).toUpperCase() + str.slice(1);
@@ -27,6 +28,7 @@ const Country = ({ winSize }) => {
     const params = useParams();
     console.log('params', params)
     const selectedCountry = params.country;
+    console.log('selectedCountry', selectedCountry)
     const selectedCategory = params.categoryId;
     const history = useHistory();
     const [posts, setPosts] = useState([]);
@@ -39,7 +41,6 @@ const Country = ({ winSize }) => {
             tr.kill()
         });
         let url;
-
         if (selectedCountry) {
             //switch keys and values to search country code by country name
             const countryCodesSwapped = swap(countryCodes);
@@ -47,15 +48,13 @@ const Country = ({ winSize }) => {
             const country = capitalize(selectedCountry);
             const countryIso = countryCodesSwapped[country];
             url = `${AppUrl}api/countries/${countryIso}`;
-            console.log('url---', url)
         }
         if (selectedCategory) {
-            const categoryId = ''
-            url = `${AppUrl}api/photo/${categoryId}`
+            url = `${AppUrl}api/categories/${selectedCategory}`
         }
         const getContent = async () => {
             const contentResponse = await axios.get(url);
-            console.log('photo response', contentResponse)
+            console.log('content response', contentResponse)
             setPosts(contentResponse.data.posts || []);
             setPhotos(contentResponse.data.photos || []);
             setVideos(contentResponse.data.videos || []);
@@ -65,13 +64,13 @@ const Country = ({ winSize }) => {
     }, []);
     let videoContainerWidth;
     if (winSize === 1) {
-        videoContainerWidth = '95%'
+        videoContainerWidth = 300
     }
     if (winSize === 2) {
-        videoContainerWidth = 500
+        videoContainerWidth = 650
     }
     if (winSize >= 3) {
-        videoContainerWidth = 700
+        videoContainerWidth = 800
     }
 
     const titleContainerStyle = {
@@ -87,64 +86,107 @@ const Country = ({ winSize }) => {
         minWidth: 230,
         borderRadius: 5,
     }
+    let postColumns, gridWidth;
+    if (winSize > 2 && posts.length > 2) {
+        postColumns = 'repeat(3, 1fr)';
+        gridWidth = 800;
+    }
+    if (winSize === 2 || posts.length === 2) {
+        postColumns = 'repeat(2, 1fr)';
+        gridWidth = 650;
+    }
+    if (winSize === 1 || posts.length === 1) {
+        postColumns = 'repeat(1, 1fr)';
+        gridWidth = 300;
+    }
     return (
         <div style={{ height: '100%', width: '100%', background: '#ece7e2', minHeight: '100vh', paddingBottom: 20 }}>
             <div style={{ padding: 20 }}>
-                <Button labelPosition='left' icon='left chevron' content='Home' onClick={() => { history.push('/') }} />
+                <Button content='Home' onClick={() => { history.push('/') }} />
             </div>
-            <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '4em', fontFamily: 'Mulish', paddingTop: 30 }}>{capitalize(selectedCountry)}</p>
-            {posts.length > 0 && <div className="photo-category-container">
+            <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '4em', fontFamily: 'Mulish', paddingTop: 30 }}>{capitalize(selectedCountry || selectedCategory)}</p>
+            {posts.length > 0 && <div className="posts-category-container" style={{ padding: 10 }}>
                 <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '3em', fontFamily: 'Mulish' }}>Posts</p>
-                <div style={{ display: 'flex', justifyContent: 'space-around', padding: '0 20px' }}>
-                    {posts.map(p => <div key={p.title} style={{ background: '#fff', height: '50vh', width: '28%' }}>
-                        <div style={{ height: '15%', padding: 10 }}><p style={{
+                <div style={{
+                    display: 'grid',
+                    maxWidth: gridWidth,
+                    margin: '0 auto',
+                    gridGap: '3rem',
+                    gridTemplateColumns: postColumns,
+                }}>
+                    {posts.map(p => <div key={p.title} onClick={() => history.push(`/post/${p.id}`)} style={{ borderRadius: 5, background: '#fff', height: '50vh', cursor: 'pointer', }}>
+                        <div style={{ height: '25%', padding: 10 }}><p style={{
                             fontFamily: 'Mulish',
                             fontWeight: 600,
-                            color: '#daad86',
+                            // color: '#daad86',
                             textAlign: 'center',
-                        }}>{p.title}</p></div>
-                        <div style={{ height: '40%', background: 'blue' }}>
+                            fontSize: '1.5em',
+                            maxWidth: '100%'
 
+
+                        }}
+                        >{p.title + 'Hitchhiking across Mexico and Nicaragua'}</p></div>
+                        <div style={{ height: '40%', background: 'blue' }}>
+                            <img src={p.image} style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
                         </div>
-                        <span style={{ padding: 10 }}>February 10, 2021</span>
+                        <span style={{ fontStyle: 'italic', color: '#8b8b8b', padding: 10 }}>{moment(new Date(p.created_at).getTime()).format("MMMM DD YYYY")}</span>
                         <div style={{ padding: 10 }}>
                             <p>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem </p>
                         </div>
                     </div>)}
                 </div>
             </div>}
-            {photos.length > 0 && <div className="photo-category-container">
-                <Photos winSize={winSize} photos={photos} />
-            </div>}
-            {/* <Gallery photos={[...posts, ...posts]} renderImage={(props) => (
-                <div style={{ height: 200, width: 150, background: '#fff', border: 'red 1px solid' }} />
-            )} /> */}
-            {videos.length > 0 && <div className="video-category-container">
-                <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '3em', fontFamily: 'Mulish', paddingTop: 30 }}>Videos</p>
-                <div>
-                    {videos.map(v =>
-                    (<div style={{ background: '#fff',alignItems:'center', display: 'flex', flexDirection: winSize === 1 ? 'column' : 'row', borderRadius: 5, width: videoContainerWidth, margin: 'auto', color: 'rgb(0,0,0)' }}>
-                        <div style={{ position: 'relative', height: '100%',width:winSize === 1 ? '100%' :'50%'  }}>
-                            <div style={titleContainerStyle}><span>Title</span></div>
-                            <img src={v.thumbnail} style={{ objectFit: 'cover', width: '100%', borderRadius: winSize === 1 ? '5px 5px 0 0' : '5px 0 0 5px' }} />
-                        </div>
-                        <div style={{ 
-                            display:'flex',
-                            justifyContent:'space-around',
-                            flexDirection:'column',
-                            padding: 10, 
-                            height: winSize === 1 ? 200 : '100%',
-                            width:winSize === 1 ? '100%' :'50%' 
-                            }}>
-                            <p>fas;lkf al;kjfsa;lkjfafa as;lkjf fas;lkf al;
-                            kjfsa;lkjfafa as;lkjf fas;lkf al;kjfsa;lkjfafa as;lkjffas;lkf al;kjfsa;lkjfafa as;lkjf
-                            kjfsa;lkjfafa as;lkjf fas;lkf al;kjfsa;lkjfafa as;lkjffas;lkf al;kjfsa;lkjfafa as;lkjf
-                        </p>
-                        </div>
-                    </div>)
-                    )}
+            {
+                photos.length > 0 && <div className="photo-category-container">
+                    <Photos winSize={winSize} photos={photos} />
                 </div>
-            </div>}
+            }
+            {
+                videos.length > 0 && <div className="video-category-container">
+                    <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '3em', fontFamily: 'Mulish', paddingTop: 30 }}>Videos</p>
+                    <div>
+                        {videos.map(v =>
+                        (<div key={`video[${v.id}]`} style={
+                            {
+                                background: '#fff',
+                                alignItems: 'center',
+                                display: 'flex', flexDirection: winSize === 1 ? 'column' : 'row',
+                                borderRadius: 5,
+                                maxWidth: videoContainerWidth,
+                                margin: 'auto',
+                                color: 'rgb(0,0,0)',
+                                cursor: 'pointer',
+                                marginBottom: 20,
+                            }
+                        }
+                            onClick={() => history.push(`/video/${v.id}`)}>
+                            <div style={{ position: 'relative', height: '100%', width: winSize === 1 ? '100%' : '50%' }}>
+
+                                <img src={v.thumbnail} style={{ objectFit: 'cover', width: '100%', borderRadius: winSize === 1 ? '5px 5px 0 0' : '5px 0 0 5px' }} />
+                            </div>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                padding: 10,
+                                height: winSize === 1 ? 200 : '100%',
+                                width: winSize === 1 ? '100%' : '50%'
+                            }}>
+                                <div>
+                                    <p style={{ fontSize: '1.5em', textAlign: 'center',margin:0 }}>{v.title}</p>
+                                    <p style={{ fontStyle: 'italic', color: '#8b8b8b', padding: 10,textAlign:'center' }}>{moment(new Date(v.created_at).getTime()).format("MMMM DD YYYY")}</p>
+
+                                </div>
+
+                                <p style={{textAlign:'center'}}>{v.description}</p>
+
+                                <div />
+                            </div>
+                        </div>)
+                        )}
+                    </div>
+                </div>
+            }
             {/* <StyledBackdrop onClick={(e) => { history.push('/') }} /> */}
 
             {/* <h1 style={{ textAlign: 'center', paddingTop: 30 }}>  {selectedCountry.slice(0, 1).toUpperCase() + selectedCountry.slice(1, selectedCountry.length)} </h1> */}
@@ -157,7 +199,7 @@ const Country = ({ winSize }) => {
                 {p.title}
             </h5>))} */}
 
-        </div>
+        </div >
     )
 }
 

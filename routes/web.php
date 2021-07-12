@@ -42,7 +42,7 @@ Route::delete('/api/posts/delete/{id}', 'PostsController@destroy');
 
 Route::get('/api/categories', 'CategoriesController@index');
 
-Route::get('/api/category/{id}', 'CategoriesController@show');
+Route::get('/api/categories/{category}', 'CategoriesController@show');
 
 Route::post('/api/categories/save', 'CategoriesController@store');
 
