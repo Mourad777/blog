@@ -6,8 +6,6 @@ import {
 } from "../svgs";
 
 const MapPath = ({ winSize,
-    // pathLength, pathPosition, pointAtLength, 
-    // lineRef 
 }) => (
     <svg
         id="mySVG"
@@ -62,12 +60,11 @@ const MapPath = ({ winSize,
             strokeMiterlimit: 10,
             strokeDasharray: 3255,
             zIndex: -5,
-            // transition:'all 0.05s ease-in'
+            transition:'all 0.3s ease-in'
         }}
             // windowWidth={winSize}
             //  pathLength={pathLength} pathPosition={pathPosition}
             id="myline"
-            // ref={lineRef}
             strokeLinecap="round"
             className="st0"
             mask="url(#dash-mask)"

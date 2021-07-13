@@ -30,7 +30,7 @@ const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
                     bottom: 55,
                     textAlign: 'center',
                     /* width: 100%, */
-                    left: '3%',
+                    left: 5,
 
                 }}
             >
@@ -43,7 +43,7 @@ const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
                     bottom: 55,
                     textAlign: 'center',
                     /* width: 100%, */
-                    right: '3%',
+                    right: 5,
 
                 }}
             >

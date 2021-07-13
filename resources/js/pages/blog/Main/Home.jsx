@@ -24,6 +24,7 @@ import HeroSectionContent from "./HeroSectionContent";
 import { Fragment } from "react";
 import _ from "lodash";
 import VideoIcon from '../../../../../public/assets/video-icon.jpg'
+import { useHistory } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
@@ -45,6 +46,12 @@ const Home = ({ scrollWidth, winSize }) => {
     const [postsFromDB, setPostsFromDB] = useState([]);
     const [photos, setPhotos] = useState([]);
     const [videos, setVideos] = useState([]);
+    const [scrollPosition, setScrollPostion] = useState(0);
+
+    const handleScrollPosition = (value) => {
+        setScrollPostion(value)
+    }
+    const history = useHistory()
     useEffect(() => {
         //function that inserts placeholders in the posts array when necessary
         //for example if there are no posts
@@ -172,11 +179,13 @@ const Home = ({ scrollWidth, winSize }) => {
             // the animation to use
             const tlPath = gsap.timeline({ paused: true });
             const tlHeroPicOne = gsap.timeline({ paused: true });
+            const tlHeroPicOneEnd = gsap.timeline({ paused: true });
             // const tlHeroPicTwo = gsap.timeline({ paused: true });
             // const tlHeroPicThree = gsap.timeline({ paused: true });
 
             tlPath.to("#myline", { strokeDashoffset: 0 });
-            tlHeroPicOne.to("#hero-pic-1", { scale:1 });
+            tlHeroPicOne.to("#hero-pic-1", { scale: 1, rotate: '10deg', opacity: 1 });
+            // tlHeroPicOneEnd.to("#hero-pic-1", { scale: 0, rotate: '0deg', opacity: 0, });
             // tlHeroPicTwo.to("#hero-pic-1", { opacity: 1 });
             // tlHeroPicOne.to("#hero-pic-1", { opacity: 1 });
 
@@ -186,23 +195,27 @@ const Home = ({ scrollWidth, winSize }) => {
             const startY = 0;
             // const finishDistance = innerHeight / 5;
             const finishDistancePath = innerHeight * 2;
-            const finishDistanceHeroPicOne = innerHeight / 2;
+            const finishDistanceHeroPicOne = 200;
             // const finishDistanceHeroBackgroundPiece = innerHeight / 2;
             // Listen to the scroll event
             // _.throttle()
-            document.addEventListener("scroll", _.throttle(function () {
+            document.addEventListener("scroll", _.debounce(function () {
                 // Prevent the update from happening too often (throttle the scroll event)
                 if (!requestId) {
                     requestId = requestAnimationFrame(update);
                 }
-            },50,{leading:true}));
+            }, 200, {}));
 
             update();
 
             function update() {
                 // Update our animation
                 tlPath.progress((scrollY - startY) / finishDistancePath);
-                tlHeroPicOne.progress((scrollY - startY) / finishDistanceHeroPicOne);
+                // tlHeroPicOne.progress((scrollY - startY) / finishDistanceHeroPicOne);
+                handleScrollPosition(scrollY)
+                tlHeroPicOneEnd.progress((scrollY - startY) / finishDistanceHeroPicOne);
+
+
                 // tlHeroBackgroundPieceOne.progress((scrollY - startY) / finishDistanceHeroBackgroundPiece);
                 // tlHeroBackgroundPieceTwo.progress((scrollY - startY) / finishDistanceHeroBackgroundPiece);
                 // Let the scroll event fire again
@@ -236,6 +249,25 @@ const Home = ({ scrollWidth, winSize }) => {
         // addEventListener("resize", getWindowSize, { passive: true });
     }, [postsFromDB])
 
+    const transformStyles1 = scrollPosition >= 200 && scrollPosition < 1000 ? {
+        opacity: 1,
+        scale: 1,
+        transform: 'rotate(-15deg) scale(1)',
+    } : {};
+
+
+    const transformStyles2 = scrollPosition >= 400 && scrollPosition < 1000 ? {
+        opacity: 1,
+        scale: 1,
+        transform: 'rotate(20deg) scale(1)',
+    } : {};
+
+
+    const transformStyles3 = scrollPosition >= 600 && scrollPosition < 1000 ? {
+        opacity: 1,
+        scale: 1,
+        transform: 'rotate(-10deg) scale(1)',
+    } : {};
 
     return (
         <Fragment>
@@ -267,14 +299,64 @@ const Home = ({ scrollWidth, winSize }) => {
 
                 {/* path drawing on world map svg */}
                 <MapPath winSize={winSize} />
-                <div id="hero-pic-1" style={{position:'fixed',top:300,left:100,height:100,width:100, transform:'rotate(10deg) scale(0)',cursor:'pointer',border:'5px solid #fff',zIndex:1,scale:0}}>
-                        <img style={{objectFit:'cover',width:'100%'}} src={VideoIcon} />
+                <div id="hero-pic-1" style={{
+                    position: 'fixed',
+                    top: winSize === 1 ? 200 : 300,
+                    left: winSize === 1 ? 15 : 100,
+                    height: winSize === 1 ? 70 : 100,
+                    width: winSize === 1 ? 70 : 100,
+                    cursor: 'pointer',
+                    border: '5px solid #fff',
+                    zIndex: 1,
+                    transition: '0.3s all ease-in',
+                    opacity: 0,
+                    scale: 0,
+                    transform: 'rotate(0) scale(0)',
+                    ...transformStyles1,
+                
+                }}
+                onClick={()=>history.push(`/photo/${(photos[0] || {}).id}`)}
+                >
+                    <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[0] || {}).src} />
                 </div>
-                <div id="hero-pic-2" style={{position:'fixed',top:450,left:250,height:100,width:100,transform:'rotate(-15deg) scale(0)',cursor:'pointer',border:'5px solid #fff',zIndex:1,scale:0}}>
-                        <img style={{objectFit:'cover',width:'100%'}} src={VideoIcon} />
+                <div id="hero-pic-2" style={{
+                    position: 'fixed',
+                    top: winSize === 1 ? 170 : 320,
+                    left: winSize === 1 ? 150 : 350,
+                    height: winSize === 1 ? 70 : 100,
+                    width: winSize === 1 ? 70 : 100,
+                    cursor: 'pointer',
+                    border: '5px solid #fff',
+                    zIndex: 1,
+                    transition: '0.3s all ease-in',
+                    opacity: 0,
+                    scale: 0,
+                    transform: 'rotate(0) scale(0)',
+                    ...transformStyles2,
+                }}
+                onClick={()=>history.push(`/photo/${(photos[1] || {}).id}`)}
+
+                >
+                    <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[1] || {}).src} />
                 </div>
-                <div id="hero-pic-3" style={{position:'fixed',top:600,left:420,height:100,width:100,transform:'rotate(13deg) scale(0)',cursor:'pointer',border:'5px solid #fff',zIndex:1,scale:0}}>
-                        <img style={{objectFit:'cover',width:'100%'}} src={VideoIcon} />
+                <div id="hero-pic-3" style={{
+                    position: 'fixed',
+                    top: winSize === 1 ? 300 : 600,
+                    left: winSize === 1 ? 170 : 420,
+                    height: winSize === 1 ? 70 : 100,
+                    width: winSize === 1 ? 70 : 100,
+                    cursor: 'pointer',
+                    border: '5px solid #fff',
+                    zIndex: 1,
+                    transition: '0.3s all ease-in',
+                    opacity: 0,
+                    scale: 0,
+                    transform: 'rotate(0) scale(0)',
+                    ...transformStyles3,
+                }}
+                onClick={()=>history.push(`/photo/${(photos[2] || {}).id}`)}
+                >
+                    <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[2] || {}).src} />
                 </div>
 
                 <div id="container" style={{ position: "relative" }}>
