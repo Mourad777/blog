@@ -9,16 +9,18 @@ const animations = [
         properties: {
             opacity: -30,
         }
-    }, {
-        target: '#myline',
-        trigger: '#main',
-        start: 'top top',
-        end: 'center bottom',
-        strokeDashoffset: 0,
-        properties: {
-            strokeDashoffset: 0,
-        }
-    },
+    }, 
+    // {
+    //     target: '#myline',
+    //     trigger: '#main',
+    //     start: 'top top',
+    //     end: 'center bottom',
+    //     strokeDashoffset: 0,
+    //     properties: {
+    //         strokeDashoffset: 0,
+    //     }
+    // },
+
     {
         target: '#hero-pic-main',
         trigger: '#main',
@@ -26,7 +28,7 @@ const animations = [
         end: '30% bottom',
         properties: {
             duration: 3,
-            xPercent: 55,
+            // xPercent: 55,
             opacity: -1,
         }
     },

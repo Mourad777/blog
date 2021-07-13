@@ -19,7 +19,7 @@ const MapPath = ({ winSize,
             // paddingBottom: '42%',
             height: 10,
             overflow: 'visible',
-            zIndex: -2,
+            zIndex: -5,
             position: 'fixed',
             top: winSize === 1 ? 78 : '60px',
             left: winSize === 1 ? 0 : 45,
@@ -61,7 +61,8 @@ const MapPath = ({ winSize,
             strokeWidth: winSize === 1 ? 4 : 5,
             strokeMiterlimit: 10,
             strokeDasharray: 3255,
-            zIndex: -2,
+            zIndex: -5,
+            // transition:'all 0.05s ease-in'
         }}
             // windowWidth={winSize}
             //  pathLength={pathLength} pathPosition={pathPosition}

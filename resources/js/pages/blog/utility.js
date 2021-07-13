@@ -4,7 +4,6 @@ import herSectionPieceOne from '../../../../public/assets/hero-section-piece-1-m
 import herSectionPieceTwo from '../../../../public/assets/hero-section-piece-2-min.png'
 import herSectionPieceThree from '../../../../public/assets/hero-section-piece-3-min.png';
 
-
 export const getWindowSizeInteger = windowWidth => {
     let widthInteger;
     if (windowWidth > 0 && windowWidth < 600) widthInteger = 1; //mobile
@@ -40,7 +39,7 @@ export const getSearchInputStyle = (windowWidth) => {
     //     left = -1000;
     //     width = 2900;
     // }
-    return {top}
+    return { top }
 }
 
 export const getHeroSectionPicStyle = (windowWidth) => {
@@ -81,7 +80,7 @@ export const getHeroSectionPicStyle = (windowWidth) => {
         backgroundRepeat: "no-repeat",
         position: "fixed",
         backgroundPosition: "top center",
-        height:4000,
+        height: 4000,
         right,
         top,
         width,

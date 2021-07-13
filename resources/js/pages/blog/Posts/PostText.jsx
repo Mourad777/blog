@@ -30,6 +30,8 @@ const PostText = ({ post, isMobile }) => {
                         position: 'absolute',
                         top: 60,
                         left: '20%',
+                        textAlign:'center',
+                        maxWidth:170,
                     }}
 
                 >

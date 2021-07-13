@@ -74,7 +74,7 @@ export default ({ isPosts, selectedSection,componentReferences }) => {
     ].filter(item => item);
 
     const handleScroll = (ref) => {
-        gsap.to(window, { duration: 1, scrollTo: ref.current });
+        gsap.to(window, { duration: 2, scrollTo: ref.current });
     }
 
     return (

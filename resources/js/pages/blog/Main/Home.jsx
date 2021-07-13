@@ -22,12 +22,15 @@ import { useRef } from "react";
 import LatestPostsSection from "../Posts/Posts";
 import HeroSectionContent from "./HeroSectionContent";
 import { Fragment } from "react";
+import _ from "lodash";
+import VideoIcon from '../../../../../public/assets/video-icon.jpg'
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
-
-
-const Home = ({ scrollWidth,winSize }) => {
+// gsap.ticker.fps(30)
+// gsap.ticker.lagSmoothing(50,50)
+// gsap.ticker.deltaRatio(30)
+const Home = ({ scrollWidth, winSize }) => {
 
     const refSection1 = useRef(null)
     const refSection2 = useRef(null)
@@ -137,6 +140,10 @@ const Home = ({ scrollWidth,winSize }) => {
     }, [])
 
     useEffect(() => {
+
+
+
+
         const triggers = ScrollTrigger.getAll();
         triggers.forEach(tr => {
             tr.kill()
@@ -158,6 +165,52 @@ const Home = ({ scrollWidth,winSize }) => {
                 });
 
             });
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // the animation to use
+            const tlPath = gsap.timeline({ paused: true });
+            const tlHeroPicOne = gsap.timeline({ paused: true });
+            // const tlHeroPicTwo = gsap.timeline({ paused: true });
+            // const tlHeroPicThree = gsap.timeline({ paused: true });
+
+            tlPath.to("#myline", { strokeDashoffset: 0 });
+            tlHeroPicOne.to("#hero-pic-1", { scale:1 });
+            // tlHeroPicTwo.to("#hero-pic-1", { opacity: 1 });
+            // tlHeroPicOne.to("#hero-pic-1", { opacity: 1 });
+
+            let requestId;
+            // The start and end positions in terms of the page scroll
+            // const startY = innerHeight / 10;
+            const startY = 0;
+            // const finishDistance = innerHeight / 5;
+            const finishDistancePath = innerHeight * 2;
+            const finishDistanceHeroPicOne = innerHeight / 2;
+            // const finishDistanceHeroBackgroundPiece = innerHeight / 2;
+            // Listen to the scroll event
+            // _.throttle()
+            document.addEventListener("scroll", _.throttle(function () {
+                // Prevent the update from happening too often (throttle the scroll event)
+                if (!requestId) {
+                    requestId = requestAnimationFrame(update);
+                }
+            },50,{leading:true}));
+
+            update();
+
+            function update() {
+                // Update our animation
+                tlPath.progress((scrollY - startY) / finishDistancePath);
+                tlHeroPicOne.progress((scrollY - startY) / finishDistanceHeroPicOne);
+                // tlHeroBackgroundPieceOne.progress((scrollY - startY) / finishDistanceHeroBackgroundPiece);
+                // tlHeroBackgroundPieceTwo.progress((scrollY - startY) / finishDistanceHeroBackgroundPiece);
+                // Let the scroll event fire again
+                requestId = null;
+            }
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             animate()
         }
@@ -213,7 +266,16 @@ const Home = ({ scrollWidth,winSize }) => {
                 <StyledMapOverlay id="map-overlay" windowWidth={winSize} />
 
                 {/* path drawing on world map svg */}
-                 <MapPath winSize={winSize} />
+                <MapPath winSize={winSize} />
+                <div id="hero-pic-1" style={{position:'fixed',top:300,left:100,height:100,width:100, transform:'rotate(10deg) scale(0)',cursor:'pointer',border:'5px solid #fff',zIndex:1,scale:0}}>
+                        <img style={{objectFit:'cover',width:'100%'}} src={VideoIcon} />
+                </div>
+                <div id="hero-pic-2" style={{position:'fixed',top:450,left:250,height:100,width:100,transform:'rotate(-15deg) scale(0)',cursor:'pointer',border:'5px solid #fff',zIndex:1,scale:0}}>
+                        <img style={{objectFit:'cover',width:'100%'}} src={VideoIcon} />
+                </div>
+                <div id="hero-pic-3" style={{position:'fixed',top:600,left:420,height:100,width:100,transform:'rotate(13deg) scale(0)',cursor:'pointer',border:'5px solid #fff',zIndex:1,scale:0}}>
+                        <img style={{objectFit:'cover',width:'100%'}} src={VideoIcon} />
+                </div>
 
                 <div id="container" style={{ position: "relative" }}>
                     <StyledHeroSection ref={refSection1} id="hero-section" >
