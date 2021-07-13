@@ -98,7 +98,7 @@ const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection
             height:
                 // 'calc(100vh - 760px)'
                 '100%',
-            maxHeight: 50,
+            maxHeight:winSize === 1 && postsFromDB.length === 0 ? '100%' : 50,
         }}>
             {postsFromDB.length > 1 && <ReactPaginate
                 previousLabel={"prev"}

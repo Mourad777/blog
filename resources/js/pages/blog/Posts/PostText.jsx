@@ -15,7 +15,7 @@ const PostText = ({ post, isMobile }) => {
                     alignItems: "center",
                     minHeight: isMobile ? 'calc(100vh - 461px)' : 200,
                     minWidth: isMobile ? '' : 478,
-                    position: 'relative'
+                    position: 'relative',
                 }}
             >
                 <div
