@@ -27,7 +27,7 @@ const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
                 className="scroll-arrows"
                 style={{
                     position: 'absolute',
-                    bottom: 55,
+                    bottom: winSize === 1 ? 100 : 55,
                     textAlign: 'center',
                     /* width: 100%, */
                     left: 5,
@@ -40,7 +40,7 @@ const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
                 className="scroll-arrows"
                 style={{
                     position: 'absolute',
-                    bottom: 55,
+                    bottom: winSize === 1 ? 100 : 55,
                     textAlign: 'center',
                     /* width: 100%, */
                     right: 5,
