@@ -293,7 +293,7 @@ const Home = ({ scrollWidth, winSize }) => {
 
 
                 {/* must use a lower resolution map for mobile devices */}
-                <StyledMap windowWidth={winSize} />
+                <StyledMap windowWidth={winSize} lowRes />
 
                 <StyledMapOverlay id="map-overlay" windowWidth={winSize} />
 

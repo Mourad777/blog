@@ -2,6 +2,7 @@ import styled from "styled-components";
 // import map  from '../../../../public/assets/map-2-black-min.jpg'
 import map from '../../../../public/assets/map-3-black.jpg'
 import mapLowRes from '../../../../public/assets/map-low-res-3-black.jpg'
+// import mapLowRes from '../../../../public/assets/map-sketch.jpg'
 //Styledpath StyledDestinationsSection
 //styledmapover
 //430px
