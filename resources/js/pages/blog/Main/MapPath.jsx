@@ -60,7 +60,7 @@ const MapPath = ({ winSize,
             strokeMiterlimit: 10,
             strokeDasharray: 3255,
             zIndex: -5,
-            transition:'all 0.3s ease-in'
+            transition:'all 0.8s ease-in'
         }}
             // windowWidth={winSize}
             //  pathLength={pathLength} pathPosition={pathPosition}
