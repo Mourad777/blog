@@ -199,12 +199,12 @@ const Home = ({ scrollWidth, winSize }) => {
             // const finishDistanceHeroBackgroundPiece = innerHeight / 2;
             // Listen to the scroll event
             // _.throttle()
-            document.addEventListener("scroll", _.debounce(function () {
+            document.addEventListener("scroll", _.throttle(function () {
                 // Prevent the update from happening too often (throttle the scroll event)
                 if (!requestId) {
                     requestId = requestAnimationFrame(update);
                 }
-            }, 50, {}));
+            }, 500, {}));
 
             update();
 
@@ -256,14 +256,14 @@ const Home = ({ scrollWidth, winSize }) => {
     } : {};
 
 
-    const transformStyles2 = scrollPosition >= 400 && scrollPosition < 1000 ? {
+    const transformStyles2 = scrollPosition >= 300 && scrollPosition < 1000 ? {
         opacity: 1,
         scale: 1,
         transform: 'rotate(20deg) scale(1)',
     } : {};
 
 
-    const transformStyles3 = scrollPosition >= 600 && scrollPosition < 1000 ? {
+    const transformStyles3 = scrollPosition >= 500 && scrollPosition < 1000 ? {
         opacity: 1,
         scale: 1,
         transform: 'rotate(-10deg) scale(1)',
