@@ -1,10 +1,10 @@
 import React from 'react'
 import './SearchInput.css'
 import { Icon } from 'semantic-ui-react'
-const SearchInput = () => (
+const SearchInput = ({searchValue,handleSearchValue}) => (
     <div className="search-box">
         <button className="btn-search"><Icon name="search" /></button>
-        <input type="text" className="input-search" placeholder="Type to Search..."></input>
+        <input value={searchValue} onChange={handleSearchValue} type="text" className="input-search" placeholder="Type to Search..."></input>
     </div>
 )
 

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import ScrollDownArrow from '../../../components/blog/ScrollDownArrow/ScrollDownArrow';
 import SearchInput from '../../../components/blog/SearchInput/SearchInput';
 import { heroTextPathOne } from '../svgs';
@@ -10,6 +10,16 @@ import {
     getSearchInputStyle,
 } from "../utility";
 const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
+    const [searchValue, setSearchValue] = useState('');
+    const options = [{ id: 1, title: 'Couchsurfing in Mexico', summary: 'Free accomodation', content: 'A new way to travel' },
+    { id: 2, title: 'Hitchhking across Honduras', summary: 'Hitching is not as dangerous as you think', content: 'A way to meet cool people' },
+    ]
+    const filteredResults = options.filter(item => (item.title.includes(searchValue) || item.summary.includes(searchValue) || item.content.includes(searchValue)) && !!searchValue);
+
+    const handleSearchValue = (e) => {
+        console.log('search e',e,'e.target.value',e.target.value)
+        setSearchValue(e.target.value);
+    }
     return (
         <Fragment>
             <div
@@ -21,7 +31,18 @@ const HeroSectionContent = ({ winSize, heroPicMainRef, isAssetLoaded }) => {
                     ...getSearchInputStyle(winSize)
                 }}
             >
-                <SearchInput />
+                <SearchInput searchValue={searchValue} handleSearchValue={handleSearchValue} />
+                {/* <div style={{ width: '100%', margin: 'auto' }}>
+                    <div style={{ background: '#fff', borderRadius: 5, width: 300 }} >
+                        {
+
+                            filteredResults.map(res => (
+                                <div key={`search-result[${res.id}]`}>
+                                    <p>{res.title}</p>
+                                </div>
+                            ))}
+                    </div>
+                </div> */}
             </div>
             <div
                 className="scroll-arrows"
