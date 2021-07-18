@@ -164,7 +164,7 @@ export const getHeroSectionPicPiecesStyle = (windowWidth, piece, scroll) => {
         right,
         height,
         width,
-        zIndex: 0,
+        zIndex: -1,
     };
 };
 
@@ -200,11 +200,11 @@ export const getHeroSectionNameStyle = (windowWidth) => {
         position: "fixed",
         strokeDasharray: 180,
         strokeDashoffset: 180,
-        zIndex: 0,
+        zIndex: -1,
         fill: "none",
         // stroke: "rgb(0 146 228)",
         stroke: "white",
-        strokeWidth: 1,
+        strokeWidth: -1,
         strokeMiterlimit: 10,
         top,
         right,
@@ -253,7 +253,7 @@ export const getHeroSectionTextStyle = (windowWidth) => {
         right,
         fontSize,
         width,
-        zIndex: 0,
+        zIndex: -1,
 
     };
 };

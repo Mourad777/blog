@@ -15,6 +15,7 @@ import Category from "./pages/blog/Category/Category";
 import Photo from "./pages/blog/Photos/Photo";
 import Video from "./pages/blog/Videos/Video";
 import { getWindowSizeInteger } from "./pages/blog/utility";
+import './fonts/WaitingfortheSunrise/WaitingfortheSunrise-Regular.ttf';
 
 const ScrollToTop = withRouter(({ history }) => {
     useEffect(() => {

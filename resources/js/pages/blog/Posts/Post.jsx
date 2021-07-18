@@ -124,7 +124,10 @@ const Post = ({ postsFromDB, refPosts }) => {
         <div ref={postContainer} style={{ width: '100%', height: '100%', background: '#fff', padding: '40px 20px', position: 'absolute', zIndex: 999 }}>
             <Button content='Home' onClick={() => { history.push('/') }} />
             <h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: '3em' }}>{post.title}</h1>
-            <div dangerouslySetInnerHTML={{ __html: "<style>@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');</style>" + post.content }} />
+            <div dangerouslySetInnerHTML={{ __html: `<style>
+            @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+            </style>` + post.content }} />
 
             {comments.length > 0 && <p style={{ fontSize: '2.5em', marginTop: 30 }}>{replyComment ? 'Comment' : 'Comments'}</p>}
             <Form style={{ paddingBottom: 20 }}>
