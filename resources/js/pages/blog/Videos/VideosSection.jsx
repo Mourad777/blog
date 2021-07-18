@@ -47,7 +47,7 @@ export default ({ reference, videos, winSize }) => {
     };
     return (
         <div style={{ paddingTop: 50, height: '100vh', background: 'rgb(236, 231, 226)', width: '100%' }} ref={reference}>
-            <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#daad86', textAlign: 'center' }}>Videos</p>
+            <p style={{ fontFamily: 'Mulish,sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center' }}>Videos</p>
             {/* <div className="row" style={{ justifyContent: 'center' }}>
                 {data.map((video, i) => (
                     <div key={`video[${video.id}]`} className="col-12 col-sm-4 col-md-4 col-lg-4">

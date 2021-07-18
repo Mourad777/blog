@@ -8,7 +8,7 @@ import Avatar from 'react-avatar';
 import { useHistory, useParams } from 'react-router';
 import { ScrollTrigger } from 'gsap/all';
 
-const Replies = ({ comment, setReplyComment }) => {
+export const Replies = ({ comment, setReplyComment }) => {
     return (
         <div>
             {(comment.replies || []).map(reply => {
@@ -79,6 +79,7 @@ const Post = ({ postsFromDB, refPosts }) => {
         formData.append('email', email);
         formData.append('post_id', selectedPost);
         formData.append('content', content);
+        formData.append('comment_type', 'post');
         if (replyComment) {
             formData.append('comment_id', replyComment.id)
         }
@@ -102,7 +103,7 @@ const Post = ({ postsFromDB, refPosts }) => {
         })
 
         const getPost = async () => {
-            const postRes = await axios.get(`${AppUrl}api/posts/show/${selectedPost}`);
+            const postRes = await axios.get(`${AppUrl}api/posts/${selectedPost}`);
             console.log('postRes', postRes);
             setPost(postRes.data)
         }

@@ -1,9 +1,13 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
 import { StyledRedButton } from '../../blog/StyledComponents';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { AppUrl } from '../../blog/utility';
 import { Checkbox } from 'semantic-ui-react'
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
 const processComments = (comments) => {
     //recursive function to get replies
@@ -23,30 +27,36 @@ const processComments = (comments) => {
     return processedComments;
 }
 
-const Comments = () => {
-    const history = useHistory();
+const Comments = ({ isPost, isVideo }) => {
+    let docType;
+    if (isPost) {
+        docType = 'post'
+    }
+    if (isVideo) {
+        docType = 'video'
+    }
     const params = useParams();
     const [comments, setComments] = useState([]);
-    const [post, setPost] = useState({});
-
-    const getComments = async (postId) => {
-        const res = await axios.get(`${AppUrl}api/comments/post/${postId}`);
+    const [document, setDocument] = useState({});
+    const getComments = async (docId) => {
+        const res = await axios.get(`${AppUrl}api/comments/${docType}/${docId}`);
         console.log('res comments', res)
         const comments = res.data;
         setComments(processComments(comments));
     }
 
-    const getPost = async (postId) => {
-        const res = await axios.get(`${AppUrl}api/posts/show/${postId}`);
-        console.log('res post', res)
-        const post = res.data;
-        setPost(post);
-    }
-
     useEffect(() => {
-        const postId = params.id;
-        getPost(postId);
-        getComments(postId);
+        const docId = params.id;
+        const getDocument = async (docId) => {
+            const res = await axios.get(`${AppUrl}api/${docType}s/${docId}`);
+            console.log('res post or video', res)
+            const doc = res.data;
+
+            setDocument(doc);
+
+        }
+        getDocument(docId);
+        getComments(docId);
     }, [])
 
     const handleDeleteComment = async (commentId) => {
@@ -63,10 +73,10 @@ const Comments = () => {
             .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
         getComments(params.id)
     }
-
+    console.log('document -----------------',document)
     return (
         <div style={{ margin: 'auto', maxWidth: 800 }}>
-            <h1>Post Comments from {post.title}</h1>
+            <h1>{capitalizeFirstLetter(docType)} Comments from {document.title}</h1>
             <table style={{ margin: 'auto', width: '100%' }}>
                 <tbody>
 

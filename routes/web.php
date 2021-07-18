@@ -26,7 +26,7 @@ Route::post('/api/tinymce/upload', 'TinymceImageUploadController@store');
 
 Route::get('/api/posts', 'PostsController@index');
 
-Route::get('/api/posts/show/{id}', 'PostsController@show');
+Route::get('/api/posts/{id}', 'PostsController@show');
 
 Route::post('/api/posts/save', 'PostsController@store');
 
@@ -54,7 +54,7 @@ Route::delete('/api/categories/delete/{id}', 'CategoriesController@destroy');
 Route::get('/api/countries/{country_iso}', 'CountriesController@show');
 
 
-Route::get('/api/comments/post/{id}', 'CommentsController@index');
+Route::get('/api/comments/{doc_type}/{id}', 'CommentsController@index');
 
 Route::post('/api/comments/save', 'CommentsController@store');
 
@@ -78,7 +78,7 @@ Route::delete('/api/photos/delete/{id}', 'PhotosController@destroy');
 
 Route::get('/api/videos', 'VideosController@index');
 
-Route::get('/api/video/{id}', 'VideosController@show');
+Route::get('/api/videos/{id}', 'VideosController@show');
 
 Route::post('/api/videos/save', 'VideosController@store');
 

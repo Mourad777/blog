@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Comment;
 use App\Post;
+use App\Video;
 use Illuminate\Support\Facades\Log;
 
 class CommentsController extends Controller
@@ -14,7 +15,7 @@ class CommentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index($doc_type, $id)
 
     {
         function getReplies($comm)
@@ -30,9 +31,12 @@ class CommentsController extends Controller
             return $comm_replies;
         }
         //
-
-        $comments = Post::find($id)->comments()->get();
-
+        if ($doc_type === 'post') {
+            $comments = Post::find($id)->comments()->get();
+        }
+        if ($doc_type === 'video') {
+            $comments = Video::find($id)->comments()->get();
+        }
         $comments->map(function ($comment) {
             $comment->replies = getReplies($comment);
             $comment->encryptedEmail = md5($comment->email);
@@ -62,7 +66,7 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         //
-
+        Log::info('comment type '.$request->comment_type);
         if ($request->comment_id) {
             Log::info('replying');
             //if the request has a comment_id then the user
@@ -74,9 +78,14 @@ class CommentsController extends Controller
             $reply->is_approved = 0;
             // $reply->user()->associate($request->user());
             $reply->parent_id = $request->get('comment_id');
-            $post = Post::find($request->get('post_id'));
-
-            $post->comments()->save($reply);
+            if ($request->comment_type === 'post') {
+                $post = Post::find($request->get('post_id'));
+                $post->comments()->save($reply);
+            }
+            if ($request->comment_type === 'video') {
+                $video = Video::find($request->get('video_id'));
+                $video->comments()->save($reply);
+            }
         } else {
             $comment = new Comment;
             $comment->content = $request->get('content');
@@ -84,8 +93,14 @@ class CommentsController extends Controller
             $comment->email = $request->get('email');
             $comment->is_approved = 0;
             // $comment->user()->associate($request->user());
-            $post = Post::find($request->get('post_id'));
-            $post->comments()->save($comment);
+            if ($request->comment_type === 'post') {
+                $post = Post::find($request->get('post_id'));
+                $post->comments()->save($comment);
+            }
+            if ($request->comment_type === 'video') {
+                $video = Video::find($request->get('video_id'));
+                $video->comments()->save($comment);
+            }
         }
     }
 
@@ -122,7 +137,7 @@ class CommentsController extends Controller
     {
         //
         $comment = Comment::find($id);
-        
+
         $comment->is_approved = !$comment->is_approved;
         $comment->save();
     }
@@ -133,8 +148,8 @@ class CommentsController extends Controller
         $id = $request->comment_id;
         $comment = Comment::find($id);
 
-        $is_approved =0;
-        if($comment->is_approved === 0){
+        $is_approved = 0;
+        if ($comment->is_approved === 0) {
             $is_approved = 1;
         } else {
             $is_approved = 0;

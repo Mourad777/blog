@@ -118,7 +118,10 @@ class VideosController extends Controller
                 $thumbnail = $request->file('thumbnail');
                 $extension = $request->file('thumbnail')->extension();
                 $filename = md5(time()) . '_' . $thumbnail->getClientOriginalName();
-                $resized_file = Image::make($thumbnail)->resize(800, null, function ($constraint) {
+                
+                $orientation = Image::make($thumbnail)->exif('Orientation');
+
+                $resized_file = Image::make($thumbnail)->rotate($orientation === 8 ? 90 : 0)->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->encode($extension);
                 $file_key = 'video-thumbnails/' . $filename;

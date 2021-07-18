@@ -17,6 +17,11 @@ class Video extends Model
         'tags',
     ];
 
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
+    }
+
     public function categories()
     {
         return $this->belongsToMany('App\Category','category_video');

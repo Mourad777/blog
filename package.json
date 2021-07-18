@@ -32,6 +32,7 @@
         "@material-ui/icons": "^4.11.2",
         "@tinymce/tinymce-react": "^3.12.6",
         "array-move": "^3.0.1",
+        "blueimp-load-image": "^5.14.0",
         "d3-geo-projection": "^3.0.0",
         "exif-js": "^2.3.0",
         "gsap": "^3.7.0",

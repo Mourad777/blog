@@ -15,7 +15,7 @@ export default ({ isAssetLoaded }) => (
         <p
             style={{
                 color: "white",
-                fontFamily: "Waiting for the sunrise",
+                fontFamily: "Waiting for the sunrise, sans-serif",
                 fontSize: "1.3em",
                 display: "block",
                 margin: "auto",

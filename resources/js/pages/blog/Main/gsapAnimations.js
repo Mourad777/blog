@@ -12,7 +12,7 @@ const animations = [
     }, 
     // {
     //     target: '#myline',
-    //     trigger: '#main',
+    //     trigger: '#spacer',
     //     start: 'top top',
     //     end: 'center bottom',
     //     strokeDashoffset: 0,
@@ -28,8 +28,16 @@ const animations = [
         end: '30% bottom',
         properties: {
             duration: 3,
-            // xPercent: 55,
             opacity: -1,
+        }
+    },
+    {
+        target: '#map-pics-container',
+        trigger: '#main',
+        start: 'top top',
+        end: '40% bottom',
+        properties: {
+            zIndex:0,
         }
     },
     {

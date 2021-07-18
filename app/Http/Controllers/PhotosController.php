@@ -64,14 +64,28 @@ class PhotosController extends Controller
 
             //////////////////////////////////////////////////////////////////////////////////////////////
             $image = $request->file('image');
+
             $extension = $request->file('image')->extension();
             $filename = md5(time()) . '_' . $image->getClientOriginalName();
-            $resized_file = Image::make($image)->resize(800, null, function ($constraint) {
+
+            $orientation = Image::make($image)->exif('Orientation');
+
+            $resized_file = Image::make($image)->rotate($orientation === 8 ? 90 : 0)->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();
             })->encode($extension);
+            // $image_orientated = $resized_file->orientate();
+
             $file_key = 'gallery/' . $filename;
             $s3 = Storage::disk('s3');
             $s3->put($file_key, (string)$resized_file, 'public');
+            // if($orientation === 8) {
+            //     Log::info('yes orientation is 8');
+            //     $resized_file->rotate(90);
+            //     $s3->put($file_key, (string)$resized_file, 'public');
+            // } else {
+            //     Log::info('no orientation is not 8');
+            //     $s3->put($file_key, (string)$resized_file, 'public');
+            // }
             // $s3->setVisibility($file_key, visibility: 'public');
 
             /////////////////////////////////////////////////////////// ->stream();

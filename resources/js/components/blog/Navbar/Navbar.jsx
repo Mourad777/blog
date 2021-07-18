@@ -9,7 +9,7 @@ import {
     animateScroll as scroll,
     scrollSpy,
     scroller,
-    
+
 } from "react-scroll";
 
 const NavText = styled.span`
@@ -59,18 +59,18 @@ const LinkWrapper = styled.div`
 `;
 
 
-export default ({ isPosts, selectedSection,componentReferences }) => {
+export default ({ isPosts, selectedSection, componentReferences }) => {
     const links = [
-        { name: "Welcome", id: "hero-section",ref:componentReferences.welcome },
-        isPosts ? { name: "Latests Posts", id: "latest-posts-section",ref:componentReferences.posts } : null,
+        { name: "Welcome", id: "hero-section", ref: componentReferences.welcome },
+        { name: "Latests Posts", id: "latest-posts-section", ref: componentReferences.posts },
         // selectedSection === 'posts' ? { name: "Posts", id: "posts-section",ref:componentReferences.destinations } : null,
-        isPosts ? { name: "Destinations", id: "destinations-section",ref:componentReferences.destinations } : null,
+        { name: "Destinations", id: "destinations-section", ref: componentReferences.destinations },
         // selectedSection === 'destination' ? { name: "Posts", id: "destinations-section-detail",ref:'' } : null,
-        { name: "Photos", id: "photos-section",ref:componentReferences.photos },
+        { name: "Photos", id: "photos-section", ref: componentReferences.photos },
         // selectedSection === 'photos' ? { name: "Photo detail", id: "photos-section-detail",ref:componentReferences.photos } : null,
-        { name: "Latest videos", id: "videos-section",ref:componentReferences.videos },
+        { name: "Latest videos", id: "videos-section", ref: componentReferences.videos },
         // selectedSection === 'videos' ? { name: "All videos", id: "videos-section-detail",ref:componentReferences.videos } : null,
-        { name: "Contact", id: "contact-section",ref:componentReferences.contact}
+        { name: "Contact", id: "contact-section", ref: componentReferences.contact }
     ].filter(item => item);
 
     const handleScroll = (ref) => {
@@ -88,7 +88,7 @@ export default ({ isPosts, selectedSection,componentReferences }) => {
                 }}
             >
                 {links.map((link, i) => (
-                    <li key={link.name} onClick={()=>handleScroll(link.ref)} style={{ cursor: "pointer" }}>
+                    <li key={link.name} onClick={() => handleScroll(link.ref)} style={{ cursor: "pointer" }}>
                         {/* <Link
                             activeClass="activeLink"
                             to={link.id}
@@ -101,13 +101,13 @@ export default ({ isPosts, selectedSection,componentReferences }) => {
                                 alignItems: "center"
                             }}
                         > */}
-                            <LinkWrapper index={i}>
-                                <BulletWrapper>
-                                    <Bullet />
-                                </BulletWrapper>
+                        <LinkWrapper index={i}>
+                            <BulletWrapper>
+                                <Bullet />
+                            </BulletWrapper>
 
-                                <NavText className="textLink">{link.name}</NavText>
-                            </LinkWrapper>
+                            <NavText className="textLink">{link.name}</NavText>
+                        </LinkWrapper>
                         {/* </Link> */}
                     </li>
                 ))}

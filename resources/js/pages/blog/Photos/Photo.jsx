@@ -74,7 +74,7 @@ const Photo = ({ winSize }) => {
                             position: "relative",
                             display: "flex",
                             alignItems: "center",
-                            padding: '30px 30px 0 30px'
+                            padding: '30px 30px 0 30px',
                         }}
                         className="image-container"
                     >
@@ -106,14 +106,26 @@ const Photo = ({ winSize }) => {
                                 src={photo.src}
                                 alt=""
                             />{" "}
-                            <div className="extra-img-info-container" style={{ color: 'white', }}>
-                                {photo.photographer && (
+                            <div className="extra-img-info-container" style={{ color: 'white',  background:'#daad86'}}>
+                                {(photo.photographer && photo.date_taken) && (
                                     <div style={{ color: "#fff4e1" }}>
                                         <Typography style={{ fontStyle: 'italic' }} variant="subtitle1">Taken by {photo.photographer} {photo.date_taken ? ' on ' + new Date(photo.date_taken).toDateString() : ''}</Typography>
                                     </div>
                                 )}
+                                {(!photo.photographer && photo.date_taken) && (
+                                    <div style={{ color: "#fff4e1" }}>
+                                        <Typography style={{ fontStyle: 'italic' }} variant="subtitle1">Taken on {new Date(photo.date_taken).toDateString()}</Typography>
+                                    </div>
+                                )}
+                                {(!photo.photographer && !photo.date_taken) && (
+                                    <div style={{ color: "#fff4e1" }}>
+                                        <Typography style={{ fontStyle: 'italic' }} variant="subtitle1">Taken by {photo.photographer} </Typography>
+                                    </div>
+                                )}
                                 {photo.country && (
-                                    <div style={{ display: 'flex', color: "#fff4e1",background:'#DAAD86',padding:10 }}>
+                                    <div
+                                    onClick={()=>history.push(`/destination/${countries.find(c => c.value === photo.country).text}`)}
+                                    style={{ display: 'flex', color: "#fff4e1", background: '#DAAD86', padding: 10,cursor:'pointer' }}>
                                         <Location />
                                         <Typography variant="body1">{countries.find(c => c.value === photo.country).text}</Typography>
 

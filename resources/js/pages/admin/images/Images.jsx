@@ -18,6 +18,9 @@ import {
     DateTimeInput,
     DatesRangeInput
 } from 'semantic-ui-calendar-react';
+import loadImage from "blueimp-load-image";
+
+
 //json.parse
 const processCategories = (categories) => {
     const processedCategories = categories.map(cat => {
@@ -138,6 +141,9 @@ function PhotoGallery() {
     }
 
     const handleImageUpload = async e => {
+
+
+          
         e.preventDefault()
         const newPhotoFormData = new FormData();
         const file = e.target.files[0];
@@ -145,11 +151,14 @@ function PhotoGallery() {
 
 
         EXIF.getData(file, async function () {
-            const exifData = EXIF.pretty(this);
+            console.log('8888888888888file***', file)
+            
+            const orientationAdjustedFile = { ...file, exifdata: { ...file.exifdata, Orientation: 1 } }
+            console.log('file oriented',orientationAdjustedFile)
             console.log('this.exifdata', this.exifdata)
             const photoMetaData = this.exifdata;
             const isMetaDataEmpty = photoMetaData && Object.keys(photoMetaData).length === 0 && photoMetaData.constructor === Object;
-            console.log('isMetaDataEmpty',isMetaDataEmpty)
+            console.log('isMetaDataEmpty', isMetaDataEmpty)
             if (!isMetaDataEmpty) {
                 const {
                     Make,
@@ -163,6 +172,8 @@ function PhotoGallery() {
                 } = this.exifdata
                 console.log('this.exifdata', this.exifdata)
                 //   console.log(EXIF.getTag(this, "Orientation"));
+                // const orientationAdjustedFile = await loadImage
+                console.log('------ orientationAdjustedFile',orientationAdjustedFile)
                 newPhotoFormData.append('image', file);
                 newPhotoFormData.append('camera', Make + ' ' + Model);
                 newPhotoFormData.append('lens', Lens);
@@ -185,7 +196,7 @@ function PhotoGallery() {
                 setIsLoading(false)
                 console.log('upload photo response: ', resUploadPhoto.data);
                 console.log('cur items', items);
-                const newArray = [{...resUploadPhoto.data, src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
+                const newArray = [{ ...resUploadPhoto.data, src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
                 console.log('new array', newArray);
                 setItems(newArray);
                 //update order 
@@ -235,7 +246,7 @@ function PhotoGallery() {
         setDateTaken(photo.date_taken)
 
         setTags(Array.isArray(photo.tags) ? JSON.parse(photo.tags) : [])
-        setSelectedCategories((photo.categories||[]).map(cat => cat.name));
+        setSelectedCategories((photo.categories || []).map(cat => cat.name));
         setCountry(photo.country)
 
         setSelectedPhoto(photo)
@@ -298,12 +309,12 @@ function PhotoGallery() {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-        
+
         // //update order 
 
-        
-        const newArray = items.filter(p=>p.id !== id);
-        console.log('new array--------------------------',newArray)
+
+        const newArray = items.filter(p => p.id !== id);
+        console.log('new array--------------------------', newArray)
         updateOrder(newArray)
         setItems(newArray);
         // console.log('curr array',items,'updated array',items.filter(p=>p.id !== id))
@@ -332,14 +343,16 @@ function PhotoGallery() {
                     </div>
                     <div style={{ marginTop: 20 }}>
                         <label style={{ fontSize: '1.2em' }}>Date Taken</label>
-                        <DateInput
-                            name="date"
-                            placeholder="Date Taken"
-                            value={dateTaken}
-                            iconPosition="left"
-                            onChange={handleDate}
-                            dateFormat="YYYY-MM-DD"
-                        />
+                        <div style={{ paddingLeft: 38 }}>
+                            <DateInput
+                                name="date"
+                                placeholder="Date Taken"
+                                value={dateTaken}
+                                iconPosition="left"
+                                onChange={handleDate}
+                                dateFormat="YYYY-MM-DD"
+                            />
+                        </div>
                     </div>
                     <div style={{ marginTop: 20 }}>
                         <label style={{ fontSize: '1.2em' }}>Camera</label>
@@ -376,7 +389,7 @@ function PhotoGallery() {
                             <StyledBlueButton disabled={!newCategory} onClick={handleNewCategorySubmit} icon="image"
                             >
                                 Create Category
-                    </StyledBlueButton>
+                            </StyledBlueButton>
                         </div>
                     </div>
                     <Segment basic>

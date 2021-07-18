@@ -14,6 +14,31 @@ export const getWindowSizeInteger = windowWidth => {
     return widthInteger;
 };
 
+export const getMapPosition = windowWidth => {
+    let width,top;
+    if (windowWidth === 1) {
+        width = 450;
+        top = 0;
+    }
+    if (windowWidth === 2) {
+        width = 220;
+        top = 75;
+    }
+    if (windowWidth === 3) {
+        width = 104;
+        top = 0;
+    }
+    if (windowWidth === 4) {
+        width = 450;
+        top = 0;
+    }
+    if (windowWidth === 5) {
+        width = 450;
+        top = 0;
+    }
+    return { width, top };
+}
+
 export const getSearchInputStyle = (windowWidth) => {
     let top = 20;
     if (windowWidth === 1) {
@@ -84,7 +109,7 @@ export const getHeroSectionPicStyle = (windowWidth) => {
         right,
         top,
         width,
-        zIndex: -4,
+        zIndex: -1,
         // transform: `translateX(${5000 * scroll}px)`,
         // transition: "transform 1s ease-out",
     };
@@ -139,7 +164,7 @@ export const getHeroSectionPicPiecesStyle = (windowWidth, piece, scroll) => {
         right,
         height,
         width,
-        zIndex: -4,
+        zIndex: 0,
     };
 };
 
@@ -175,7 +200,7 @@ export const getHeroSectionNameStyle = (windowWidth) => {
         position: "fixed",
         strokeDasharray: 180,
         strokeDashoffset: 180,
-        zIndex: -4,
+        zIndex: 0,
         fill: "none",
         // stroke: "rgb(0 146 228)",
         stroke: "white",
@@ -228,7 +253,7 @@ export const getHeroSectionTextStyle = (windowWidth) => {
         right,
         fontSize,
         width,
-        zIndex: -4,
+        zIndex: 0,
 
     };
 };

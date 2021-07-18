@@ -54,7 +54,10 @@ const App = () => {
                             <Posts />
                         </Route>
                         <Route exact path="/admin/post/:id/comments">
-                            <Comments />
+                            <Comments isPost />
+                        </Route>
+                        <Route exact path="/admin/video/:id/comments">
+                            <Comments isVideo />
                         </Route>
                         <Route exact path="/admin/create-post">
                             <CreatePost />

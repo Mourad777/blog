@@ -4,29 +4,34 @@ import {
     lineLargeDevice,
     lineSmallDevice,
 } from "../svgs";
+import { getMapPosition } from '../utility';
 
-const MapPath = ({ winSize,
+const MapPath = ({ 
+    winSize,
 }) => (
     <svg
         id="mySVG"
-        viewBox={winSize === 1 ? "0 0 2000 2000" : "0 0 1000 1000"}
-        preserveAspectRatio="xMidYMin slice"
+        // preserveAspectRatio="xMidYMin meet"
+        viewBox="0 0 1000 1000" preserveAspectRatio="none"
         // windowWidth={winSize}
         style={{
-            width: 1000,
+            width: `${getMapPosition(winSize).width}%`,
             // paddingBottom: '42%',
-            height: 10,
+            height: 'auto',
             overflow: 'visible',
-            zIndex: -5,
-            position: 'fixed',
-            top: winSize === 1 ? 78 : '60px',
-            left: winSize === 1 ? 0 : 45,
+            zIndex: 1,
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform:'translateX(-50%) translateY(-50%)',
+            display:'block',
+            margin:'auto',
         }}
     >
         <defs>
             <mask id="dash-mask">
                 <path
-                    style={{ stroke: "white", strokeWidth: 7 }}
+                    style={{ stroke: "white", strokeWidth: 6 }}
                     className="st0 mask-style"
                     strokeDasharray="15,9"
                     strokeLinecap="round"
@@ -34,36 +39,17 @@ const MapPath = ({ winSize,
                 />
             </mask>
         </defs>
-        {/* <StyledCircle
-            id="circle"
-            cx={pointAtLength.x}
-            cy={pointAtLength.y}
-            r="10"
-            style={{ fill: "#840404" }}
-        /> */}
-        {/* <StyledPath
-            style={{ strokeDashoffset: 0 }}
-            windowWidth={winSize}
-            //  pathLength={pathLength} pathPosition={pathPosition}
-            id="myline"
-            // ref={lineRef}
-            strokeLinecap="round"
-            className="st0"
-            mask="url(#dash-mask)"
-            d={lineLargeDevice}
-        /> */}
         <path style={{
             fill: 'none',
             strokeDashoffset: 3255,
+            // strokeDashoffset: 0,
             stroke: 'rgb(132, 4, 4, 0.6)',
-            strokeWidth: winSize === 1 ? 4 : 5,
+            strokeWidth: 2,
             strokeMiterlimit: 10,
             strokeDasharray: 3255,
-            zIndex: -5,
+            zIndex: 1,
             transition:'all 0.8s ease-in'
         }}
-            // windowWidth={winSize}
-            //  pathLength={pathLength} pathPosition={pathPosition}
             id="myline"
             strokeLinecap="round"
             className="st0"

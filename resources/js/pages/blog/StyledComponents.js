@@ -1,13 +1,15 @@
 import styled from "styled-components";
 // import map  from '../../../../public/assets/map-2-black-min.jpg'
-import map from '../../../../public/assets/map-3-black.jpg'
-import mapLowRes from '../../../../public/assets/map-low-res-3-black.jpg'
+// import map from '../../../../public/assets/map-3-black.jpg'
+// import mapLowRes from '../../../../public/assets/map-low-res-3-black.jpg'
+import mapLowRes from'../../../../public/assets/map-notepad-white-md.jpg'
 // import mapLowRes from '../../../../public/assets/map-sketch.jpg'
 //Styledpath StyledDestinationsSection
 //styledmapover
 //430px
 //StyledLatestPostsTitle
 //StyledLatestPostsSection
+//font contact styledinput
 export const StyledPostRow = styled.div`
 border: rgba(218, 173, 134) solid;
 border-width: ${props => props.index === 0 ? "40" : "20"
@@ -87,24 +89,20 @@ box-sizing: border-box;
 
 export const StyledContactSection = styled.section`
     height:100vh;
-    background-color:black;
+    background-color:#daad86;
     position:relative;
     
 `;
 
-export const StyledMap = styled.div`
-&:before {
-content:'';
-background-image: url('${props => props.lowRes ? mapLowRes : map}');
-height: 2000px;
-width: 100%;
+export const StyledMap = styled.img`
+height: auto;
+width: ${props => props.width}%;
 background-repeat: no-repeat;
-position: fixed;
-background-position: ${props => props.windowWidth === 1 ? 'left -100px top -290px' : 'left -160px top -680px'};
-background-size: ${props => props.windowWidth === 1 ? '150em' : '300em'};
-z-index: ${props => props.layer === 'top' ? -3 : -10};
-will-change: transform;
-  }
+z-index:-3;
+position:absolute;
+left:50%;
+top:50%;
+transform:translateX(-50%) translateY(-50%);
 `;
 
 export const StyledMapOverlay = styled.div`
@@ -172,7 +170,7 @@ min-height: 100vh;
 `;
 
 export const StyledWorldMapTitle = styled.h3`
-font-family: Mulish;
+font-family: Mulish, sans-serif;
 text-align: center;
 color: black;
 `;
@@ -206,15 +204,29 @@ margin-top:35px;
 `;
 export const StyledInputLabel = styled.span`
 color: white;
+margin-bottom:15px;
 `;
 
 export const StyledTextInput = styled.input`
 height:30px;
 color:black;
+font-size:1.2em;
+border:none;
+&:focus {
+    outline:solid;
+    outline-color:rgb(236, 231, 226);
+    outline-width:3px;
+}
 `;
 
 export const StyledTextareaInput = styled.textarea`
 color:black;
+border:none;
+&:focus {
+    outline:solid;
+    outline-color:rgb(236, 231, 226);
+    outline-width:3px;
+}
 `;
 
 export const StyledContactFormSubmitButton = styled.button`

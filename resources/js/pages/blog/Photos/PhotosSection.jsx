@@ -44,7 +44,7 @@ export default ({ reference, photos, winSize,scrollWidth }) => {
     
     return (
         <div style={{ height: '100vh', background: 'rgb(218, 173, 134)', width: '100%',overflow:'hidden' }} ref={reference}>
-            <p style={{ fontFamily: 'Mulish', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }}>Photos</p>
+            <p style={{ fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }}>Photos</p>
             <div
                 style={{
                     overflow: "hidden",

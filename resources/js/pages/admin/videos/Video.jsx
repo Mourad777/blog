@@ -1,10 +1,12 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { StyledBlueButton, StyledRedButton } from "../../blog/StyledComponents";
 
 const imgWithClick = { cursor: "pointer" };
 
 const Photo = ({ index, onClick, photo, margin, direction, top, left, handleVideoDetails,handleDeleteVideo }) => {
-  const imgStyle = { margin: margin, padding: 20, objectFit:'cover' };
+  const history = useHistory()
+  const imgStyle = { margin: margin, padding: 20, objectFit:'cover',maxWidth:400 };
   if (direction === "column") {
     imgStyle.position = "absolute";
     imgStyle.left = left;
@@ -28,6 +30,10 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left, handleVide
         <StyledBlueButton style={{width:'100%'}}  onClick={() => handleVideoDetails(photo)}
         >
           Details
+        </StyledBlueButton>
+        <StyledBlueButton style={{width:'100%'}}  onClick={() => history.push(`/admin/video/${photo.id}/comments`)}
+        >
+          Comments {3}
         </StyledBlueButton>
         <StyledRedButton style={{ maxWidth: 100, }} onClick={() => handleDeleteVideo(photo.id)}
         >

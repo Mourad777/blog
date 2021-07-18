@@ -1,11 +1,10 @@
 import React from "react";
 import { StyledBlueButton, StyledRedButton } from "../../blog/StyledComponents";
-import axios from 'axios'
 
 const imgWithClick = { cursor: "pointer" };
 
 const Photo = ({ index, onClick, photo, margin, direction, top, left, handleImageDetails,handleDeleteImage }) => {
-  const imgStyle = { margin: margin, padding: 20, objectFit:'cover' };
+  const imgStyle = { margin: margin, padding: 20, objectFit:'cover',maxWidth:400 };
   if (direction === "column") {
     imgStyle.position = "absolute";
     imgStyle.left = left;
