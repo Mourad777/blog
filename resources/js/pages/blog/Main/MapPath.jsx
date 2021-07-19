@@ -48,7 +48,7 @@ const MapPath = ({
             strokeMiterlimit: 10,
             strokeDasharray: 3255,
             zIndex: 1,
-            transition:'all 0.8s ease-in'
+            transition:'all 0.3s ease-in'
         }}
             id="myline"
             strokeLinecap="round"

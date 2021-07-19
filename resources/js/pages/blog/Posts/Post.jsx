@@ -121,7 +121,7 @@ const Post = ({ postsFromDB, refPosts }) => {
     const history = useHistory();
 
     return (
-        <div ref={postContainer} style={{ width: '100%', height: '100%', background: '#fff', padding: '40px 20px', position: 'absolute', zIndex: 999 }}>
+        <div ref={postContainer} style={{ width: '100%', height: '100%', background: '#fff', padding: '40px 20px', maxWidth:600,margin:'auto'}}>
             <Button content='Home' onClick={() => { history.push('/') }} />
             <h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: '3em' }}>{post.title}</h1>
             <div dangerouslySetInnerHTML={{ __html: `<style>

@@ -17,6 +17,36 @@ class VideosController extends Controller
      */
     public function index()
     {
+
+        function  increaseCommentCount($comments)
+        {
+            global $comment_count;
+
+            if ($comments) {
+                $comment_count += count($comments);
+                Log::info('yes comments new count' . $comment_count);
+            }
+
+            foreach ($comments as $comment) {
+                if ($comment->replies) {
+                    increaseCommentCount($comment->replies);
+                }
+            }
+            Log::info('done' . $comment_count);
+            return $comment_count;
+        }
+
+        function getCommentCount($comments)
+        {
+            global $comment_count;
+
+            $comment_count = 0;
+
+            $final_value = increaseCommentCount($comments);
+
+            return $final_value;
+        }
+
         //
         $videos = Video::all();
 
@@ -26,8 +56,12 @@ class VideosController extends Controller
                 $video->thumbnail = Storage::disk(name: 's3')->url($video->thumbnail);
             }
             $video->categories = $video->categories()->get();
+
+            $video->comments = $video->comments()->get();
+            $video->comment_count = getCommentCount($video->comments);
             return $video;
         });
+        
 
         return $videos;
     }
@@ -51,13 +85,28 @@ class VideosController extends Controller
     public function store(Request $request)
     {
         //
+        Log::info(' video store controller');
         $video = new Video;
         if ($request->has('video')) {
-            $video_base_url = $request->file(key: 'video')->store(path: 'videos', options: 's3');
-            Storage::disk(name: 's3')->setVisibility($video_base_url, visibility: 'public');
-            $video->url = $video_base_url;
+            Log::info('has video ');
+            $video_file = $request->video;
+            $filename = md5(time()) . '_' . $video_file->getClientOriginalName();
+            $file_key = 'videos/' . $filename;
+
+
+            // $video_base_url = $request->file(key: 'video')->store(path: 'videos', options: 's3');
+            Log::info('storing video');
+            // Storage::disk(name: 's3')->setVisibility($file_key, visibility: 'public');
+          
+            $video->url = $file_key;
             $video->save();
-            $video->src = Storage::disk(name: 's3')->url($video_base_url);
+            // $video->src = Storage::disk(name: 's3')->url($video_base_url);
+
+
+            $s3 = Storage::disk('s3');
+            $s3->put($file_key, (string)$video_file, 'public');
+
+            Log::info('stored video');
             return $video;
         }
     }

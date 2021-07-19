@@ -59,6 +59,7 @@ const getVideos = async (setItems) => {
             src: item.thumbnail || VideoIcon,
             height: 1,
             width: 1.5,
+            commentCount:item.comments,
             id: item.id,
             videoUrl: item.src
         }
@@ -231,7 +232,7 @@ function VideoGallery() {
 
     const handleDeleteVideo = async (id) => {
         console.log('delete image', id)
-        await axios.delete(`${AppUrl}api/photos/delete/${id}`, {
+        await axios.delete(`${AppUrl}api/videos/delete/${id}`, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(res => console.log('res', res.data)).catch(e => console.log('error', e));

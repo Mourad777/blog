@@ -204,7 +204,7 @@ const Home = ({ scrollWidth, winSize }) => {
                 if (!requestId) {
                     requestId = requestAnimationFrame(update);
                 }
-            }, 500, {}));
+            }, 200, {}));
 
             update();
 

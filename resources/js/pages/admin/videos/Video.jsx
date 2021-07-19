@@ -33,7 +33,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left, handleVide
         </StyledBlueButton>
         <StyledBlueButton style={{width:'100%'}}  onClick={() => history.push(`/admin/video/${photo.id}/comments`)}
         >
-          Comments {3}
+          Comments {photo.commentCount}
         </StyledBlueButton>
         <StyledRedButton style={{ maxWidth: 100, }} onClick={() => handleDeleteVideo(photo.id)}
         >
