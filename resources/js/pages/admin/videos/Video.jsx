@@ -17,7 +17,7 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left, handleVide
   const handleClick = event => {
     onClick(event, { photo, index });
   };
-
+  console.log('-----777777777777777777777777777777',photo)
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <img
