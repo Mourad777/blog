@@ -55,7 +55,7 @@ export default ({ isLeft }) => (
         </div>
         <div className="row" style={{ 
             // height: 730 
-            height: 370
+            height: '100%'
             }}>
             <div
                 className={isLeft ?"col-2" : "col-4"}
@@ -89,7 +89,7 @@ export default ({ isLeft }) => (
                 <div
                     style={{
                         // height: 430,
-                        height: 70,
+                        height: '100%',
                         backgroundColor: "rgb(218, 173, 134)"
                     }}
                 ></div>

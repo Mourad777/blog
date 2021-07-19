@@ -16,6 +16,7 @@ import Photo from "./pages/blog/Photos/Photo";
 import Video from "./pages/blog/Videos/Video";
 import { getWindowSizeInteger } from "./pages/blog/utility";
 import './fonts/WaitingfortheSunrise/WaitingfortheSunrise-Regular.ttf';
+import _ from "lodash";
 
 const ScrollToTop = withRouter(({ history }) => {
     useEffect(() => {
@@ -33,17 +34,19 @@ const ScrollToTop = withRouter(({ history }) => {
 const App = () => {
     const [winSize, setWinSize] = useState(getWindowSizeInteger(window.innerWidth));
     const [scrollWidth, setScrollWidth] = useState(getWindowSizeInteger(window.innerWidth));
+    const [height, setHeight] = useState(window.innerHeight);
 
     useEffect(() => {
-        addEventListener("resize", getWindowSize, { passive: true });
+        addEventListener("resize", _.throttle(getWindowSize,200), { passive: true });
     }, []);
 
     const getWindowSize = () => {
-        const windowSizeInt = getWindowSizeInteger(window.innerWidth);
+        const windowSizeWidthInt = getWindowSizeInteger(window.innerWidth);
+        const windowSizeHeight = window.innerHeight;
         setScrollWidth(window.innerWidth);
-        setWinSize(windowSizeInt);
+        setHeight(windowSizeHeight)
+        setWinSize(windowSizeWidthInt);
     };
-
 
     return (
         <BrowserRouter>
@@ -90,7 +93,7 @@ const App = () => {
                     <Video winSize={winSize} />
                 </Route>
                 <Route path="/">
-                    <Home winSize={winSize} scrollWidth={scrollWidth}/>
+                    <Home winSize={winSize} scrollWidth={scrollWidth} height={height}/>
                 </Route>
             </Switch>
 

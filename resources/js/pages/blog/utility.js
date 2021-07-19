@@ -173,27 +173,27 @@ export const getHeroSectionNameStyle = (windowWidth) => {
     if (windowWidth === 1) {
         top = "calc(100vh - 550px)";
         right = -660;
-        width = 1000;
+        width = 300;
     }
     if (windowWidth === 2) {
         top = "calc(100vh - 220px)";
         right = -390;
-        width = 1000;
+        width = 300;
     }
     if (windowWidth === 3) {
         top = "calc(100vh - 350px)";
         right = -710;
-        width = 1800;
+        width = 565;
     }
     if (windowWidth === 4) {
         top = "calc(100vh - 600px)";
         right = -1020;
-        width = 2800;
+        width = 1000;
     }
     if (windowWidth === 5) {
-        top = "calc(100vh - 1700px)";
+        top = "calc(100vh - 1785px)";
         right = -1000;
-        width = 2900;
+        width = 1200;
     }
 
     return {
@@ -207,8 +207,10 @@ export const getHeroSectionNameStyle = (windowWidth) => {
         strokeWidth: -1,
         strokeMiterlimit: 10,
         top,
-        right,
+        // right,
         width,
+        left:'50%',
+        transform:'translateX(-50%)',
     };
 };
 
@@ -250,7 +252,9 @@ export const getHeroSectionTextStyle = (windowWidth) => {
         color: "white",
         minWidth: 309,
         top,
-        right,
+        // right,
+        left:'50%',
+        transform:'translateX(-50%)',
         fontSize,
         width,
         zIndex: -1,

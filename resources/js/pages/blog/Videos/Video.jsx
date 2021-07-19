@@ -66,11 +66,13 @@ const Video = () => {
         if (replyComment) {
             formData.append('comment_id', replyComment.id)
         }
-        await axios.post(`${AppUrl}api/comments/save`, formData,
+        const videoUploadResponse = await axios.post(`${AppUrl}api/comments/save`, formData,
             {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
             .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
+        
+        console.log('Video Upload Response',videoUploadResponse)
 
         const commentsRes = await axios.get(`${AppUrl}api/comments/video/${selectedVideo}`);
         setComments(commentsRes.data)

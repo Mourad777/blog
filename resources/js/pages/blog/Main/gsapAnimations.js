@@ -2,7 +2,7 @@ import { gsap } from "gsap/all";
 
 const animations = [
     {
-        target: '.scroll-arrows',
+        target: '.scroll-down-arrow',
         trigger: '#main',
         start: 'top top',
         end: 'center bottom',

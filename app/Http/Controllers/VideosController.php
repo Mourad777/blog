@@ -89,7 +89,7 @@ class VideosController extends Controller
         $video = new Video;
         if ($request->has('video')) {
             Log::info('has video ');
-            $video_file = $request->video;
+            $video_file = $request->file('video');
             $filename = md5(time()) . '_' . $video_file->getClientOriginalName();
             $file_key = 'videos/' . $filename;
 
@@ -99,14 +99,15 @@ class VideosController extends Controller
             // Storage::disk(name: 's3')->setVisibility($file_key, visibility: 'public');
           
             $video->url = $file_key;
+
+            Storage::disk('s3')->put($file_key, file_get_contents($video_file), 'public');
+
+            Log::info('stored video');
             $video->save();
             // $video->src = Storage::disk(name: 's3')->url($video_base_url);
 
 
-            $s3 = Storage::disk('s3');
-            $s3->put($file_key, (string)$video_file, 'public');
 
-            Log::info('stored video');
             return $video;
         }
     }

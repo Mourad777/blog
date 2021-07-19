@@ -31,7 +31,7 @@ gsap.registerPlugin(ScrollToPlugin);
 // gsap.ticker.fps(30)
 // gsap.ticker.lagSmoothing(50,50)
 // gsap.ticker.deltaRatio(30)
-const Home = ({ scrollWidth, winSize }) => {
+const Home = ({ scrollWidth, winSize, height }) => {
 
     const refSection1 = useRef(null)
     const refSection2 = useRef(null)
@@ -292,71 +292,71 @@ const Home = ({ scrollWidth, winSize }) => {
 
 
                 {/* must use a lower resolution map for mobile devices */}
-                <div id="map-pics-container" style={{ zIndex: 5, position: 'fixed',height:'100vh',width:'100%'}}>
+                <div id="map-pics-container" style={{ zIndex: 5, position: 'fixed', height: '100vh', width: '100%' }}>
 
-                        <div id="hero-pic-1" style={{
-                            position: 'absolute',
-                            top: '42%',
-                            left: '32%',
-                            transform: 'translateX(-50%) translateY(-50%)',
-                            // top: winSize === 1 ? 270 : 300,
-                            // left: winSize === 1 ? 15 : 100,
-                            height: 100,
-                            width: 100,
-                            cursor: 'pointer',
-                            border: '5px solid #e7c5a2',
-                            zIndex: 4,
-                            transition: '0.3s all ease-in',
-                            opacity: 0,
-                            scale: 0,
-                            transform: 'rotate(0) scale(0)',
-                            ...transformStyles1,
+                    <div id="hero-pic-1" style={{
+                        position: 'absolute',
+                        top: '42%',
+                        left: '32%',
+                        transform: 'translateX(-50%) translateY(-50%)',
+                        // top: winSize === 1 ? 270 : 300,
+                        // left: winSize === 1 ? 15 : 100,
+                        height: 100,
+                        width: 100,
+                        cursor: 'pointer',
+                        border: '5px solid #e7c5a2',
+                        zIndex: 4,
+                        transition: '0.3s all ease-in',
+                        opacity: 0,
+                        scale: 0,
+                        transform: 'rotate(0) scale(0)',
+                        ...transformStyles1,
 
-                        }}
-                            onClick={() => history.push(`/photo/${(photos[0] || {}).id}`)}
-                        >
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[0] || {}).src} />
-                        </div>
-                        <div id="hero-pic-2" style={{
-                            position: 'absolute',
-                            top: '62%',
-                            left:winSize <= 2 ? '7%' : '35%',
-                            height: 100,
-                            width: 100,
-                            cursor: 'pointer',
-                            border: '5px solid #e7c5a2',
-                            zIndex: 4,
-                            transition: '0.3s all ease-in',
-                            opacity: 0,
-                            scale: 0,
-                            transform: 'rotate(0) scale(0)',
-                            ...transformStyles2,
-                        }}
-                            onClick={() => history.push(`/photo/${(photos[1] || {}).id}`)}
+                    }}
+                        onClick={() => history.push(`/photo/${(photos[0] || {}).id}`)}
+                    >
+                        <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[0] || {}).src} />
+                    </div>
+                    <div id="hero-pic-2" style={{
+                        position: 'absolute',
+                        top: '62%',
+                        left: winSize <= 2 ? '7%' : '35%',
+                        height: 100,
+                        width: 100,
+                        cursor: 'pointer',
+                        border: '5px solid #e7c5a2',
+                        zIndex: 4,
+                        transition: '0.3s all ease-in',
+                        opacity: 0,
+                        scale: 0,
+                        transform: 'rotate(0) scale(0)',
+                        ...transformStyles2,
+                    }}
+                        onClick={() => history.push(`/photo/${(photos[1] || {}).id}`)}
 
-                        >
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[1] || {}).src} />
-                        </div>
-                        <div id="hero-pic-3" style={{
-                            position: 'absolute',
-                            top: '58%',
-                            left: '50%',
-                            height: 100,
-                            width: 100,
-                            cursor: 'pointer',
-                            border: '5px solid #e7c5a2',
-                            zIndex: 4,
-                            transition: '0.3s all ease-in',
-                            opacity: 0,
-                            scale: 0,
-                            transform: 'rotate(0) scale(0)',
-                            ...transformStyles3,
-                        }}
-                            onClick={() => history.push(`/photo/${(photos[2] || {}).id}`)}
-                        >
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[2] || {}).src} />
-                        </div>
-            
+                    >
+                        <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[1] || {}).src} />
+                    </div>
+                    <div id="hero-pic-3" style={{
+                        position: 'absolute',
+                        top: '58%',
+                        left: '50%',
+                        height: 100,
+                        width: 100,
+                        cursor: 'pointer',
+                        border: '5px solid #e7c5a2',
+                        zIndex: 4,
+                        transition: '0.3s all ease-in',
+                        opacity: 0,
+                        scale: 0,
+                        transform: 'rotate(0) scale(0)',
+                        ...transformStyles3,
+                    }}
+                        onClick={() => history.push(`/photo/${(photos[2] || {}).id}`)}
+                    >
+                        <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[2] || {}).src} />
+                    </div>
+
 
                 </div>
 
@@ -373,7 +373,17 @@ const Home = ({ scrollWidth, winSize }) => {
                     </div>
 
                     <StyledHeroSection ref={refSection1} id="hero-section">
-                        <HeroSectionContent posts={postsFromDB} photos={photos} videos={videos} tags={[]} categories={[]} heroPicMainRef={heroPicMainRef} winSize={winSize} isAssetLoaded={isAssetLoaded} />
+                        <HeroSectionContent
+                            height={height}
+                            posts={postsFromDB}
+                            photos={photos}
+                            videos={videos}
+                            tags={[]}
+                            categories={[]}
+                            heroPicMainRef={heroPicMainRef}
+                            winSize={winSize}
+                            isAssetLoaded={isAssetLoaded}
+                        />
                     </StyledHeroSection>
                     {/* the spacer section is so that gsap will snap to latest post section if the top part of that section is in view port */}
                     <div id="spacer" style={{ overflow: 'hidden', width: '100%', height: '100vh', zIndex: -10 }} ref={refSectionX} />

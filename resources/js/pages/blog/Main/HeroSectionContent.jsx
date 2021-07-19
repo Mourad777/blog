@@ -19,7 +19,8 @@ const HeroSectionContent = ({
     videos,
     posts,
     categories,
-    tags
+    tags,
+    height,
 }) => {
 
     return (
@@ -37,9 +38,12 @@ const HeroSectionContent = ({
             ))}
 
             <svg
-                style={getHeroSectionNameStyle(winSize)}
+                style={{
+                    ...getHeroSectionNameStyle(winSize),
+                    opacity: winSize === 1 && height < 600 ? 0 : 1, transition: 'opacity 0.3s ease-in'
+                }}
                 className={isAssetLoaded ? "HeroTextAnimationOne" : ""}
-                viewBox="0 0 400 50"
+                viewBox="0 0 120 50"
                 id="heroTextMainPath"
             >
                 <g>
@@ -47,13 +51,22 @@ const HeroSectionContent = ({
                 </g>
             </svg>
 
-            <div style={getHeroSectionTextStyle(winSize, isAssetLoaded)} >
+            <div style={{
+                ...getHeroSectionTextStyle(winSize, isAssetLoaded),
+                opacity: winSize === 1 && height < 530 ? 0 : 1, transition: 'opacity 0.3s ease-in'
+            }} >
                 <p id="heroTextSecondary" style={{ fontFamily: 'Mulish,sans-serif' }} >
                     I'm Mourad - Adventure travel photographer,
                     videographer, blogger, and digital nomad. Join me as
                     I share wild stories, beautiful images, and useful
                     travel tips with you from around the world!
                 </p>
+            </div>
+            <div className="scroll-down-arrow" style={{position:'absolute',bottom:100,left:'5%',height:70}}>
+                <ScrollDownArrow />
+            </div>
+            <div className="scroll-down-arrow" style={{position:'absolute',bottom:100,right:'5%',height:70}}>
+                <ScrollDownArrow />
             </div>
         </Fragment>
     )

@@ -26,40 +26,40 @@ function useOutsideAlerter(ref, handleOutsideClick) {
     }, [ref]);
 }
 
-const Search = ({ posts, photos, videos,winSize }) => {
-    console.log('-------- photos',photos)
-    console.log('-------- videos',videos)
-    console.log('-------- posts',posts)
+const Search = ({ posts, photos, videos, winSize }) => {
+    console.log('-------- photos', photos)
+    console.log('-------- videos', videos)
+    console.log('-------- posts', posts)
 
-    const adjustedPhotos = photos.map(p=>({
-        type:'photo',
-        id:p.id,country:p.country||'',
-        summary:(p.description||'').toLowerCase(),
-        author:(p.photographer||'').toLowerCase(),
-        title:(p.title||'').toLowerCase(),
-        content:'',
-        image:p.src,
+    const adjustedPhotos = photos.map(p => ({
+        type: 'photo',
+        id: p.id, country: p.country || '',
+        summary: (p.description || '').toLowerCase(),
+        author: (p.photographer || '').toLowerCase(),
+        title: (p.title || '').toLowerCase(),
+        content: '',
+        image: p.src,
 
     }));
-    const adjustedVideos = videos.map(v=>({
-        type:'video',
-        id:v.id,
-        country:v.country||'',
-        summary:(v.description||'').toLowerCase(),
-        author:(v.videographer||'').toLowerCase(),
-        title:(v.title||'').toLowerCase(),
-        content:'',
-        image:v.thumbnail,
+    const adjustedVideos = videos.map(v => ({
+        type: 'video',
+        id: v.id,
+        country: v.country || '',
+        summary: (v.description || '').toLowerCase(),
+        author: (v.videographer || '').toLowerCase(),
+        title: (v.title || '').toLowerCase(),
+        content: '',
+        image: v.thumbnail,
     }));
-    const adjustedPosts = posts.map(p=>({
-        type:'post',
-        id:p.id,
-        country:p.country||'',
-        summary:(p.summary||'').toLowerCase(),
-        author:(p.author||'').toLowerCase(),
-        title:(p.title||'').toLowerCase(),
-        content:(p.content||'').toLowerCase(),
-        image:p.image,
+    const adjustedPosts = posts.map(p => ({
+        type: 'post',
+        id: p.id,
+        country: p.country || '',
+        summary: (p.summary || '').toLowerCase(),
+        author: (p.author || '').toLowerCase(),
+        title: (p.title || '').toLowerCase(),
+        content: (p.content || '').toLowerCase(),
+        image: p.image,
     }));
 
     const [searchValue, setSearchValue] = useState('');
@@ -67,18 +67,42 @@ const Search = ({ posts, photos, videos,winSize }) => {
     console.log('searchValue', searchValue)
 
     const countries =
-    [...posts, ...photos, ...videos]
-        .filter(item => !!item.country)
-        .map(item => ({
-            title:countryCodes[item.country].toLowerCase(),
-            type:'country',
-            id:item.country,
-            summary:'',
-            author:'',
-            content:'',
-        }));
+        [...posts, ...photos, ...videos]
+            .filter(item => !!item.country)
+            .map(item => ({
+                title: countryCodes[item.country].toLowerCase(),
+                type: 'country',
+                id: item.country,
+                summary: '',
+                author: '',
+                content: '',
+            }));
 
-    const options = [...adjustedPhotos,...adjustedVideos,...adjustedPosts,...countries]
+    const categories = [];
+
+    [...posts, ...photos, ...videos]
+        .forEach(item => {
+                item.categories.forEach(cat=>{
+                    if(!categories.map(c=>c.name).includes(cat.name)){
+                        categories.push(cat)
+
+                    }
+                })
+            
+        });
+
+        const adjustedCategories = categories.map(c=>({
+            title: c.name,
+            type: 'category',
+            id: c.name,
+            summary: '',
+            author: '',
+            content: '',
+        }))
+
+    console.log('categories', categories)
+
+    const options = [...adjustedPhotos, ...adjustedVideos, ...adjustedPosts, ...countries,...adjustedCategories];
 
     const handleSearchValue = (e) => {
         console.log('search e', e, 'e.target.value', e.target.value)
@@ -90,7 +114,6 @@ const Search = ({ posts, photos, videos,winSize }) => {
 
         console.log('reseting search value')
         setSearchValue('');
-
     }
     console.log('------- countries ---------', countries)
 
@@ -100,19 +123,20 @@ const Search = ({ posts, photos, videos,winSize }) => {
 
     const filteredResults = options
         .filter(item => (
-            item.title.includes(searchValue.toLowerCase()) || 
-            item.summary.includes(searchValue.toLowerCase()) || 
-            item.author.includes(searchValue.toLowerCase()) || 
-            item.content.includes(searchValue.toLowerCase())) && 
+            item.title.includes(searchValue.toLowerCase()) ||
+            item.summary.includes(searchValue.toLowerCase()) ||
+            item.author.includes(searchValue.toLowerCase()) ||
+            item.content.includes(searchValue.toLowerCase())) &&
             !!searchValue.toLowerCase());
 
-    console.log('-----------options--------',options)
+    console.log('-----------options--------', options)
 
-    const handleResult = ({type,id}) => {
-        if(type === 'photo')history.push(`/photo/${id}`);
-        if(type === 'video')history.push(`/video/${id}`);
-        if(type === 'post')history.push(`/post/${id}`);
-        if(type === 'country')history.push(`/destination/${countryCodes[id].toLowerCase()}`)
+    const handleResult = ({ type, selectedResult }) => {
+        if (type === 'photo') history.push(`/photo/${selectedResult}`);
+        if (type === 'video') history.push(`/video/${selectedResult}`);
+        if (type === 'post') history.push(`/post/${selectedResult}`);
+        if (type === 'country') history.push(`/destination/${countryCodes[selectedResult].toLowerCase()}`)
+        if (type === 'category') history.push(`/category/${selectedResult}`)
     }
 
     return (
@@ -123,9 +147,9 @@ const Search = ({ posts, photos, videos,winSize }) => {
                 left: '50%',
                 position: 'absolute',
                 ...getSearchInputStyle(winSize),
-                zIndex:10
+                zIndex: 10
             }}
-            ref={wrapperRef} 
+            ref={wrapperRef}
         >
             <div className="search-box">
                 <button className="btn-search"><Icon name="search" /></button>
@@ -145,7 +169,7 @@ const Search = ({ posts, photos, videos,winSize }) => {
                 <div style={{ background: '#fff', borderRadius: 5, width: 300 }} >
                     {
                         filteredResults.map(res => (
-                            <div onClick={()=>handleResult({type:res.type,id:res.id})} key={`search-result[${res.id}]`} style={{ display: 'flex', padding: 5, cursor: 'pointer' }}>
+                            <div onClick={() => handleResult({ type: res.type, selectedResult: res.id })} key={`search-result[${res.id}]`} style={{ display: 'flex', padding: 5, cursor: 'pointer' }}>
                                 <div ><img style={{
                                     width: '100%',
                                     maxWidth: 50,

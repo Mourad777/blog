@@ -52,6 +52,8 @@ class PhotosController extends Controller
     public function store(Request $request)
     {
         //
+        $imagefile = $request->file('image');
+        Log::info($imagefile);
         $photo = new Photo;
         if ($request->has('image')) {
             // $img = Image::make($request->image);
