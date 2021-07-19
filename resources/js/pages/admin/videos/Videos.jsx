@@ -59,7 +59,7 @@ const getVideos = async (setItems) => {
             src: item.thumbnail || VideoIcon,
             height: 1,
             width: 1.5,
-            commentCount:item.comments,
+            commentCount:item.comments||0,
             id: item.id,
             videoUrl: item.src
         }
