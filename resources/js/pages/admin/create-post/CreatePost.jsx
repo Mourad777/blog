@@ -289,11 +289,9 @@ const CreatePost = ({ isEditing }) => {
                             `@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
                              @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
                              @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
-                             body { 
-                                 font-family: Merriweather;
-                                 font-size: 1.6em;
-                                 line-height:2;
-                                }
+                             img {
+                                 max-width:100%;
+                             }
                             `,
                         font_formats: fontStyles,
 

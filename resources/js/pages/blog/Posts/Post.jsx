@@ -142,6 +142,9 @@ const Post = ({ winSize }) => {
             @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+            img {
+                max-width:100%;
+            }
             </style>` + post.content
                 }} />
 
