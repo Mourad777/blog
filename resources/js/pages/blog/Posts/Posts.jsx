@@ -1,12 +1,12 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { StyledLatestPostsTopLayer, StyledPostRow, StyledLatestPostsInnerWrapper, StyledLatestPostsOuterWrapper, StyledSeeAllPostsText } from '../StyledComponents'
+import React, {  useEffect, useState } from 'react'
+import { StyledLatestPostsTopLayer, StyledPostRow, StyledLatestPostsInnerWrapper, StyledLatestPostsOuterWrapper } from '../StyledComponents'
 import OuterColumn from "./OuterColumns";
 import RowLayout from './RowLayout';
 import ReactPaginate from 'react-paginate';
 import { Link } from "react-scroll";
 import { gsap } from 'gsap/all';
 
-const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection, setPhoto, reference }) => {
+const LatestPosts = ({ winSize, postsFromDB, reference }) => {
 
     const [offset, setOffset] = useState(0);
     const [pageCount, setPageCount] = useState(0);
@@ -47,6 +47,14 @@ const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection
         getData()
     }, [offset, winSize, postsFromDB]);
 
+    useEffect(() => {
+        console.log('page changed')
+        gsap.fromTo(".post-text-1", {opacity: 0.3}, {opacity: 1, duration: 1});
+        gsap.fromTo(".post-image-1", {opacity: 0.3}, {opacity: 1, duration: 1});
+        gsap.fromTo(".post-text-2", {opacity: 0.3}, {opacity: 1, duration: 1});
+        gsap.fromTo(".post-image-2", {opacity: 0.3}, {opacity: 1, duration: 1});
+    }, [offset]);
+
     const getPostsPerPage = (winSize) => {
         let postsPerPage = 2;
         if (winSize === 1) postsPerPage = 1;
@@ -76,22 +84,6 @@ const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection
 
         <StyledLatestPostsTopLayer >
             <p style={{ fontFamily: 'Mulish,sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center' }}>Posts</p>
-            {/* <Link
-                    activeClass="activeLink"
-                    to="posts-section"
-                    spy={true}
-                    smooth={true}
-                    duration={2000}
-                > */}
-            {/* <StyledSeeAllPostsText 
-                    onClick={() => {
-                        // if (selectedSection === 'posts') return;
-                        setSelectedSection('posts');
-                        gsap.to(window,{duration:1, scrollTo:refB.current});
-                    }}
-                    >See all posts</StyledSeeAllPostsText> */}
-            {/* </Link> */}
-            {/* <p style={{fontFamily: 'Mulish', fontSize: '1em', color: '#fff', textAlign: 'center',position:'absolute'}}>See all posts</p> */}
         </StyledLatestPostsTopLayer>
         <div style={{
             display: 'flex', background: '#DAAD86',
@@ -116,13 +108,15 @@ const LatestPosts = ({ winSize, postsFromDB, setSelectedSection, selectedSection
         <StyledLatestPostsOuterWrapper >
             {winSize > 1 && <OuterColumn isLeft />}
             <StyledLatestPostsInnerWrapper >
-                {posts.map((post, index) => (
-                    <StyledPostRow key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >
+           
+                    {posts.map((post, index) => (
+                        <StyledPostRow key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >
 
-                        <RowLayout winSize={winSize} post={post} index={index} />
+                            <RowLayout offset={offset} winSize={winSize} post={post} index={index} />
 
-                    </StyledPostRow>
-                ))}
+                        </StyledPostRow>
+                    ))}
+               
                 <div style={{ background: '#daad86', height: '100%' }} />
             </StyledLatestPostsInnerWrapper>
             {winSize > 1 && <OuterColumn />}

@@ -1,12 +1,14 @@
 import React from "react";
 import moment from "moment";
-const PostText = ({ post, isMobile }) => {
+const PostText = ({ post, isMobile, index }) => {
+    console.log('post text: ', `post-text-${index + 1}`)
     return (
         <div
             className="col-12 col-sm-6"
             style={{ display: "flex", padding: 0 }}
         >
             <div
+                className={`post-text-${index + 1}`}
                 style={{
                     width: "100%",
                     background: "rgba(218, 173, 134,0.8)",
@@ -29,9 +31,9 @@ const PostText = ({ post, isMobile }) => {
                         background: 'transparent !important',
                         position: 'absolute',
                         top: 60,
-                        left: '20%',
-                        textAlign:'center',
-                        maxWidth:170,
+                        left: !isMobile ? '20%' : '',
+                        textAlign: 'center',
+                        maxWidth: 170,
                     }}
 
                 >

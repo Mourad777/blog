@@ -10,6 +10,13 @@
     border-color: white ;
     color: rgb(132,4,4);
   }
+
+  .pagination > .active > a:hover{
+    background-color: white ;
+    border-color: white ;
+    color: rgb(132,4,4);
+  }
+  
   .pagination > li > a{
     /* border: 1px solid white ; */
     padding: 5px 10px;

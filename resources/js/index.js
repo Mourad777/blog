@@ -55,7 +55,7 @@ const App = () => {
                 <Route path="/admin">
                     <AdminLayout>
                         <Route exact path="/admin/posts">
-                            <Posts />
+                            <Posts winSize={winSize} />
                         </Route>
                         <Route exact path="/admin/post/:id/comments">
                             <Comments isPost />

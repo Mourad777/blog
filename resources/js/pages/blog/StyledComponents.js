@@ -2,14 +2,14 @@ import styled from "styled-components";
 // import map  from '../../../../public/assets/map-2-black-min.jpg'
 // import map from '../../../../public/assets/map-3-black.jpg'
 // import mapLowRes from '../../../../public/assets/map-low-res-3-black.jpg'
-import mapLowRes from'../../../../public/assets/map-notepad-white-md.jpg'
+import mapLowRes from '../../../../public/assets/map-notepad-white-md.jpg'
 // import mapLowRes from '../../../../public/assets/map-sketch.jpg'
 //Styledpath StyledDestinationsSection
 //styledmapover
 //430px
 //StyledLatestPostsTitle
 //StyledLatestPostsSection
-//font contact styledinput
+//font contact styledthumb
 export const StyledPostRow = styled.div`
 border: rgba(218, 173, 134) solid;
 border-width: ${props => props.index === 0 ? "40" : "20"
@@ -333,6 +333,7 @@ export const StyledCheckbox = styled.input`
 `
 
 export const StyledBlueButton = styled.button`
+    width:${props => props.maxWidth ? '100%' : ''};
     background-color: #2185d0;
     cursor: pointer;
     display: inline-block;
@@ -361,6 +362,7 @@ export const StyledBlueButton = styled.button`
 `
 
 export const StyledRedButton = styled.button`
+    width:${props => props.maxWidth ? '100%' : ''};
     background-color: #c62828;
     cursor: pointer;
     display: inline-block;
@@ -422,7 +424,8 @@ export const StyledThumbnailPreview = styled.div`
 height:${props => props.small ? '70px' : '250px'};
 background-color:#e2e2e2;
 background-image:${props => props.file ? `url("${props.file}")` : '#e2e2e2'}; 
-width: ${props => props.small ? '100px' : '350px'};
+width: ${props => props.small ? '100px' : '100%'};
+max-width:500px;
 margin-bottom: 20px; 
 border-radius: 10px;
 background-position: center;
