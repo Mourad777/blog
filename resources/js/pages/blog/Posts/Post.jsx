@@ -141,6 +141,7 @@ const Post = ({ postsFromDB, refPosts }) => {
                     __html: `<style>
             @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
             </style>` + post.content
                 }} />
 

@@ -9,10 +9,11 @@ const RowLayout = ({ winSize, post, index, offset }) => (
 
         {winSize === 1 && (
             <Fragment>
-                <PostTitleImage post={post} />
+                <PostTitleImage index={index} post={post} />
                 <PostText
                     post={post}
                     isMobile={winSize === 1}
+                    index={index}
                 />
 
             </Fragment>

@@ -26,7 +26,7 @@ const processCategories = (categories) => {
 }
 
 const fontStyles =
-    "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago;Merriweather=merriweather; Quicksand=quicksand; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats"
+    "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago;Merriweather=merriweather; Montserrat=montserrat; Quicksand=quicksand; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats"
 
 // const categories = [
 //     { key: 'accomodation', value: 'accomodation', text: 'Accomodation' },
@@ -279,6 +279,7 @@ const CreatePost = ({ isEditing }) => {
                     initialValue={initialContent}
                     apiKey="lmbdxengrz1nuue2c1bunerjwmcqgvzoptjjdr3w0o1imj5n"
                     
+                    
                     init={{
                         
                         plugins: 'link image code autoresize',
@@ -287,6 +288,12 @@ const CreatePost = ({ isEditing }) => {
                         content_style:
                             `@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
                              @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+                             @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+                             body { 
+                                 font-family: Merriweather;
+                                 font-size: 1.6em;
+                                 line-height:2;
+                                }
                             `,
                         font_formats: fontStyles,
 
