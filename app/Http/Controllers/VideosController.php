@@ -61,7 +61,7 @@ class VideosController extends Controller
             $video->comment_count = getCommentCount($video->comments);
             return $video;
         });
-        
+
 
         return $videos;
     }
@@ -84,32 +84,20 @@ class VideosController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        Log::info(' video store controller');
         $video = new Video;
-        if ($request->has('video')) {
-            Log::info('has video ');
-            $video_file = $request->file('video');
-            $filename = md5(time()) . '_' . $video_file->getClientOriginalName();
-            $file_key = 'videos/' . $filename;
 
+        // $video_base_url = $request->file(key: 'video')->store(path: 'videos', options: 's3');
+        Log::info('storing video');
+        // Storage::disk(name: 's3')->setVisibility($file_key, visibility: 'public');
 
-            // $video_base_url = $request->file(key: 'video')->store(path: 'videos', options: 's3');
-            Log::info('storing video');
-            // Storage::disk(name: 's3')->setVisibility($file_key, visibility: 'public');
-          
-            $video->url = $file_key;
+        $video->url = $request->key;
 
-            Storage::disk('s3')->put($file_key, file_get_contents($video_file), 'public');
+        // Storage::disk('s3')->put($file_key, file_get_contents($video_file), 'public');
 
-            Log::info('stored video');
-            $video->save();
-            // $video->src = Storage::disk(name: 's3')->url($video_base_url);
+        $video->save();
+        // $video->src = Storage::disk(name: 's3')->url($video_base_url);
 
-
-
-            return $video;
-        }
+        return $video;
     }
 
     /**
@@ -154,7 +142,7 @@ class VideosController extends Controller
         $video->country = $request->country;
 
 
-        Log::info(' thumbnail'.$request->thumbnail);
+        Log::info(' thumbnail' . $request->thumbnail);
 
         if ($request->thumbnail === 'sameThumbnail') {
             //same image
@@ -168,7 +156,7 @@ class VideosController extends Controller
                 $thumbnail = $request->file('thumbnail');
                 $extension = $request->file('thumbnail')->extension();
                 $filename = md5(time()) . '_' . $thumbnail->getClientOriginalName();
-                
+
                 $orientation = Image::make($thumbnail)->exif('Orientation');
 
                 $resized_file = Image::make($thumbnail)->rotate($orientation === 8 ? 90 : 0)->resize(800, null, function ($constraint) {

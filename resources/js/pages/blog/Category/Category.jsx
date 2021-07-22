@@ -28,8 +28,8 @@ const Country = ({ winSize }) => {
 
     const params = useParams();
     console.log('params', params)
-    const selectedCountry = params.country;
-    console.log('selectedCountry', selectedCountry)
+    const countryIso = params.country;
+    // console.log('selectedCountry', selectedCountry)
     const selectedCategory = params.categoryId;
     const history = useHistory();
     const [posts, setPosts] = useState([]);
@@ -42,12 +42,12 @@ const Country = ({ winSize }) => {
             tr.kill()
         });
         let url;
-        if (selectedCountry) {
+        if (countryIso) {
             //switch keys and values to search country code by country name
             const countryCodesSwapped = swap(countryCodes);
             //capitalize first letter of country name to match the json object
-            const country = capitalize(selectedCountry);
-            const countryIso = countryCodesSwapped[country];
+            // const country = capitalize(selectedCountry);
+            // const countryIso = countryCodesSwapped[country];
             url = `${AppUrl}api/countries/${countryIso}`;
         }
         if (selectedCategory) {
@@ -105,7 +105,7 @@ const Country = ({ winSize }) => {
             <div style={{ padding: 20 }}>
                 <Button content='Home' onClick={() => { history.push('/') }} />
             </div>
-            <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '4em', fontFamily: 'Mulish', paddingTop: 30 }}>{capitalize(selectedCountry || selectedCategory)}</p>
+            <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '4em', fontFamily: 'Mulish', paddingTop: 30 }}>{capitalize(countryCodes[countryIso] || selectedCategory)}</p>
             {posts.length > 0 && <div className="posts-category-container" style={{ padding: 10 }}>
                 <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '3em', fontFamily: 'Mulish' }}>Posts</p>
                 <div style={{

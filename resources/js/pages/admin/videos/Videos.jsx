@@ -4,14 +4,14 @@ import Photo from "./Video";
 import arrayMove from "array-move";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import {
-    StyledBlueButton, 
-    StyledFormTextInput, 
-    StyledRedButton, 
+    StyledBlueButton,
+    StyledFormTextInput,
+    StyledRedButton,
     StyledSubmitButton,
     StyledThumbnailPreview,
 } from '../../blog/StyledComponents';
 import axios from 'axios';
-import { AppUrl } from '../../blog/utility';
+import { AppUrl, getFileName } from '../../blog/utility';
 import { Checkbox, Segment, Dropdown } from 'semantic-ui-react'
 import { countries } from "../util/countries-iso";
 import TagInput from "../../../components/TagInput/TagInput";
@@ -59,7 +59,7 @@ const getVideos = async (setItems) => {
             src: item.thumbnail || VideoIcon,
             height: 1,
             width: 1.5,
-            commentCount:item.comment_count,
+            commentCount: item.comment_count,
             id: item.id,
             videoUrl: item.src
         }
@@ -134,16 +134,77 @@ function VideoGallery() {
 
     const handleVideoUpload = async e => {
         e.preventDefault()
-        const newVideoFormData = new FormData();
+
         const file = e.target.files[0];
         console.log('e.target.files[0]', file);
 
 
-
-        newVideoFormData.append('video', file);
+        const fileInfo = new FormData();
 
         const saveVideoUrl = `${AppUrl}api/videos/save`;
-        setIsLoading(true)
+        const presignedUrlEndpoint = `${AppUrl}api/upload/store`;
+        setIsLoading(true);
+
+
+        const filename = getFileName(file.name)
+        const directory = 'videos'
+
+        fileInfo.append('filename', filename);
+        fileInfo.append('directory', directory);
+
+        const resPresignedUrl = await axios.post(presignedUrlEndpoint, fileInfo,
+            {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+        console.log('resPresignedUrl', resPresignedUrl)
+
+        const fileData = new FormData();
+        const inputs = resPresignedUrl.data.inputs
+        Object.keys(inputs).forEach(key => {
+            console.log('key', key, inputs[key], 'inputs[key]')
+            fileData.append(key, inputs[key]);
+        });
+        // fileData.append('Content-Type', 'multipart/form-data');
+        fileData.append('file', file);
+
+        // const resUploadFile = await axios.post(presignedUrl, fileData,
+        //     {
+        //         headers: { 'Content-Type': 'multipart/form-data' }
+        //     });
+        const fileUploadUrl =
+            // resPresignedUrl.data
+            // resPresignedUrl.data.attributes.action;
+            // 'https://s3.ca-central-1.amazonaws.com/travel-blog-bouka-dev';
+            'https://travel-blog-bouka-dev.s3.ca-central-1.amazonaws.com/';
+        const options = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'x-amz-acl': 'public-read'
+            }
+        }
+        const response = await axios.post(
+            fileUploadUrl,
+            fileData,
+            // options,
+            // {
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data'
+            //     }
+            // }
+            // {
+            //   headers:{'x-amz-meta-filetype':'abcfileType'}
+            // }
+        );
+        console.log('file upload response', response)
+
+        // fetch(fileUploadUrl, { method: 'POST', body: fileData })
+        //     .then(res => console.log('res upload', res))
+        //     .catch(e => console.log('upload error', e));
+
+
+        const newVideoFormData = new FormData();
+        newVideoFormData.append('key', `${directory}/${filename}`)
         const resUploadVideo = await axios.post(saveVideoUrl, newVideoFormData,
             {
                 headers: { 'Content-Type': 'multipart/form-data' }
@@ -151,7 +212,7 @@ function VideoGallery() {
         setIsLoading(false)
         console.log('upload video response: ', resUploadVideo.data);
         console.log('cur items', items);
-        const newArray = [{ src: resUploadVideo.data.thumbnail || VideoIcon, height: 1, width: 1.5, id: resUploadVideo.data.id }, ...items]
+        const newArray = [{videoUrl:resPresignedUrl.data.url, src: resUploadVideo.data.thumbnail || VideoIcon, height: 1, width: 1.5, id: resUploadVideo.data.id }, ...items]
         console.log('new array', newArray);
         setItems(newArray);
         //update order 
@@ -171,7 +232,7 @@ function VideoGallery() {
         // setDateTaken(video.date_taken)
 
         setTags(Array.isArray(video.tags) ? JSON.parse(video.tags) : [])
-        setSelectedCategories((video.categories||[]).map(cat => cat.name));
+        setSelectedCategories((video.categories || []).map(cat => cat.name));
         setCountry(video.country)
 
         setSelectedVideo(video)
@@ -181,7 +242,7 @@ function VideoGallery() {
         console.log('set video: ', video);
         const selectedCategoriesIds = categories.filter(cat => selectedCategories.includes(cat.text)).map(cat => cat._id);
         const formData = new FormData();
-        if(!!thumbnail){
+        if (!!thumbnail) {
             if (thumbnail instanceof File) {
                 //this will be an updated image
                 formData.append('thumbnail', thumbnail);
@@ -236,12 +297,12 @@ function VideoGallery() {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-        
+
         // //update order 
 
-        
-        const newArray = items.filter(p=>p.id !== id);
-        console.log('new array--------------------------',newArray)
+
+        const newArray = items.filter(p => p.id !== id);
+        console.log('new array--------------------------', newArray)
         updateOrder(newArray)
         setItems(newArray);
         // console.log('curr array',items,'updated array',items.filter(p=>p.id !== id))

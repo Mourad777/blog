@@ -123,7 +123,8 @@ const Post = ({ postsFromDB, refPosts }) => {
     return (
         <div ref={postContainer} style={{ width: '100%', height: '100%', background: '#fff', padding: '40px 20px', maxWidth:600,margin:'auto'}}>
             <Button content='Home' onClick={() => { history.push('/') }} />
-            <h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: '3em' }}>{post.title}</h1>
+            <h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: '3em',fontFamily:"Merriweather" }}>{post.title}</h1>
+
             <div dangerouslySetInnerHTML={{ __html: `<style>
             @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');

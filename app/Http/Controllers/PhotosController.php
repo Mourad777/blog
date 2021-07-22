@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Photo;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
-
+use Illuminate\Support\Str;
 use Storage;
 
 class PhotosController extends Controller
@@ -103,10 +103,10 @@ class PhotosController extends Controller
             // Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
             $photo->url = $file_key;
             $photo->camera = $request->camera;
-            $photo->lens = $request->lens;
-            $photo->focal_length = $request->focal_length;
-            $photo->shutter_speed = $request->shutter_speed;
-            $photo->aperture = $request->aperture;
+            $photo->lens = Str::limit($request->lens, 20);
+            $photo->focal_length = Str::limit($request->focal_length, 20);
+            $photo->shutter_speed = Str::limit($request->shutter_speed, 20);
+            $photo->aperture = Str::limit($request->aperture, 20);
             $photo->iso = $request->iso;
             if ($request->has('date_taken') && $request->date_taken !== 'undefined') {
                 $photo->date_taken = $request->date_taken;

@@ -92,6 +92,10 @@ Route::get('/api/configurations', 'ConfigurationsController@index');
 Route::post('/api/configurations/update', 'ConfigurationsController@update');
 
 
+
+Route::post('/api/upload/store', 'UploadController@upload');
+
+
 Route::get('/{any?}', function () {
     return view('index');
 })->where('any', '^((?!api).)*$');

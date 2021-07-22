@@ -124,7 +124,7 @@ const Photo = ({ winSize }) => {
                                 )}
                                 {photo.country && (
                                     <div
-                                    onClick={()=>history.push(`/destination/${countries.find(c => c.value === photo.country).text}`)}
+                                    onClick={()=>history.push(`/destination/${photo.country}`)}
                                     style={{ display: 'flex', color: "#fff4e1", background: '#DAAD86', padding: 10,cursor:'pointer' }}>
                                         <Location />
                                         <Typography variant="body1">{countries.find(c => c.value === photo.country).text}</Typography>

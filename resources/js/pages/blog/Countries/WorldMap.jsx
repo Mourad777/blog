@@ -10,7 +10,8 @@ const WorldMap = ({ winSize, reference, postsFromDB = [], photos, videos }) => {
     const handleClick = (geo) => () => {
         const highlightedCountries = [...postsFromDB.map(p => p.country), ...photos.map(p => p.country), ...videos.map(p => p.country)];
         if (highlightedCountries.includes(geo.ISO_A2)) {
-            history.push(`/destination/${geo.NAME.toLowerCase()}`)
+            history.push(`/destination/${geo.ISO_A2}`)
+            // history.push(`/destination/${geo.NAME.toLowerCase()}`)
         }
 
     }

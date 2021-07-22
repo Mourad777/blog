@@ -3,6 +3,19 @@ import herSectionPic from '../../../../public/assets/hero-section-main-new-small
 import herSectionPieceOne from '../../../../public/assets/hero-section-piece-1-min.png'
 import herSectionPieceTwo from '../../../../public/assets/hero-section-piece-2-min.png'
 import herSectionPieceThree from '../../../../public/assets/hero-section-piece-3-min.png';
+import { v1 } from "uuid";
+
+
+export const getFileName = (filename) => {
+
+    const extension = filename.split('.').pop();
+
+    const newFileName = v1() + Date.now() + '.' + extension;
+
+    console.log('newFileName', newFileName);
+    return newFileName;
+}
+
 
 export const getWindowSizeInteger = windowWidth => {
     let widthInteger;
@@ -15,7 +28,7 @@ export const getWindowSizeInteger = windowWidth => {
 };
 
 export const getMapPosition = windowWidth => {
-    let width,top;
+    let width, top;
     if (windowWidth === 1) {
         width = 450;
         top = 0;
@@ -209,8 +222,8 @@ export const getHeroSectionNameStyle = (windowWidth) => {
         top,
         // right,
         width,
-        left:'50%',
-        transform:'translateX(-50%)',
+        left: '50%',
+        transform: 'translateX(-50%)',
     };
 };
 
@@ -253,8 +266,8 @@ export const getHeroSectionTextStyle = (windowWidth) => {
         minWidth: 309,
         top,
         // right,
-        left:'50%',
-        transform:'translateX(-50%)',
+        left: '50%',
+        transform: 'translateX(-50%)',
         fontSize,
         width,
         zIndex: -1,

@@ -11,6 +11,7 @@
         "php": "^7.2.5|^8.0",
         "ext-exif": "^8.0",
         "ext-gd": " *",
+        "aws/aws-sdk-php-laravel": "^3.6",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",

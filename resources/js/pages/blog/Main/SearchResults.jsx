@@ -135,7 +135,7 @@ const Search = ({ posts, photos, videos, winSize }) => {
         if (type === 'photo') history.push(`/photo/${selectedResult}`);
         if (type === 'video') history.push(`/video/${selectedResult}`);
         if (type === 'post') history.push(`/post/${selectedResult}`);
-        if (type === 'country') history.push(`/destination/${countryCodes[selectedResult].toLowerCase()}`)
+        if (type === 'country') history.push(`/destination/${selectedResult}`)
         if (type === 'category') history.push(`/category/${selectedResult}`)
     }
 
