@@ -53,7 +53,7 @@ export const Replies = ({ comment, setReplyComment }) => {
     )
 }
 
-const Post = ({ postsFromDB, refPosts }) => {
+const Post = ({ winSize }) => {
 
     const params = useParams();
     const selectedPost = params.postId;
@@ -130,7 +130,7 @@ const Post = ({ postsFromDB, refPosts }) => {
                     borderRadius: 2,
                     padding: 20,
                     minWidth: 300,
-                }}><h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: '2.5em', fontFamily: "Merriweather", color: 'white' }}>{post.title}</h1></div>
+                }}><h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: winSize === 1 ? '2em' : '2.5em', fontFamily: "Merriweather", color: 'white' }}>{post.title}</h1></div>
                 <img src={post.image} style={{ width: '100%', maxHeight: 400, objectFit: 'cover', position: 'absolute' }} />
             </div>
 
