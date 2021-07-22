@@ -123,7 +123,7 @@ const Post = ({ winSize }) => {
 
     return (
         <Fragment>
-            <div style={{ position: 'relative', width: '100%', height: 400 }}>
+            <div style={{ position: 'relative', width: '100%', height: 300,overflow:'hidden' }}>
                 <div style={{
                     zIndex: 1, top: 50, left: '50%', transform: 'translateX(-50%)', position: 'absolute',
                     background: 'rgb(0,0,0,0.6)',
