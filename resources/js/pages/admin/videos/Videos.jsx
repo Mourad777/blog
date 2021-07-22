@@ -174,9 +174,9 @@ function VideoGallery() {
         //     });
         const fileUploadUrl =
             // resPresignedUrl.data
-            // resPresignedUrl.data.attributes.action;
+            resPresignedUrl.data.attributes.action;
             // 'https://s3.ca-central-1.amazonaws.com/travel-blog-bouka-dev';
-            'https://travel-blog-bouka-dev.s3.ca-central-1.amazonaws.com/';
+            // 'https://travel-blog-bouka-dev.s3.ca-central-1.amazonaws.com/';
         const options = {
             headers: {
                 'Content-Type': 'multipart/form-data',
