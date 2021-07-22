@@ -25,7 +25,7 @@ const CameraInfo = ({ photo }) => (
         >
             <Lens />
             <p style={{ marginLeft: 10 }}>
-                Lens <span>{ !!photo.lens && !photo.lens.includes('undefined') && !photo.lens.includes(',') && !photo.camera.toLowerCase().includes('gopro') && !photo.lens.includes('000') ? (photo.lens || '').substring(0, 18) : ''}</span>
+                Lens <span>{ !!photo.lens && !photo.lens.includes('undefined') && photo.lens.includes('mm') && !photo.lens.includes(',') && !photo.camera.toLowerCase().includes('gopro') && !photo.lens.includes('000') ? (photo.lens || '').substring(0, 18) : ''}</span>
             </p>
         </div>
         <div

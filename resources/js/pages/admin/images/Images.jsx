@@ -245,7 +245,7 @@ function PhotoGallery() {
         setDescription(photo.description)
         setDateTaken(photo.date_taken)
 
-        setTags(Array.isArray(photo.tags) ? JSON.parse(photo.tags) : [])
+        setTags(Array.isArray(JSON.parse(photo.tags)) ? JSON.parse(photo.tags) : [])
         setSelectedCategories((photo.categories || []).map(cat => cat.name));
         setCountry(photo.country)
 

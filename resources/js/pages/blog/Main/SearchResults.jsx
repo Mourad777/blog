@@ -39,6 +39,7 @@ const Search = ({ posts, photos, videos, winSize }) => {
         title: (p.title || '').toLowerCase(),
         content: '',
         image: p.src,
+        tags:(JSON.parse(p.tags)||[]).map(t=>t.toLowerCase()),
 
     }));
     const adjustedVideos = videos.map(v => ({
@@ -50,6 +51,7 @@ const Search = ({ posts, photos, videos, winSize }) => {
         title: (v.title || '').toLowerCase(),
         content: '',
         image: v.thumbnail,
+        tags:(JSON.parse(v.tags)||[]).map(t=>t.toLowerCase()),
     }));
     const adjustedPosts = posts.map(p => ({
         type: 'post',
@@ -60,6 +62,7 @@ const Search = ({ posts, photos, videos, winSize }) => {
         title: (p.title || '').toLowerCase(),
         content: (p.content || '').toLowerCase(),
         image: p.image,
+        tags:(JSON.parse(p.tags)||[]).map(t=>t.toLowerCase()),
     }));
 
     const [searchValue, setSearchValue] = useState('');
@@ -124,6 +127,7 @@ const Search = ({ posts, photos, videos, winSize }) => {
     const filteredResults = options
         .filter(item => (
             item.title.includes(searchValue.toLowerCase()) ||
+            (item.tags||[]).includes(searchValue.toLowerCase()) ||
             item.summary.includes(searchValue.toLowerCase()) ||
             item.author.includes(searchValue.toLowerCase()) ||
             item.content.includes(searchValue.toLowerCase())) &&

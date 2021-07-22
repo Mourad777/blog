@@ -231,7 +231,7 @@ function VideoGallery() {
         setDescription(video.description)
         // setDateTaken(video.date_taken)
 
-        setTags(Array.isArray(video.tags) ? JSON.parse(video.tags) : [])
+        setTags(Array.isArray(JSON.parse(video.tags)) ? JSON.parse(video.tags) : [])
         setSelectedCategories((video.categories || []).map(cat => cat.name));
         setCountry(video.country)
 
