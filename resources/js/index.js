@@ -10,6 +10,7 @@ import Comments from "./pages/admin/comments/Comments"
 import CreatePost from "./pages/admin/create-post/CreatePost"
 import Images from "./pages/admin/images/Images"
 import Videos from "./pages/admin/videos/Videos"
+import Messages from "./pages/admin/messages/Messages"
 import Post from "./pages/blog/Posts/Post"
 import Category from "./pages/blog/Category/Category";
 import Photo from "./pages/blog/Photos/Photo";
@@ -74,6 +75,9 @@ const App = () => {
                         </Route>
                         <Route exact path="/admin/videos">
                             <Videos />
+                        </Route>
+                        <Route exact path="/admin/messages">
+                            <Messages />
                         </Route>
                     </AdminLayout>
                 </Route>

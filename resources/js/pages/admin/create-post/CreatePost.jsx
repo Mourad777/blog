@@ -291,6 +291,7 @@ const CreatePost = ({ isEditing }) => {
                              @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
                              img {
                                  max-width:100%;
+                                 object-fit:cover;
                              }
                             `,
                         font_formats: fontStyles,

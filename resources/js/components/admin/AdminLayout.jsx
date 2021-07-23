@@ -132,7 +132,7 @@ export default function PersistentDrawerLeft({ children }) {
                     </IconButton>
                     <Typography variant="h6" noWrap>
                         Blog admin panel
-          </Typography>
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -189,10 +189,13 @@ export default function PersistentDrawerLeft({ children }) {
                 </List>
                 <Divider />
                 <List>
-                    {['All mail', 'Trash', 'Settings'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
+                    {[
+                        { text: 'Messages', icon: MailIcon, url: '/admin/messages' },
+                        // { text: 'Videos', icon: VideoIcon, url: '/admin/videos' },
+                    ].map((item, index) => (
+                        <ListItem onClick={() => history.push(item.url)} button key={item.text}>
+                            <ListItemIcon><item.icon /></ListItemIcon>
+                            <ListItemText primary={item.text} />
                         </ListItem>
                     ))}
 

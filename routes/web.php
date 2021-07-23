@@ -92,6 +92,10 @@ Route::get('/api/configurations', 'ConfigurationsController@index');
 Route::post('/api/configurations/update', 'ConfigurationsController@update');
 
 
+Route::get('/api/messages', 'MessagesController@index');
+
+Route::post('/api/messages/save', 'MessagesController@store');
+
 
 Route::post('/api/upload/store', 'UploadController@upload');
 

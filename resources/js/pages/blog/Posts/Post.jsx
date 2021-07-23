@@ -143,6 +143,7 @@ const Post = ({ winSize }) => {
             @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
             img {
                 max-width:100%;
+                object-fit:cover;
             }
             </style>` + post.content
                 }} />
