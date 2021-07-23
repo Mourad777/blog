@@ -25,11 +25,8 @@ function swap(json) {
 }
 
 const Country = ({ winSize }) => {
-
     const params = useParams();
-    console.log('params', params)
     const countryIso = params.country;
-    // console.log('selectedCountry', selectedCountry)
     const selectedCategory = params.categoryId;
     const history = useHistory();
     const [posts, setPosts] = useState([]);

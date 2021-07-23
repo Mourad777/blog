@@ -73,7 +73,6 @@ const Comments = ({ isPost, isVideo }) => {
             .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
         getComments(params.id)
     }
-    console.log('document -----------------',document)
     return (
         <div style={{ margin: 'auto', maxWidth: 800 }}>
             <h1>{capitalizeFirstLetter(docType)} Comments from {document.title}</h1>

@@ -24,7 +24,7 @@ class UploadController extends Controller
             'key' => $s3['key'], 'secret' => $s3['secret'],
         ]]);
         $bucket = $s3['bucket'];
-        Log::info('bucket name' . $bucket);
+
         $prefix = $directory . '/';
         $acl = 'public-read';
         $expires = '+10 minutes';

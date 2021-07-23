@@ -7,7 +7,6 @@ import axios from 'axios'
 import { useHistory } from "react-router";
 import Gallery from "react-photo-gallery";
 export default ({ reference, photos, winSize,scrollWidth }) => {
-    console.log('photos ---------------', photos)
     // const [photo, setPhoto] = useState("");
     const [data, setData] = useState([]);
     const [offset, setOffset] = useState(0);
@@ -17,9 +16,7 @@ export default ({ reference, photos, winSize,scrollWidth }) => {
     const history = useHistory();
     const getData = async () => {
         const slice = photos.slice(offset === 1 || offset === 0 ? 0 : offset * perPage - perPage, offset === 0 ? perPage : offset * perPage);
-        console.log('slice', slice)
         setData(slice)
-        console.log('photos.length / perPage)', photos.length / perPage)
         setPageCount(Math.ceil(photos.length / perPage))
     }
 
@@ -38,7 +35,6 @@ export default ({ reference, photos, winSize,scrollWidth }) => {
 
     const gridContainerReference = useRef(null);
     useEffect(() => {
-        console.log('gridContainerReference', gridContainerReference);
         setGridWidth(gridContainerReference.current.scrollWidth);
     }, [gridContainerReference,scrollWidth]);
     
@@ -83,26 +79,6 @@ export default ({ reference, photos, winSize,scrollWidth }) => {
                                 }} src={p.src} alt="" />
                             </figure>
                         </div>
-
-                        // <div
-                        //     key={`photo-[${i + 1}]`}
-                        //     onClick={() => {
-                        //         history.push(`/photo/${p.id}`)
-                        //     }}
-                        //     style={{
-                        //         cursor: "pointer",
-                        //         float: "left",
-                        //         position: "relative",
-                        //         width: winSize === 1 ? 110: "30%",
-                        //         height: winSize === 1 ? 110: "30%",
-                        //         margin: "1.66%",
-                        //         overflow: "hidden",
-                        //     }}
-                        // >
-                        //     <img src={p.src} style={{ width: winSize === 1 ? 150 : 200, height: winSize === 1 ? 150 : 200, objectFit: 'cover' }} />
-
-                        // </div>
-                        // </Link>
                     ))}
                 </div>
             </div>

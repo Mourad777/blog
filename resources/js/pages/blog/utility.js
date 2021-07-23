@@ -12,7 +12,6 @@ export const getFileName = (filename) => {
 
     const newFileName = v1() + Date.now() + '.' + extension;
 
-    console.log('newFileName', newFileName);
     return newFileName;
 }
 

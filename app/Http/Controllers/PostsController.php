@@ -24,7 +24,6 @@ class PostsController extends Controller
 
             if ($comments) {
                 $comment_count += count($comments);
-                Log::info('yes comments new count' . $comment_count);
             }
 
             foreach ($comments as $comment) {
@@ -32,7 +31,6 @@ class PostsController extends Controller
                     increaseCommentCount($comment->replies);
                 }
             }
-            Log::info('done' . $comment_count);
             return $comment_count;
         }
 
@@ -53,7 +51,6 @@ class PostsController extends Controller
             if ($post->image) {
                 $post->image = Storage::disk(name: 's3')->url($post->image);
             }
-            Log::info('counting comments for each post' . count($post->comments));
             $post->categories = $post->categories()->get();
             $post->comments = $post->comments()->get();
             $post->comment_count = getCommentCount($post->comments);
@@ -118,7 +115,6 @@ class PostsController extends Controller
         if (!$request->title) {
             $post->title = 'Untitled';
         }
-        Log::info('author creating post'.$request->author);
         $post->author = $request->author;
         $post->summary = $request->summary;
         $post->content = $request->content;
@@ -127,12 +123,6 @@ class PostsController extends Controller
         $post->is_published = $request->is_published;
         $post->save();
         $post->categories()->attach(json_decode($request->selected_categories));
-        // $post->create($request->all());
-        // $post->title = $request->title;
-        // $post->content = $request->content;
-
-
-
     }
 
     /**
@@ -192,7 +182,6 @@ class PostsController extends Controller
 
         if ($request->image === 'sameImage') {
             //same image
-            Log::info('same image');
         } else {
             if ($request->has('image')) {
 
@@ -227,7 +216,6 @@ class PostsController extends Controller
 
                 if ($post->image) {
                     //delete thumbnail from aws if there was an image on the post prior to updating
-                    Log::info('delete thumbnail from aws');
                 }
             }
         }

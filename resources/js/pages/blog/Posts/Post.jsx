@@ -118,7 +118,6 @@ const Post = ({ winSize }) => {
         getComments()
     }, []);
 
-    console.log('selec post', selectedPost)
     const history = useHistory();
 
     return (

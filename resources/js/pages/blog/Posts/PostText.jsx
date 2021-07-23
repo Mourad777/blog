@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 const PostText = ({ post, isMobile, index }) => {
-    console.log('post text: ', `post-text-${index + 1}`)
+
     return (
         <div
             className="col-12 col-sm-6"

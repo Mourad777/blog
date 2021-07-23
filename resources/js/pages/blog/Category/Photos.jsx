@@ -7,7 +7,6 @@ function PhotoGallery({ winSize, photos }) {
     const [currentImage, setCurrentImage] = useState(0);
 
     const handleIndexChange = (value) => {
-        console.log('value---***', value)
         // setCurrentImage(value.curIndex)
     }
     const handleDragStart = (e) => e.preventDefault();
@@ -27,22 +26,8 @@ function PhotoGallery({ winSize, photos }) {
         <div style={{ background: '#daad86', padding: 20 }}>
             <div style={{ position: 'relative', margin: 'auto', maxWidth: 600 }}>
                 <p style={{ textAlign: 'center', color: 'rgb(236, 231, 226)', fontSize: '3em', fontFamily: 'Mulish', paddingTop: 30 }}>Photos</p>
-                {/* <div>
-                    <CameraInfo photo={photos[currentImage]} />
-                </div> */}
-                {/* <Carousel canAutoPlay isAutoPlaying onIndexChange={handleIndexChange} images={photos} /> */}
                 <Carousel
                     disableDotsControls={items.length > 10 ? true : false}
-                    // responsive={
-                    //         {
-                    //             0: {
-                    //                 items: 1,
-                    //             },
-                    //             1024: {
-                    //                 items: 3
-                    //             }
-                    //           }
-                    // } 
                     canAutoPlay isAutoPlaying onSlideChanged={handleIndexChange} items={items} />
             </div>
         </div>

@@ -47,11 +47,48 @@ const Home = ({ scrollWidth, winSize, height }) => {
     const [photos, setPhotos] = useState([]);
     const [videos, setVideos] = useState([]);
     const [scrollPosition, setScrollPostion] = useState(0);
+    const [scrollSection, setScrollSection] = useState(0);
 
     const handleScrollPosition = (value) => {
         setScrollPostion(value)
     }
     const history = useHistory()
+
+    useEffect(() => {
+        setScrollSection(0)
+        if (window.scrollY > window.innerHeight / 4) {
+            // do something 
+            setScrollSection(1)
+            console.log('passed section 1 hero')
+        }
+        if (window.scrollY > window.innerHeight * 1 + window.innerHeight / 2) {
+            // do something 
+            setScrollSection(2)
+            console.log('passed section 2 posts')
+        }
+        if (window.scrollY > window.innerHeight * 2 + window.innerHeight / 2) {
+            // do something 
+            setScrollSection(3)
+            console.log('passed section 3 destinations')
+        }
+        if (window.scrollY > window.innerHeight * 3 + window.innerHeight / 2) {
+            // do something 
+            setScrollSection(4)
+            console.log('passed section 4 photos')
+        }
+        if (window.scrollY > window.innerHeight * 4 + window.innerHeight / 2) {
+            // do something 
+            setScrollSection(5)
+            console.log('passed section 5 videos')
+        }
+        if (window.scrollY > window.innerHeight * 5 + window.innerHeight / 2) {
+            // do something 
+            setScrollSection(6)
+            console.log('passed section 6 contact')
+        }
+
+    }, [scrollPosition, scrollWidth])
+
     useEffect(() => {
         //function that inserts placeholders in the posts array when necessary
         //for example if there are no posts
@@ -84,7 +121,6 @@ const Home = ({ scrollWidth, winSize, height }) => {
 
             if (resFetchConfigurations.data !== 'no_config') {
                 const order = JSON.parse(resFetchConfigurations.data.photo_gallery_order);
-                console.log('saved order: ', order);
                 const orderedFormattedPhotos = [];
                 order.forEach(number => {
                     formattedPhotos.forEach(photo => {
@@ -96,7 +132,6 @@ const Home = ({ scrollWidth, winSize, height }) => {
 
                 setPhotos(orderedFormattedPhotos)
             } else {
-                console.log('default order')
                 setPhotos(formattedPhotos)
             }
         }
@@ -121,10 +156,8 @@ const Home = ({ scrollWidth, winSize, height }) => {
                 }
             });
 
-            console.log('formattedVideos', formattedVideos)
             if (resFetchConfigurations.data !== 'no_config') {
                 const order = JSON.parse(resFetchConfigurations.data.video_gallery_order);
-                console.log('saved order: ', order);
                 const orderedFormattedVideos = [];
                 order.forEach(number => {
                     formattedVideos.forEach(video => {
@@ -133,24 +166,15 @@ const Home = ({ scrollWidth, winSize, height }) => {
                         }
                     })
                 });
-                console.log('orderedFormattedVideos', orderedFormattedVideos);
                 setVideos(orderedFormattedVideos)
             } else {
-                console.log('default order')
                 setVideos(formattedVideos)
             }
-
-
-
         }
         getVideos()
     }, [])
 
     useEffect(() => {
-
-
-
-
         const triggers = ScrollTrigger.getAll();
         triggers.forEach(tr => {
             tr.kill()
@@ -277,6 +301,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
                 <Loader isAssetLoaded={isAssetLoaded} />
                 {winSize > 1 && (
                     <Navigation
+                        scrollSection={scrollSection}
                         componentReferences={
                             {
                                 welcome: refSection1,

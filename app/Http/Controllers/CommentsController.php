@@ -66,9 +66,7 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         //
-        Log::info('comment type '.$request->comment_type);
         if ($request->comment_id) {
-            Log::info('replying');
             //if the request has a comment_id then the user
             //wants to reply to a comment
             $reply = new Comment();
@@ -192,8 +190,5 @@ class CommentsController extends Controller
 
         Comment::find($commentIds)->delete();
 
-
-
-        Log::info($commentIds);
     }
 }

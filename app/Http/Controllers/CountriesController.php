@@ -13,7 +13,6 @@ class CountriesController extends Controller
 {
     public function show($country_iso)
     {
-        Log::info('country_iso' . $country_iso);
 
         $posts = Post::where("country", "=", $country_iso)->get();
         $photos = Photo::where("country", "=", $country_iso)->get();
@@ -23,7 +22,6 @@ class CountriesController extends Controller
             if ($post->image) {
                 $post->image = Storage::disk(name: 's3')->url($post->image);
             }
-            Log::info('counting comments for each post' . count($post->comments));
             $post->categories = $post->categories()->get();
             $post->comments = $post->comments()->get();
 
@@ -46,7 +44,6 @@ class CountriesController extends Controller
             $video->categories = $video->categories()->get();
             return $video;
         });
-        // Log::info($country_content);
         return ["posts"=>$posts,"photos"=>$photos,"videos"=>$videos];
     }
 }

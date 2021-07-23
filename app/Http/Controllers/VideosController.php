@@ -24,7 +24,6 @@ class VideosController extends Controller
 
             if ($comments) {
                 $comment_count += count($comments);
-                Log::info('yes comments new count' . $comment_count);
             }
 
             foreach ($comments as $comment) {
@@ -32,7 +31,6 @@ class VideosController extends Controller
                     increaseCommentCount($comment->replies);
                 }
             }
-            Log::info('done' . $comment_count);
             return $comment_count;
         }
 
@@ -87,7 +85,6 @@ class VideosController extends Controller
         $video = new Video;
 
         // $video_base_url = $request->file(key: 'video')->store(path: 'videos', options: 's3');
-        Log::info('storing video');
         // Storage::disk(name: 's3')->setVisibility($file_key, visibility: 'public');
 
         $video->url = $request->key;
@@ -141,12 +138,8 @@ class VideosController extends Controller
         $video->tags = $request->tags;
         $video->country = $request->country;
 
-
-        Log::info(' thumbnail' . $request->thumbnail);
-
         if ($request->thumbnail === 'sameThumbnail') {
             //same image
-            Log::info('same thumbnail');
         } else {
             if ($request->has('thumbnail')) {
 
@@ -178,7 +171,6 @@ class VideosController extends Controller
 
                 if ($video->thumbnail) {
                     //delete thumbnail from aws if there was an image on the post prior to updating
-                    Log::info('delete thumbnail from aws');
                 }
             }
         }

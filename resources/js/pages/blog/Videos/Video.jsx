@@ -42,7 +42,7 @@ const Video = () => {
 
         const getComments = async () => {
             const commentsRes = await axios.get(`${AppUrl}api/comments/video/${selectedVideo}`);
-            console.log('commentsRes.data', commentsRes.data)
+            console.log('Fetch comments response', commentsRes.data)
             setComments(commentsRes.data);
         }
         getComments()

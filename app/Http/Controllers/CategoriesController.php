@@ -59,17 +59,14 @@ class CategoriesController extends Controller
 
         $category = Category::find($categoryId);
 
-        Log::info('cat--- *&'.$category);
         $posts = $category->posts;
         $photos = $category->photos;
         $videos = $category->videos;
-        Log::info($videos);
-        Log::info($photos);
+
         $posts->map(function ($post) {
             if ($post->image) {
                 $post->image = Storage::disk(name: 's3')->url($post->image);
             }
-            Log::info('counting comments for each post' . count($post->comments));
             $post->categories = $post->categories()->get();
             $post->comments = $post->comments()->get();
 

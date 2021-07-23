@@ -48,7 +48,6 @@ const LatestPosts = ({ winSize, postsFromDB, reference }) => {
     }, [offset, winSize, postsFromDB]);
 
     useEffect(() => {
-        console.log('page changed')
         gsap.fromTo(".post-text-1", {opacity: 0.3}, {opacity: 1, duration: 1});
         gsap.fromTo(".post-image-1", {opacity: 0.3}, {opacity: 1, duration: 1});
         gsap.fromTo(".post-text-2", {opacity: 0.3}, {opacity: 1, duration: 1});

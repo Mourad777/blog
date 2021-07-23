@@ -2,38 +2,30 @@ import React from "react";
 import styled from "styled-components";
 import "./navbar.module.css";
 import { gsap } from 'gsap/all'
-import {
-    Link,
-    Element,
-    Events,
-    animateScroll as scroll,
-    scrollSpy,
-    scroller,
-
-} from "react-scroll";
 
 const NavText = styled.span`
     font-size: 1em;
     opacity: 0;
-    color: white;
-    transition: opacity 0.3s ease-in;
+    color:${props => props.section % 2 === 0 ? '#fff' : '#daad86'};
+    transition: all 0.3s ease-in;
 `;
 
 const Bullet = styled.div`
     height: 10px;
     width: 10px;
     margin-right: 30px;
-    background-color: white;
+    background-color: ${props => props.section % 2 === 0 ? '#fff' : '#daad86'};
     border-radius: 50%;
 
-    transition: transform 0.3s ease-in;
+    transition: all 0.3s ease-in;
+    transform:${props => props.active ? 'scale(1.2)' : 'scale(1)'};
     position:absolute;
     top: 0; 
     bottom: 0; 
     left: 0; 
     right: 0;
     margin: auto;
-    opacity:0.7;
+    opacity:${props => props.active ? '1' : '0.7'};
 `;
 
 const BulletWrapper = styled.div`
@@ -59,7 +51,7 @@ const LinkWrapper = styled.div`
 `;
 
 
-export default ({ isPosts, selectedSection, componentReferences }) => {
+export default ({ scrollSection, componentReferences }) => {
     const links = [
         { name: "Welcome", id: "hero-section", ref: componentReferences.welcome },
         { name: "Latests Posts", id: "latest-posts-section", ref: componentReferences.posts },
@@ -89,26 +81,13 @@ export default ({ isPosts, selectedSection, componentReferences }) => {
             >
                 {links.map((link, i) => (
                     <li key={link.name} onClick={() => handleScroll(link.ref)} style={{ cursor: "pointer" }}>
-                        {/* <Link
-                            activeClass="activeLink"
-                            to={link.id}
-                            spy={true}
-                            smooth={true}
-                            duration={2000}
-                            style={{
-                                display: "flex",
-                                justifyContent: "start",
-                                alignItems: "center"
-                            }}
-                        > */}
                         <LinkWrapper index={i}>
                             <BulletWrapper>
-                                <Bullet />
+                                <Bullet active={i === 0 && scrollSection <= 1 ? true : scrollSection === i + 1} section={scrollSection} />
                             </BulletWrapper>
 
-                            <NavText className="textLink">{link.name}</NavText>
+                            <NavText section={scrollSection}  className="textLink">{link.name}</NavText>
                         </LinkWrapper>
-                        {/* </Link> */}
                     </li>
                 ))}
             </ul>

@@ -128,7 +128,7 @@ const CreatePost = ({ isEditing }) => {
                 formData.append('image', 'sameImage');
             }
         }
-        console.log('author-----------',author)
+
         const selectedCategoriesIds = categories.filter(cat=>selectedCategories.includes(cat.text)).map(cat=>cat._id); 
         formData.append('title', title||'');
         formData.append('author', author||'');
@@ -162,7 +162,7 @@ const CreatePost = ({ isEditing }) => {
                 const id = params.id;
                 const postResponse = await axios.get(`${AppUrl}api/posts/edit/${id}`);
                 const post = postResponse.data;
-                console.log('fetched post',post)
+                console.log('Post response',postResponse)
                 setTitle(post.title);
                 setAuthor(post.author);
 

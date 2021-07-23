@@ -27,9 +27,6 @@ function useOutsideAlerter(ref, handleOutsideClick) {
 }
 
 const Search = ({ posts, photos, videos, winSize }) => {
-    console.log('-------- photos', photos)
-    console.log('-------- videos', videos)
-    console.log('-------- posts', posts)
 
     const adjustedPhotos = photos.map(p => ({
         type: 'photo',
@@ -67,7 +64,6 @@ const Search = ({ posts, photos, videos, winSize }) => {
 
     const [searchValue, setSearchValue] = useState('');
     const history = useHistory();
-    console.log('searchValue', searchValue)
 
     const countries =
         [...posts, ...photos, ...videos]
@@ -103,22 +99,16 @@ const Search = ({ posts, photos, videos, winSize }) => {
             content: '',
         }))
 
-    console.log('categories', categories)
 
     const options = [...adjustedPhotos, ...adjustedVideos, ...adjustedPosts, ...countries,...adjustedCategories];
 
     const handleSearchValue = (e) => {
-        console.log('search e', e, 'e.target.value', e.target.value)
         setSearchValue(e.target.value);
     }
 
     const handleOutsideClick = () => {
-        console.log('clicking outside is search value', !!searchValue)
-
-        console.log('reseting search value')
         setSearchValue('');
     }
-    console.log('------- countries ---------', countries)
 
     const wrapperRef = useRef(null);
 
@@ -133,7 +123,6 @@ const Search = ({ posts, photos, videos, winSize }) => {
             item.content.includes(searchValue.toLowerCase())) &&
             !!searchValue.toLowerCase());
 
-    console.log('-----------options--------', options)
 
     const handleResult = ({ type, selectedResult }) => {
         if (type === 'photo') history.push(`/photo/${selectedResult}`);

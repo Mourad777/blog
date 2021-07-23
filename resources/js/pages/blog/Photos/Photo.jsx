@@ -13,7 +13,6 @@ import CameraInfo from '../../../components/blog/Photo/CameraInfo';
 const Photo = ({ winSize }) => {
     const params = useParams();
     const history = useHistory();
-    console.log('photo params', params);
     const [photo, setPhoto] = useState({});
     const [isHideCameraInfo, setisHideCameraInfo] = useState(false);
     useEffect(() => {
@@ -79,7 +78,6 @@ const Photo = ({ winSize }) => {
                         className="image-container"
                     >
                         <div className="image" style={{ display: 'flex', flexDirection: 'column', background: 'black', position: 'relative' }}>
-                            {/* <FaWindowClose onClick={() => setPhoto("")} size="2em" color="white" cursor="pointer" /> */}
                             {!isHideCameraInfo && (
                                 <CameraInfo photo={photo} />
                             )}
@@ -88,13 +86,6 @@ const Photo = ({ winSize }) => {
                                 style={{
                                     border: "10px solid white",
                                     height: '60vh',
-                                    // height:
-                                    //     winSize === 1
-                                    //         ? "auto"
-                                    //         : winSize === 2
-                                    //             ? 333
-                                    //             : 533,
-                                    // width: winSize > 1 ? "500px" : "100%",
                                     width:
                                         winSize === 1
                                             ? "100%"

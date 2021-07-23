@@ -37,7 +37,6 @@ const updateOrder = async (items) => {
     const order = items.map(item => item.id);
     const configFormData = new FormData();
     configFormData.append('video_gallery_order', JSON.stringify(order));
-    console.log('order', order)
     const resUpdateOrder = await axios.post(updateOrderUrl, configFormData,
         {
             headers: { 'Content-Type': 'multipart/form-data' }
@@ -65,10 +64,8 @@ const getVideos = async (setItems) => {
         }
     });
 
-    console.log('formattedVideos', formattedVideos)
     if (resFetchConfigurations.data !== 'no_config') {
         const order = JSON.parse(resFetchConfigurations.data.video_gallery_order);
-        console.log('saved order: ', order);
         const orderedFormattedVideos = [];
         order.forEach(number => {
             formattedVideos.forEach(video => {
@@ -77,10 +74,8 @@ const getVideos = async (setItems) => {
                 }
             })
         });
-        console.log('orderedFormattedVideos', orderedFormattedVideos);
         setItems(orderedFormattedVideos)
     } else {
-        console.log('default order')
         setItems(formattedVideos)
     }
 }
@@ -107,9 +102,7 @@ function VideoGallery() {
 
     const onSortEnd = async ({ oldIndex, newIndex }) => {
         const reArrangeVideos = arrayMove(items, oldIndex, newIndex);
-        console.log('reArrangeVideos', reArrangeVideos)
         setItems(reArrangeVideos);
-        //update order
         updateOrder(reArrangeVideos)
     };
 
@@ -125,19 +118,10 @@ function VideoGallery() {
         getVideos(setItems)
     }, []);
 
-    // const handleDate = (event, { name, value }) => {
-    //     console.log('name', name)
-    //     console.log('value', value)
-
-    //     setDateTaken(value);
-    // }
-
     const handleVideoUpload = async e => {
         e.preventDefault()
 
         const file = e.target.files[0];
-        console.log('e.target.files[0]', file);
-
 
         const fileInfo = new FormData();
 
@@ -162,46 +146,19 @@ function VideoGallery() {
         const fileData = new FormData();
         const inputs = resPresignedUrl.data.inputs
         Object.keys(inputs).forEach(key => {
-            console.log('key', key, inputs[key], 'inputs[key]')
             fileData.append(key, inputs[key]);
         });
         // fileData.append('Content-Type', 'multipart/form-data');
         fileData.append('file', file);
 
-        // const resUploadFile = await axios.post(presignedUrl, fileData,
-        //     {
-        //         headers: { 'Content-Type': 'multipart/form-data' }
-        //     });
         const fileUploadUrl =
-            // resPresignedUrl.data
             resPresignedUrl.data.attributes.action;
-            // 'https://s3.ca-central-1.amazonaws.com/travel-blog-bouka-dev';
-            // 'https://travel-blog-bouka-dev.s3.ca-central-1.amazonaws.com/';
-        const options = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'x-amz-acl': 'public-read'
-            }
-        }
+
         const response = await axios.post(
             fileUploadUrl,
             fileData,
-            // options,
-            // {
-            //     headers: {
-            //         'Content-Type': 'multipart/form-data'
-            //     }
-            // }
-            // {
-            //   headers:{'x-amz-meta-filetype':'abcfileType'}
-            // }
         );
         console.log('file upload response', response)
-
-        // fetch(fileUploadUrl, { method: 'POST', body: fileData })
-        //     .then(res => console.log('res upload', res))
-        //     .catch(e => console.log('upload error', e));
-
 
         const newVideoFormData = new FormData();
         newVideoFormData.append('key', `${directory}/${filename}`)
@@ -210,13 +167,8 @@ function VideoGallery() {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
         setIsLoading(false)
-        console.log('upload video response: ', resUploadVideo.data);
-        console.log('cur items', items);
-        const newArray = [{videoUrl:resPresignedUrl.data.url, src: resUploadVideo.data.thumbnail || VideoIcon, height: 1, width: 1.5, id: resUploadVideo.data.id }, ...items]
-        console.log('new array', newArray);
+        const newArray = [{ videoUrl: resPresignedUrl.data.url, src: resUploadVideo.data.thumbnail || VideoIcon, height: 1, width: 1.5, id: resUploadVideo.data.id }, ...items]
         setItems(newArray);
-        //update order 
-
         updateOrder(newArray)
 
 
@@ -224,13 +176,9 @@ function VideoGallery() {
     };
 
     const handleVideoDetails = (video) => {
-        console.log('set video: ', video)
-
         setTitle(video.title)
         setThumbnail(video.thumbnail)
         setDescription(video.description)
-        // setDateTaken(video.date_taken)
-
         setTags(Array.isArray(JSON.parse(video.tags)) ? JSON.parse(video.tags) : [])
         setSelectedCategories((video.categories || []).map(cat => cat.name));
         setCountry(video.country)
@@ -239,7 +187,6 @@ function VideoGallery() {
     }
 
     const submitVideoDetails = async (video) => {
-        console.log('set video: ', video);
         const selectedCategoriesIds = categories.filter(cat => selectedCategories.includes(cat.text)).map(cat => cat._id);
         const formData = new FormData();
         if (!!thumbnail) {
@@ -256,13 +203,13 @@ function VideoGallery() {
 
         formData.append('tags', JSON.stringify(tags));
         formData.append('country', country || '');
-        // formData.append('date_taken', dateTaken || '');
         formData.append('selected_categories', JSON.stringify(selectedCategoriesIds))
 
         const updateVideoDetailsResponse = await axios.post(`${AppUrl}api/videos/update/${selectedVideo.id}`, formData,
             {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
+        console.log('Update Video Details Response', updateVideoDetailsResponse)
 
         setSelectedVideo(null);
         getVideos(setItems)
@@ -292,22 +239,15 @@ function VideoGallery() {
     }
 
     const handleDeleteVideo = async (id) => {
-        console.log('delete image', id)
         await axios.delete(`${AppUrl}api/videos/delete/${id}`, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
 
-        // //update order 
-
-
         const newArray = items.filter(p => p.id !== id);
-        console.log('new array--------------------------', newArray)
         updateOrder(newArray)
         setItems(newArray);
-        // console.log('curr array',items,'updated array',items.filter(p=>p.id !== id))
     }
-    console.log('selec video', selectedVideo)
     const handleThumbnailChange = e => {
         e.preventDefault()
         setThumbnail(e.target.files[0]);

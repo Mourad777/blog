@@ -52,19 +52,9 @@ class PhotosController extends Controller
     public function store(Request $request)
     {
         //
-        $imagefile = $request->file('image');
-        Log::info($imagefile);
         $photo = new Photo;
         if ($request->has('image')) {
-            // $img = Image::make($request->image);
-            // $resized_image = $img->resize(50, null, function ($constraint) {
-            //     $constraint->aspectRatio();
-            // });
-            // $image_base_url = $resized_image->store(path: 'gallery', options: 's3');
 
-            // Storage::disk('s3')->put('gallery', $resized_image)->setVisibility($image_base_url, visibility: 'public');
-
-            //////////////////////////////////////////////////////////////////////////////////////////////
             $image = $request->file('image');
 
             $extension = $request->file('image')->extension();
@@ -80,27 +70,7 @@ class PhotosController extends Controller
             $file_key = 'gallery/' . $filename;
             $s3 = Storage::disk('s3');
             $s3->put($file_key, (string)$resized_file, 'public');
-            // if($orientation === 8) {
-            //     Log::info('yes orientation is 8');
-            //     $resized_file->rotate(90);
-            //     $s3->put($file_key, (string)$resized_file, 'public');
-            // } else {
-            //     Log::info('no orientation is not 8');
-            //     $s3->put($file_key, (string)$resized_file, 'public');
-            // }
-            // $s3->setVisibility($file_key, visibility: 'public');
 
-            /////////////////////////////////////////////////////////// ->stream();
-
-            // $imageFile = $imageFile->__toString();
-
-            // $filename = 'aUniqueFilename.png';
-
-            // $s3 = Storage::disk('s3');
-            // $s3->put($filename, $imageFile, 'public');
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            // $image_base_url = $request->file(key: 'image')->store(path: 'gallery', options: 's3');
-            // Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
             $photo->url = $file_key;
             $photo->camera = $request->camera;
             $photo->lens = Str::limit($request->lens, 20);
@@ -168,7 +138,6 @@ class PhotosController extends Controller
 
         $photo->tags = $request->tags;
         $photo->country = $request->country;
-        Log::info('photo 2' . $photo);
         $photo->save();
         $photo->categories()->sync(json_decode($request->selected_categories));
 

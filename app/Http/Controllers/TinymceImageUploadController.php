@@ -18,7 +18,6 @@ class TinymceImageUploadController extends Controller
 
     public function store(Request $request)
     {
-        Log::info('This is some useful information.');
     //     // return 'yes!';
     // //     /***************************************************
     //     //  * Only these origins are allowed to upload images *
@@ -49,7 +48,6 @@ class TinymceImageUploadController extends Controller
     //     reset($_FILES);
     //     $temp = current($_FILES);
         if ($request->has('image')) {
-            Log::info('Has image');
     //         /*
     //   If your script needs to receive cookies, set images_upload_credentials : true in
     //   the configuration and enable the following two headers.
@@ -88,12 +86,8 @@ class TinymceImageUploadController extends Controller
             Storage::disk(name:'s3')->setVisibility($image_base_url,visibility:'public');
 
             $aws_url = Storage::disk(name:'s3')->url($image_base_url);
-            // $imgpath = request()->file('name')->store('uploads', 'public');
-            // return json_encode(['location' => $imgpath]);
-            Log::info($aws_url);
             return json_encode(array('location' => $aws_url));
         } else {
-            Log::info('No image');
             // Notify editor that the upload failed
             header("HTTP/1.1 500 Server Error");
         }

@@ -45,7 +45,6 @@ const updateOrder = async (items) => {
         {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
-    console.log('update order response: ', resUpdateOrder.data);
 }
 
 const getPhotos = async (setItems) => {
@@ -66,10 +65,8 @@ const getPhotos = async (setItems) => {
         }
     });
 
-    console.log('formattedPhotos', formattedPhotos)
     if (resFetchConfigurations.data !== 'no_config') {
         const order = JSON.parse(resFetchConfigurations.data.photo_gallery_order);
-        console.log('saved order: ', order);
         const orderedFormattedPhotos = [];
         order.forEach(number => {
             formattedPhotos.forEach(photo => {
@@ -78,10 +75,8 @@ const getPhotos = async (setItems) => {
                 }
             })
         });
-        console.log('orderedFormattedPhotos', orderedFormattedPhotos);
         setItems(orderedFormattedPhotos)
     } else {
-        console.log('default order')
         setItems(formattedPhotos)
     }
 }
@@ -114,7 +109,6 @@ function PhotoGallery() {
 
     const onSortEnd = async ({ oldIndex, newIndex }) => {
         const reArrangedPhotos = arrayMove(items, oldIndex, newIndex);
-        console.log('reArrangedPhotos', reArrangedPhotos)
         setItems(reArrangedPhotos);
         //update order
         updateOrder(reArrangedPhotos)
@@ -134,31 +128,19 @@ function PhotoGallery() {
     }, []);
 
     const handleDate = (event, { name, value }) => {
-        console.log('name', name)
-        console.log('value', value)
-
-        setDateTaken(value);
+       setDateTaken(value);
     }
 
     const handleImageUpload = async e => {
 
-
-          
         e.preventDefault()
         const newPhotoFormData = new FormData();
         const file = e.target.files[0];
-        console.log('e.target.files[0]', file);
-
-
         EXIF.getData(file, async function () {
-            console.log('8888888888888file***', file)
             
             const orientationAdjustedFile = { ...file, exifdata: { ...file.exifdata, Orientation: 1 } }
-            console.log('file oriented',orientationAdjustedFile)
-            console.log('this.exifdata', this.exifdata)
             const photoMetaData = this.exifdata;
             const isMetaDataEmpty = photoMetaData && Object.keys(photoMetaData).length === 0 && photoMetaData.constructor === Object;
-            console.log('isMetaDataEmpty', isMetaDataEmpty)
             if (!isMetaDataEmpty) {
                 const {
                     Make,
@@ -170,10 +152,6 @@ function PhotoGallery() {
                     ISOSpeedRatings,
                     DateTime,
                 } = this.exifdata
-                console.log('this.exifdata', this.exifdata)
-                //   console.log(EXIF.getTag(this, "Orientation"));
-                // const orientationAdjustedFile = await loadImage
-                console.log('------ orientationAdjustedFile',orientationAdjustedFile)
                 newPhotoFormData.append('image', file);
                 newPhotoFormData.append('camera', Make + ' ' + Model);
                 newPhotoFormData.append('lens', Lens);
@@ -183,10 +161,6 @@ function PhotoGallery() {
                 newPhotoFormData.append('iso', ISOSpeedRatings);
                 newPhotoFormData.append('date_taken', DateTime);
 
-                for (var pair of newPhotoFormData.entries()) {
-                    console.log('abc', pair[0] + ', ' + pair[1]);
-                }
-
                 const savePhotoUrl = `${AppUrl}api/photos/save`;
                 setIsLoading(true)
                 const resUploadPhoto = await axios.post(savePhotoUrl, newPhotoFormData,
@@ -195,21 +169,11 @@ function PhotoGallery() {
                     });
                 setIsLoading(false)
                 console.log('upload photo response: ', resUploadPhoto.data);
-                console.log('cur items', items);
                 const newArray = [{ ...resUploadPhoto.data, src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
-                console.log('new array', newArray);
                 setItems(newArray);
-                //update order 
-
                 updateOrder(newArray)
-
             } else {
                 newPhotoFormData.append('image', file);
-                console.log("No EXIF data found in image '" + file.name + "'.");
-
-                for (var pair of newPhotoFormData.entries()) {
-                    console.log('abc', pair[0] + ', ' + pair[1]);
-                }
 
                 const savePhotoUrl = `${AppUrl}api/photos/save`;
                 setIsLoading(true)
@@ -219,12 +183,8 @@ function PhotoGallery() {
                     });
                 setIsLoading(false)
                 console.log('upload photo response: ', resUploadPhoto.data);
-                console.log('cur items', items);
                 const newArray = [{ src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
-                console.log('new array', newArray);
                 setItems(newArray);
-                //update order 
-
                 updateOrder(newArray)
             }
         });
@@ -232,7 +192,6 @@ function PhotoGallery() {
     };
 
     const handleImageDetails = (photo) => {
-        console.log('set photo: ', photo)
         setCamera(photo.camera)
         setLens(photo.lens)
         setFocalLength(photo.focal_length)
@@ -253,7 +212,6 @@ function PhotoGallery() {
     }
 
     const submitImageDetails = async (photo) => {
-        console.log('set photo: ', photo);
         const selectedCategoriesIds = categories.filter(cat => selectedCategories.includes(cat.text)).map(cat => cat._id);
         const formData = new FormData();
         formData.append('title', title || '');
@@ -274,8 +232,6 @@ function PhotoGallery() {
             {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-
-        console.log('updatePhotoDetailsResponse', updatePhotoDetailsResponse)
         setSelectedPhoto(null);
         getPhotos(setItems)
     }
@@ -304,7 +260,6 @@ function PhotoGallery() {
     }
 
     const handleDeleteImage = async (id) => {
-        console.log('delete image', id)
         await axios.delete(`${AppUrl}api/photos/delete/${id}`, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
@@ -314,12 +269,9 @@ function PhotoGallery() {
 
 
         const newArray = items.filter(p => p.id !== id);
-        console.log('new array--------------------------', newArray)
         updateOrder(newArray)
         setItems(newArray);
-        // console.log('curr array',items,'updated array',items.filter(p=>p.id !== id))
     }
-
     return (
         <div>
             {isLoading && <h1>Loading</h1>}

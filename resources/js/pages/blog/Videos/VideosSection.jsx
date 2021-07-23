@@ -9,7 +9,6 @@ export default ({ reference, videos, winSize }) => {
     const [offset, setOffset] = useState(0);
     const [data, setData] = useState([]);
     const [pageCount, setPageCount] = useState(0);
-    console.log('win size',winSize)
     let perPage = 3;
     let margin = '1.66%'
     let width = '30%'
@@ -26,16 +25,13 @@ export default ({ reference, videos, winSize }) => {
 
     const getData = async () => {
         const slice = videos.slice(offset === 1 || offset === 0 ? 0 : offset * perPage - perPage, offset === 0 ? perPage : offset * perPage);
-        console.log('slice', slice)
         setData(slice)
-        console.log('videos.length / perPage)', videos.length / perPage)
         setPageCount(Math.ceil(videos.length / perPage))
     }
 
     useEffect(() => {
         getData()
     }, [offset, videos]);
-    console.log('offset',offset)
     useEffect(()=>{
         getData()
         setOffset(1)
@@ -48,24 +44,6 @@ export default ({ reference, videos, winSize }) => {
     return (
         <div style={{ paddingTop: 50, height: '100vh', background: 'rgb(236, 231, 226)', width: '100%' }} ref={reference}>
             <p style={{ fontFamily: 'Mulish,sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center' }}>Videos</p>
-            {/* <div className="row" style={{ justifyContent: 'center' }}>
-                {data.map((video, i) => (
-                    <div key={`video[${video.id}]`} className="col-12 col-sm-4 col-md-4 col-lg-4">
-                        <div
-                            onClick={() => history.push(`/video/${video.id}`)}
-                            style={{
-                                border: "3px solid white",
-                                height: 200,
-                                background: `url('${video.thumbnail || VideoIcon}')`,
-                                backgroundSize: "cover",
-                                backgroundRepeat: "no-repeat",
-                                backgroundPosition: "center",
-                                cursor: 'pointer'
-                            }}
-                        />
-                    </div>
-                ))}
-            </div> */}
             <div
                 style={{
                     overflow: "hidden",
