@@ -38,9 +38,9 @@ const PostText = ({ post, isMobile, index }) => {
 
                 >
                     <div >
-                        {!!post.title && <p style={{ fontSize: '1.5em' }}>{post.title}</p>}
-                        {!!post.created_at && <p style={{ fontStyle: 'italic', color: 'rgb(251,251,251)', }}>{moment(new Date(post.created_at).getTime()).format("MMMM DD YYYY")}</p>}
-
+                        {!!post.title && <p style={{ fontSize: '1.5em',fontFamily:'Mulish' }}>{post.title}</p>}
+                        {!!post.created_at && <p style={{ fontStyle: 'italic',fontFamily:'Mulish', fontSize:'0.7em', color: 'rgb(251,251,251)', }}>{moment(new Date(post.created_at).getTime()).format("MMMM DD YYYY")}</p>}
+                        {!!post.summary && <p style={{ fontSize: '0.8em',fontFamily:'Merriweather' }}>{`${post.summary.substring(0, 100)} ${post.summary.length > 99 ?'...' : ''}`}</p>}
                     </div>
                 </div>
 

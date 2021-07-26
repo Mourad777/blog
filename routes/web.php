@@ -94,6 +94,8 @@ Route::post('/api/configurations/update', 'ConfigurationsController@update');
 
 Route::get('/api/messages', 'MessagesController@index');
 
+Route::get('/api/message/{id}', 'MessagesController@show');
+
 Route::post('/api/messages/save', 'MessagesController@store');
 
 

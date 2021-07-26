@@ -81,7 +81,7 @@ class PostsController extends Controller
     {
         // permanently delete
         // dd($request);
-        
+
         $post = new Post;
 
         if ($request->has('image')) {
@@ -93,21 +93,9 @@ class PostsController extends Controller
             $resized_file = Image::make($image)->rotate($orientation === 8 ? 90 : 0)->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();
             })->encode($extension);
-            // $resized_file = Image::make($image)->resize(800, null, function ($constraint) {
-            //     $constraint->aspectRatio();
-            // })->encode($extension);
             $file_key = 'post-thumbnails/' . $filename;
             $s3 = Storage::disk('s3');
             $s3->put($file_key, (string)$resized_file, 'public');
-
-
-
-
-            // $image_base_url = $request->file(key: 'image')->store(path: 'images', options: 's3');
-
-            // Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
-            // return Storage::disk(name:'s3')->url($image_base_url);
-            // return Storage::cloud()->url($image_base_url);
             $post->image = $file_key;
         }
 
@@ -121,6 +109,7 @@ class PostsController extends Controller
         $post->country = $request->country;
         $post->tags = $request->tags;
         $post->is_published = $request->is_published;
+        $post->is_comments_enabled = $request->is_comments_enabled;
         $post->save();
         $post->categories()->attach(json_decode($request->selected_categories));
     }
@@ -167,33 +156,28 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $s3 = Storage::disk('s3');
         $post = Post::find($id);
         $post->title = $request->title;
         $post->content = $request->content;
-
         $post->tags = $request->tags;
         $post->is_published = $request->is_published;
-
+        $post->is_comments_enabled = $request->is_comments_enabled;
         $post->author = $request->author;
         $post->summary = $request->summary;
-
         $post->country = $request->country;
-
 
         if ($request->image === 'sameImage') {
             //same image
         } else {
             if ($request->has('image')) {
 
-                if ($post->image) {
-                    //delete previous image
-                }
+                $s3->delete($post->image);
+                //delete previous image
+
                 $image = $request->file('image');
                 $extension = $request->file('image')->extension();
                 $filename = md5(time()) . '_' . $image->getClientOriginalName();
-                // $resized_file = Image::make($image)->resize(800, null, function ($constraint) {
-                //     $constraint->aspectRatio();
-                // })->encode($extension);
 
                 $orientation = Image::make($image)->exif('Orientation');
 
@@ -201,22 +185,13 @@ class PostsController extends Controller
                     $constraint->aspectRatio();
                 })->encode($extension);
                 $file_key = 'post-thumbnails/' . $filename;
-                $s3 = Storage::disk('s3');
                 $s3->put($file_key, (string)$resized_file, 'public');
-
-
-
-                // $image_base_url = $request->file(key: 'image')->store(path: 'images', options: 's3');
-
-                // Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
 
                 $post->image = $file_key;
             } else {
+                $s3->delete($post->image);
                 $post->image = null;
-
-                if ($post->image) {
-                    //delete thumbnail from aws if there was an image on the post prior to updating
-                }
+                //delete thumbnail from aws if there was an image on the post prior to updating
             }
         }
 
@@ -234,6 +209,10 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
+        $post = Post::findOrFail($id);
+        $post->categories()->detach();
+        $s3 = Storage::disk('s3');
+        $s3->delete($post->image);
         Post::destroy($id);
     }
 }

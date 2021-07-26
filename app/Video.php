@@ -15,6 +15,7 @@ class Video extends Model
         'description',
         'country',
         'tags',
+        'is_comments_enabled',
     ];
 
     public function comments()

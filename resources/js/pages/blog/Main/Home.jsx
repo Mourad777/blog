@@ -58,7 +58,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
         setScrollSection(0)
         if (window.scrollY > window.innerHeight / 4) {
             // do something 
-            setScrollSection(1)
+            setScrollSection(winSize > 2 ? 2 : 1)
             console.log('passed section 1 hero')
         }
         if (window.scrollY > window.innerHeight * 1 + window.innerHeight / 2) {
@@ -87,7 +87,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
             console.log('passed section 6 contact')
         }
 
-    }, [scrollPosition, scrollWidth])
+    }, [scrollPosition, scrollWidth, winSize])
 
     useEffect(() => {
         //function that inserts placeholders in the posts array when necessary
@@ -319,7 +319,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
                 {/* must use a lower resolution map for mobile devices */}
                 <div id="map-pics-container" style={{ zIndex: 5, position: 'fixed', height: '100vh', width: '100%' }}>
 
-                    <div id="hero-pic-1" style={{
+                    {(photos[0] || {}).src && <div id="hero-pic-1" style={{
                         position: 'absolute',
                         top: '42%',
                         left: '32%',
@@ -341,8 +341,8 @@ const Home = ({ scrollWidth, winSize, height }) => {
                         onClick={() => history.push(`/photo/${(photos[0] || {}).id}`)}
                     >
                         <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[0] || {}).src} />
-                    </div>
-                    <div id="hero-pic-2" style={{
+                    </div>}
+                    {(photos[1] || {}).src && <div id="hero-pic-2" style={{
                         position: 'absolute',
                         top: '62%',
                         left: winSize <= 2 ? '7%' : '35%',
@@ -361,8 +361,8 @@ const Home = ({ scrollWidth, winSize, height }) => {
 
                     >
                         <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[1] || {}).src} />
-                    </div>
-                    <div id="hero-pic-3" style={{
+                    </div>}
+                    {(photos[2] || {}).src && <div id="hero-pic-3" style={{
                         position: 'absolute',
                         top: '58%',
                         left: '50%',
@@ -380,7 +380,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
                         onClick={() => history.push(`/photo/${(photos[2] || {}).id}`)}
                     >
                         <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[2] || {}).src} />
-                    </div>
+                    </div>}
 
 
                 </div>
@@ -417,7 +417,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
                     <WorldMap reference={refSection3} postsFromDB={postsFromDB} videos={videos} photos={photos} winSize={winSize} />
                     {/* <Country reference={refSectionDestination} postsFromDB={postsFromDB} /> */}
 
-                    <PhotosSection photos={photos} reference={refSection4} winSize={winSize} scrollWidth={scrollWidth} />
+                    <PhotosSection photos={photos} reference={refSection4} winSize={winSize} height={height} scrollWidth={scrollWidth} />
                     {/* <PhotosSectionDetail reference={refSectionPhotos}/> */}
 
                     <VideosSection videos={videos} reference={refSection5} winSize={winSize} />

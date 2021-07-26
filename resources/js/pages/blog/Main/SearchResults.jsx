@@ -69,7 +69,7 @@ const Search = ({ posts, photos, videos, winSize }) => {
         [...posts, ...photos, ...videos]
             .filter(item => !!item.country)
             .map(item => ({
-                title: countryCodes[item.country].toLowerCase(),
+                title: countryCodes[item.country.toUpperCase()].toLowerCase(),
                 type: 'country',
                 id: item.country,
                 summary: '',
@@ -100,7 +100,9 @@ const Search = ({ posts, photos, videos, winSize }) => {
         }))
 
 
-    const options = [...adjustedPhotos, ...adjustedVideos, ...adjustedPosts, ...countries,...adjustedCategories];
+    const options = [...adjustedPhotos, ...adjustedVideos, ...adjustedPosts,
+         ...countries,
+         ...adjustedCategories];
 
     const handleSearchValue = (e) => {
         setSearchValue(e.target.value);

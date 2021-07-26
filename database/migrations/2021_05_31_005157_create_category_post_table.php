@@ -17,6 +17,10 @@ class CreateCategoryPostTable extends Migration
             $table->id();
             $table->integer('category_id');
             $table->integer('post_id');
+            // $table->primary(['category_id', 'post_id']);
+
+            // $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            // $table->foreign('post_id')->references('id')->on('products')->onDelete('cascade');
             $table->timestamps();
         });
     }

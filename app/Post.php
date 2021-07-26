@@ -13,6 +13,7 @@ class Post extends Model
         'title',
         'author',
         'is_published',
+        'is_comments_enabled',
         'summary',
         'country',
         'tags',
@@ -20,10 +21,10 @@ class Post extends Model
         'image',
     ];
 
-    protected $casts = [
-        // 'tags' => 'array',
-        'is_published' => 'boolean',
-    ];
+    // protected $casts = [
+    //     // 'tags' => 'array',
+    //     'is_published' => 'boolean',
+    // ];
 
     // public function comments() {
 

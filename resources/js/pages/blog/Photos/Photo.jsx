@@ -97,7 +97,7 @@ const Photo = ({ winSize }) => {
                                 src={photo.src}
                                 alt=""
                             />{" "}
-                            <div className="extra-img-info-container" style={{ color: 'white',  background:'#daad86'}}>
+                            <div className="extra-img-info-container" style={{ color: 'white', background: '#daad86' }}>
                                 {(photo.photographer && photo.date_taken) && (
                                     <div style={{ color: "#fff4e1" }}>
                                         <Typography style={{ fontStyle: 'italic' }} variant="subtitle1">Taken by {photo.photographer} {photo.date_taken ? ' on ' + new Date(photo.date_taken).toDateString() : ''}</Typography>
@@ -115,8 +115,8 @@ const Photo = ({ winSize }) => {
                                 )}
                                 {photo.country && (
                                     <div
-                                    onClick={()=>history.push(`/destination/${photo.country}`)}
-                                    style={{ display: 'flex', color: "#fff4e1", background: '#DAAD86', padding: 10,cursor:'pointer' }}>
+                                        onClick={() => history.push(`/destination/${photo.country}`)}
+                                        style={{ display: 'flex', color: "#fff4e1", background: '#DAAD86', padding: 10, cursor: 'pointer' }}>
                                         <Location />
                                         <Typography variant="body1">{countries.find(c => c.value === photo.country).text}</Typography>
 
@@ -165,7 +165,7 @@ const Photo = ({ winSize }) => {
                             >
                                 <DownArrow />
                                 <p style={{ marginLeft: 33, fontSize: '1.2em' }}>
-                                    Download
+                                    <a style={{color:'#fff'}} href={photo.src} download >Download</a>
                                 </p>
                             </div>
 

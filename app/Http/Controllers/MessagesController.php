@@ -54,6 +54,8 @@ class MessagesController extends Controller
     public function show($id)
     {
         //
+        $message = Message::findOrFail($id);
+        return $message;
     }
 
     /**

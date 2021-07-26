@@ -3,7 +3,7 @@ import { StyledFormTextInput, StyledBlueButton, StyledRedButton } from '../Style
 import { List, TextArea, Form, Button } from 'semantic-ui-react'
 import { AppUrl } from '../utility';
 import axios from 'axios';
-import '../global-styles.css/tinymceReadonly.css'
+import '../global-styles/tinymceReadonly.css'
 import Avatar from 'react-avatar';
 import { useHistory, useParams } from 'react-router';
 import { ScrollTrigger } from 'gsap/all';

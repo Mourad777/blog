@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Log;
 
 class CountriesController extends Controller
 {
+    public function index()
+    {
+
+
+    }
+
     public function show($country_iso)
     {
 

@@ -70,9 +70,9 @@ export default ({ reference, videos, winSize }) => {
                             overflow: "hidden",
                         }}
                     >
-                        <div style={{height:'10vh',background:'#fff'}}><p style={{textAlign:'center',paddingTop:10}}>Title</p></div>
+                        <div style={{height:'10vh',background:'#fff'}}><p style={{textAlign:'center',paddingTop:10}}>{video.title}</p></div>
                         <img src={video.thumbnail || VideoIcon} style={{ width: '100%', height: '25vh', objectFit: 'cover' }} />
-                        <div style={{height:'100%',background:'#fff'}}><p style={{textAlign:'center',paddingTop:10}}>Description</p></div>
+                        <div style={{height:'100%',background:'#fff'}}><p style={{textAlign:'center',paddingTop:10}}>{video.description}</p></div>
                     </div>
                     // </Link>
                 ))}

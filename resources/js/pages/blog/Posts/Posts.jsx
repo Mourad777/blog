@@ -1,58 +1,41 @@
-import React, {  useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyledLatestPostsTopLayer, StyledPostRow, StyledLatestPostsInnerWrapper, StyledLatestPostsOuterWrapper } from '../StyledComponents'
 import OuterColumn from "./OuterColumns";
 import RowLayout from './RowLayout';
-import ReactPaginate from 'react-paginate';
-import { Link } from "react-scroll";
+import Paginate from '../../../components/blog/Paginate/Paginate';
 import { gsap } from 'gsap/all';
 
 const LatestPosts = ({ winSize, postsFromDB, reference }) => {
 
-    const [offset, setOffset] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [posts, setPosts] = useState([]);
+    const [selectedPage, setSelectedPage] = useState(0);
 
-    const placeHolderPosts = [
-        {
-            _id: posts.length + 1,
-            title: "",
-            image: "",
-            content: "",
-            country: '',
-        },
-        {
-            _id: posts.length + 2,
-            title: "",
-            image: "",
-            content: "",
-            country: '',
-        },
-        {
-            _id: posts.length + 3,
-            title: "",
-            image: "",
-            content: "",
-            country: '',
-        }
-    ]
+    // useEffect(() => {
+    //     if (winSize > 1) {
+    //         setOffset(1)
+    //     }
+    // }, [winSize])
 
+    // useEffect(() => {
+    //     getData()
+    // }, [offset, winSize, postsFromDB]);
 
     useEffect(() => {
-        if (winSize > 1) {
-            setOffset(1)
-        }
-    }, [winSize])
+        gsap.fromTo(".post-text-1", { opacity: 0.3 }, { opacity: 1, duration: 1 });
+        gsap.fromTo(".post-image-1", { opacity: 0.3 }, { opacity: 1, duration: 1 });
+        gsap.fromTo(".post-text-2", { opacity: 0.3 }, { opacity: 1, duration: 1 });
+        gsap.fromTo(".post-image-2", { opacity: 0.3 }, { opacity: 1, duration: 1 });
+    }, [selectedPage]);
 
     useEffect(() => {
         getData()
-    }, [offset, winSize, postsFromDB]);
+    }, [selectedPage, postsFromDB]);
 
     useEffect(() => {
-        gsap.fromTo(".post-text-1", {opacity: 0.3}, {opacity: 1, duration: 1});
-        gsap.fromTo(".post-image-1", {opacity: 0.3}, {opacity: 1, duration: 1});
-        gsap.fromTo(".post-text-2", {opacity: 0.3}, {opacity: 1, duration: 1});
-        gsap.fromTo(".post-image-2", {opacity: 0.3}, {opacity: 1, duration: 1});
-    }, [offset]);
+        setSelectedPage(0)
+        getData();
+    }, [winSize])
 
     const getPostsPerPage = (winSize) => {
         let postsPerPage = 2;
@@ -61,22 +44,15 @@ const LatestPosts = ({ winSize, postsFromDB, reference }) => {
     }
 
     const getData = async () => {
-
         const perPage = getPostsPerPage(winSize);
         setPageCount(Math.ceil((postsFromDB || []).length / perPage))
-        const slice = (postsFromDB || []).slice(offset === 1 || offset === 0 ? 0 : offset * perPage - perPage, offset === 0 ? perPage : offset * perPage);
-        if (slice.length === 1) {
-            setPosts([...slice, placeHolderPosts[0]]);
-            return;
-        }
-
+        const slice = postsFromDB.slice((selectedPage + 1) * perPage - perPage, (selectedPage + 1) * perPage);
         setPosts(slice)
-
     }
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
-        setOffset(selectedPage + 1)
+        setSelectedPage(selectedPage)
     };
 
     return (<div ref={reference} style={{ height: '100vh', overflow: 'hidden', zIndex: 6 }}>
@@ -91,42 +67,28 @@ const LatestPosts = ({ winSize, postsFromDB, reference }) => {
                 '100%',
             maxHeight: winSize === 1 && postsFromDB.length === 0 ? '100%' : 50,
         }}>
-            {postsFromDB.length > 1 && <ReactPaginate
-                previousLabel={"prev"}
-                nextLabel={"next"}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName={"pagination"}
-                subContainerClassName={"pages pagination"}
-                activeClassName={"active"} />}
+            {postsFromDB.length > 1 &&
+                <Paginate totalPages={pageCount} page={selectedPage} handlePageClick={handlePageClick} />}
         </div>
         <StyledLatestPostsOuterWrapper >
             {winSize > 1 && <OuterColumn isLeft />}
             <StyledLatestPostsInnerWrapper >
-           
-                    {posts.map((post, index) => (
-                        <StyledPostRow key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >
 
-                            <RowLayout offset={offset} winSize={winSize} post={post} index={index} />
+                {posts.map((post, index) => (
+                    <StyledPostRow key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >
 
-                        </StyledPostRow>
-                    ))}
-               
+                        <RowLayout offset={selectedPage} winSize={winSize} post={post} index={index} />
+
+                    </StyledPostRow>
+                ))}
+
                 <div style={{ background: '#daad86', height: '100%' }} />
             </StyledLatestPostsInnerWrapper>
             {winSize > 1 && <OuterColumn />}
         </StyledLatestPostsOuterWrapper>
 
-
-
-
         <div style={{
             background: '#DAAD86',
-            // height: '100%'
         }}>
         </div>
     </div>)

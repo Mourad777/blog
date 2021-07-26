@@ -8,7 +8,7 @@ import { List, TextArea, Form, Button } from 'semantic-ui-react'
 import { StyledFormTextInput, StyledBlueButton, StyledRedButton } from '../StyledComponents';
 import Avatar from 'react-avatar';
 
-const Video = () => {
+const Video = ({winSize}) => {
     const params = useParams();
     const history = useHistory();
     const selectedVideo = params.videoId;
@@ -71,8 +71,8 @@ const Video = () => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
             .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-        
-        console.log('Video Upload Response',videoUploadResponse)
+
+        console.log('Video Upload Response', videoUploadResponse)
 
         const commentsRes = await axios.get(`${AppUrl}api/comments/video/${selectedVideo}`);
         setComments(commentsRes.data)
@@ -83,16 +83,25 @@ const Video = () => {
     }
 
     return (
-        <div style={{ background: '#ece7e2', height: '100vh', width: '100%' }}>
+        <div style={{ background: '#ece7e2', height: '100%', width: '100%', paddingBottom: 20 }}>
+            <div style={{ position: 'relative', width: '100%', height: 300, overflow: 'hidden' }}>
+                <div style={{
+                    zIndex: 1, top: 50, left: '50%', transform: 'translateX(-50%)', position: 'absolute',
+                    background: 'rgb(0,0,0,0.6)',
+                    borderRadius: 2,
+                    padding: 20,
+                    minWidth: 300,
+                }}><h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: winSize === 1 ? '2em' : '2.5em', fontFamily: "Mulish", color: 'white' }}>{video.title}</h1></div>
+                <img src={video.thumbnail} style={{ width: '100%', maxHeight: 400, objectFit: 'cover', position: 'absolute' }} />
+            </div>
             <div style={{ padding: 20 }}>
                 <Button content='Home' onClick={() => { history.push('/') }} />
             </div>
-            <p style={{ color: 'rgb(218, 173, 134)', fontSize: '4em', fontFamily: 'Mulish', textAlign: 'center', paddingTop: 56 }}>{video.title}</p>
+            {/* <p style={{ color: 'rgb(218, 173, 134)', fontSize: '4em', fontFamily: 'Mulish', textAlign: 'center', paddingTop: 56 }}>{video.title}</p> */}
             <div style={{
-                maxWidth: '800px',
-                display: 'flex',
-                justifyContent: 'space-around',
-                padding: 15,
+                maxWidth: 800,
+                // display: 'flex',
+                // justifyContent: 'space-around',
                 margin: 'auto'
             }}
                 className="player-container">
@@ -102,12 +111,16 @@ const Video = () => {
                     height="100%"
                     url={video.src}
                 />
-
+                <div style={{ padding: 20, background: '#fff', margin: '10px 0' }}>
+                    <p style={{ fontSize: '1.2em', fontFamily: 'Mulish', }}>
+                        {video.description}
+                    </p>
+                </div>
             </div>
 
 
-            <div style={{ background: '#fff',padding:10 }} className="video-comments-container">
-                {comments.length > 0 && <p style={{ fontSize: '2.5em', marginTop: 30 }}>{replyComment ? 'Comment' : 'Comments'}</p>}
+            <div style={{ background: '#fff', padding: 10, maxWidth: 800, margin: 'auto' }} className="video-comments-container">
+                {comments.length > 0 && <p style={{ fontSize: '2.5em', marginTop: 30, textAlign: 'center' }}>{replyComment ? 'Comment' : 'Comments'}</p>}
                 <Form style={{ paddingBottom: 20 }}>
                     {replyComment ?
                         <div style={{ display: 'flex', margin: '20px 0' }}>

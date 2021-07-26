@@ -88,6 +88,7 @@ class VideosController extends Controller
         // Storage::disk(name: 's3')->setVisibility($file_key, visibility: 'public');
 
         $video->url = $request->key;
+        $video->is_comments_enabled = 1;
 
         // Storage::disk('s3')->put($file_key, file_get_contents($video_file), 'public');
 
@@ -108,6 +109,7 @@ class VideosController extends Controller
         //
         $video = Video::find($id);
         $video->src = Storage::disk(name: 's3')->url($video->url);
+        $video->thumbnail = Storage::disk(name: 's3')->url($video->thumbnail);
         return $video;
     }
 
@@ -132,11 +134,13 @@ class VideosController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $s3 = Storage::disk('s3');
         $video = Video::find($id);
         $video->title = $request->title;
         $video->description = $request->description;
         $video->tags = $request->tags;
         $video->country = $request->country;
+        $video->is_comments_enabled = $request->is_comments_enabled;
 
         if ($request->thumbnail === 'sameThumbnail') {
             //same image
@@ -144,46 +148,31 @@ class VideosController extends Controller
             if ($request->has('thumbnail')) {
 
                 if ($video->thumbnail) {
-                    //delete previous image
+                    //delete previous image to replace by new image
+                    $key = $video->thumbnail;
+                    $s3->delete($key);
                 }
-                $thumbnail = $request->file('thumbnail');
-                $extension = $request->file('thumbnail')->extension();
-                $filename = md5(time()) . '_' . $thumbnail->getClientOriginalName();
+                $thumbnail_file = $request->file('thumbnail');
+                $extension = $thumbnail_file->extension();
+                $filename = md5(time()) . '_' . $thumbnail_file->getClientOriginalName();
 
-                $orientation = Image::make($thumbnail)->exif('Orientation');
+                $orientation = Image::make($thumbnail_file)->exif('Orientation');
 
-                $resized_file = Image::make($thumbnail)->rotate($orientation === 8 ? 90 : 0)->resize(800, null, function ($constraint) {
+                $resized_file = Image::make($thumbnail_file)->rotate($orientation === 8 ? 90 : 0)->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->encode($extension);
                 $file_key = 'video-thumbnails/' . $filename;
-                $s3 = Storage::disk('s3');
+
                 $s3->put($file_key, (string)$resized_file, 'public');
-
-
-
-                // $image_base_url = $request->file(key: 'image')->store(path: 'images', options: 's3');
-
-                // Storage::disk(name: 's3')->setVisibility($image_base_url, visibility: 'public');
 
                 $video->thumbnail = $file_key;
             } else {
+                //delete thumbnail from aws if there was an image on the post prior to updating
+                $key = $video->thumbnail;
+                $s3->delete($key);
                 $video->thumbnail = null;
-
-                if ($video->thumbnail) {
-                    //delete thumbnail from aws if there was an image on the post prior to updating
-                }
             }
         }
-
-
-
-
-
-
-
-
-
-
 
         $video->save();
         $video->categories()->sync(json_decode($request->selected_categories));
@@ -201,6 +190,12 @@ class VideosController extends Controller
     public function destroy($id)
     {
         //
+        $s3 = Storage::disk('s3');
+        $video = Video::findOrFail($id);
+        $video_thumbnail_key = $video->thumbnail;
+        $video_url_key = $video->url;
+        $s3->delete($video_thumbnail_key);
+        $s3->delete($video_url_key);
         Video::destroy($id);
     }
 }

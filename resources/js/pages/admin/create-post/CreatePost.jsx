@@ -6,33 +6,19 @@ import {
     StyledRedButton,
     StyledSubmitButton,
     StyledThumbnailPreview,
-    StyledCheckbox
 } from '../../blog/StyledComponents';
-import { Checkbox, Segment, Dropdown } from 'semantic-ui-react'
-
-// import { Checkbox, Form, Select } from 'semantic-ui-react'
+import { Checkbox, Segment, Dropdown,TextArea,Form } from 'semantic-ui-react'
 import axios from 'axios'
 import './editor.css'
 import { useParams, useHistory } from 'react-router';
 import { AppUrl } from '../../blog/utility';
 import { countries } from '../util/countries-iso';
 import TagInput from '../../../components/TagInput/TagInput';
-
-const processCategories = (categories) => {
-    const processedCategories = categories.map(cat => {
-        return { key: cat.name, value: cat.name, text: cat.name, _id: cat.id }
-    });
-    return processedCategories;
-}
+import { processCategories } from '../util/helper-functions';
+import { getCategories } from '../util/api';
 
 const fontStyles =
-    "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago;Merriweather=merriweather; Montserrat=montserrat; Quicksand=quicksand; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats"
-
-// const categories = [
-//     { key: 'accomodation', value: 'accomodation', text: 'Accomodation' },
-//     { key: 'food', value: 'food', text: 'Food' },
-//     { key: 'southAmerica', value: 'southAmerica', text: 'South America' }
-// ]
+    "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago;Merriweather=merriweather; Montserrat=montserrat; Quicksand=quicksand; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats";
 
 async function upload_handler(blobInfo, success, failure, progress) {
     const formData = new FormData();
@@ -54,14 +40,15 @@ const CreatePost = ({ isEditing }) => {
     const [file, setFile] = useState('');
     const [country, setCountry] = useState('');
     const [author, setAuthor] = useState('');
+    const [summary, setSummary] = useState('');
     const [content, setContent] = useState('');
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
-    // const [category, setCategory] = useState('');
     const [newCategory, setNewCategory] = useState('');
     const [tags, setTags] = useState([]);
     const [initialContent, setInitialContent] = useState('Write something...');
-    const [isCommentsDisabled, setIsCommentsDisabled] = useState(false);
+    const [isCommentsEnabled, setIsCommentsEnabled] = useState(true);
+    const [isPublished, setIsPublished] = useState(true);
 
     const fileInputRef = createRef();
 
@@ -88,8 +75,21 @@ const CreatePost = ({ isEditing }) => {
         setAuthor(e.target.value);
     };
 
+    const handleSummary = e => {
+        e.preventDefault()
+        setSummary(e.target.value);
+    };
+
     const handleNewCategoryField = (e) => {
         setNewCategory(e.target.value);
+    }
+
+    const handleComments = () => {
+        setIsCommentsEnabled(!isCommentsEnabled);
+    }
+
+    const handlePublished = () => {
+        setIsPublished(!isPublished);
     }
 
     const handleNewCategorySubmit = async () => {
@@ -100,7 +100,7 @@ const CreatePost = ({ isEditing }) => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
             .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-        
+
         const categoriesResponse = await axios.get(`${AppUrl}api/categories`);
         const processedCategories = processCategories(categoriesResponse.data);
         setCategories(processedCategories)
@@ -108,7 +108,7 @@ const CreatePost = ({ isEditing }) => {
     }
 
     const handleTags = async (value) => {
-       
+
         setTags(value);
     }
 
@@ -129,14 +129,16 @@ const CreatePost = ({ isEditing }) => {
             }
         }
 
-        const selectedCategoriesIds = categories.filter(cat=>selectedCategories.includes(cat.text)).map(cat=>cat._id); 
-        formData.append('title', title||'');
-        formData.append('author', author||'');
+        const selectedCategoriesIds = categories.filter(cat => selectedCategories.includes(cat.text)).map(cat => cat._id);
+        formData.append('title', title || '');
+        formData.append('author', author || '');
+        formData.append('summary', summary || '');
         formData.append('content', content || 'Write something...');
         formData.append('selected_categories', JSON.stringify(selectedCategoriesIds));
         formData.append('tags', JSON.stringify(tags));
-        formData.append('country', country||'');
-        formData.append('is_published', 0);
+        formData.append('country', country || '');
+        formData.append('is_published', isPublished ? 1 : 0);
+        formData.append('is_comments_enabled', isCommentsEnabled ? 1 : 0);
         let url = `${AppUrl}api/posts/save`;
         if (isEditing) url = `${AppUrl}api/posts/update/${params.id}`;
         await axios.post(url, formData,
@@ -150,23 +152,22 @@ const CreatePost = ({ isEditing }) => {
 
 
     useEffect(() => {
-        let processedCategories;
-        const getCategories = async () => {
-            const categoriesResponse = await axios.get(`${AppUrl}api/categories`);
-            processedCategories = processCategories(categoriesResponse.data);
+        const getInitialData = async () => {
+            const categoriesResponse = await getCategories();
+            const processedCategories = processCategories(categoriesResponse.data);
             setCategories(processedCategories);
-        }
-        getCategories()
-        if (isEditing) {
-            const getPost = async () => {
+
+            if (isEditing) {
                 const id = params.id;
                 const postResponse = await axios.get(`${AppUrl}api/posts/edit/${id}`);
                 const post = postResponse.data;
-                console.log('Post response',postResponse)
-                setTitle(post.title);
-                setAuthor(post.author);
-
-                setSelectedCategories(post.categories.map(cat=>cat.name));
+                console.log('Post response', postResponse)
+                setTitle(post.title || '');
+                setAuthor(post.author || '');
+                setSummary(post.summary || '');
+                setIsPublished(!!parseInt(post.is_published));
+                setIsCommentsEnabled(!!parseInt(post.is_comments_enabled));
+                setSelectedCategories(post.categories.map(cat => cat.name));
 
                 setCountry(post.country);
                 if (post.tags) setTags(JSON.parse(post.tags));
@@ -174,27 +175,28 @@ const CreatePost = ({ isEditing }) => {
                 setContent(post.content);
                 setFile(post.aws_url);
             }
-            getPost()
         }
+        getInitialData()
+
     }, [])
     const handleSelectedCategories = (e, { label, checked }) => {
         if (checked) {
-          setSelectedCategories([...selectedCategories, label]);
+            setSelectedCategories([...selectedCategories, label]);
         } else {
-          setSelectedCategories(selectedCategories.filter(el => el !== label));
+            setSelectedCategories(selectedCategories.filter(el => el !== label));
         }
-      };
+    };
 
     return (
         <div style={{ margin: 'auto', maxWidth: 800 }}>
             <h1>{isEditing ? 'Edit Post' : 'New Post'}</h1>
 
             <div>
-                <label style={{fontSize:'1.2em'}}>Title</label>
+                <label style={{ fontSize: '1.2em' }}>Title</label>
                 <StyledFormTextInput value={title} onChange={handleTitle} placeholder='Title' />
             </div>
             <div style={{ marginTop: 20 }}>
-                <label style={{fontSize:'1.2em'}}>Author</label>
+                <label style={{ fontSize: '1.2em' }}>Author</label>
                 <StyledFormTextInput value={author} onChange={handleAuthor} placeholder='Author' />
             </div>
             <div style={{ marginTop: 20 }}>
@@ -204,7 +206,7 @@ const CreatePost = ({ isEditing }) => {
                 <StyledBlueButton onClick={() => fileInputRef.current.click()} icon="image"
                 >
                     Upload Thumbnail
-                    </StyledBlueButton>
+                </StyledBlueButton>
                 <StyledRedButton onClick={() => setFile(null)}
                 >
                     <i className="trash icon"></i>
@@ -217,7 +219,7 @@ const CreatePost = ({ isEditing }) => {
                 />
             </div>
             <div style={{ marginTop: 20 }}>
-                <label style={{fontSize:'1.2em'}}>Country</label>
+                <label style={{ fontSize: '1.2em' }}>Country</label>
                 <Dropdown
                     clearable
                     placeholder='Select Country'
@@ -232,7 +234,7 @@ const CreatePost = ({ isEditing }) => {
                 </Dropdown>
             </div>
             <div style={{ marginTop: 20 }}>
-                <label style={{fontSize:'1.2em'}}>Create a new category</label>
+                <label style={{ fontSize: '1.2em' }}>Create a new category</label>
                 <StyledFormTextInput value={newCategory} onChange={handleNewCategoryField} placeholder='New Category' />
                 <div style={{ marginTop: 10 }}>
                     <StyledBlueButton onClick={handleNewCategorySubmit} icon="image"
@@ -246,42 +248,35 @@ const CreatePost = ({ isEditing }) => {
 
                 <Dropdown item simple text="Select categories">
                     <Dropdown.Menu>
-                        {categories.map(cat =>{ 
-                            
-                            return(
-                            <Dropdown.Item key={cat._id}>
-                                <Checkbox label={cat.text} checked={selectedCategories.includes(cat.text)} onChange={handleSelectedCategories} />
-                            </Dropdown.Item>
-                        )})}
+                        {categories.map(cat => {
+
+                            return (
+                                <Dropdown.Item key={cat._id}>
+                                    <Checkbox label={cat.text} checked={selectedCategories.includes(cat.text)} onChange={handleSelectedCategories} />
+                                </Dropdown.Item>
+                            )
+                        })}
                     </Dropdown.Menu>
                 </Dropdown>
             </Segment>
-            {/* <div style={{ marginTop: 20 }}>
-                <label style={{fontSize:'1.2em'}}>Select from an existing category</label>
-                <Dropdown
-                    clearable
-                    placeholder='Select a Category'
-                    fluid
-                    search
-                    selection
-                    options={categories}
-                    onChange={handleCategory}
-                    value={(category || {}).value}
-                />
-            </div> */}
             <div style={{ marginTop: 20 }}>
-                <label style={{fontSize:'1.2em'}}>Tags</label>
+                <label style={{ fontSize: '1.2em' }}>Tags</label>
                 <TagInput values={tags} onChange={handleTags} />
             </div>
-
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: 200, padding: 20, fontSize: '1.2em' }}><span style={{ marginRight: 10 }}>Published</span>
+                <Checkbox checked={!!isPublished} onChange={() => handlePublished()} /></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: 200, padding: 20, fontSize: '1.2em' }}><span style={{ marginRight: 10 }}>Comments Enabled</span>
+                <Checkbox checked={!!isCommentsEnabled} onChange={() => handleComments()} /></div>
+            <div style={{ marginTop: 20 }}>
+                <label style={{ fontSize: '1.2em' }}>Summary</label>
+            <Form><TextArea value={summary} onChange={handleSummary} style={{ minHeight: 100, width: '100%' }} /></Form>
+            </div>
             <div style={{ marginTop: 20 }}>
                 <Editor
                     initialValue={initialContent}
                     apiKey="lmbdxengrz1nuue2c1bunerjwmcqgvzoptjjdr3w0o1imj5n"
-                    
-                    
                     init={{
-                        
+
                         plugins: 'link image code autoresize',
                         toolbar: 'insert undo redo | bold italic | alignleft aligncenter alignright | code',
                         images_upload_handler: upload_handler,
@@ -297,19 +292,14 @@ const CreatePost = ({ isEditing }) => {
                         font_formats: fontStyles,
 
                     }}
-                    
+
                     onChange={handleEditorContent}
                 />
             </div>
-            {/* <Checkbox label='Published' /> */}
-
-
 
             <div style={{ textAlign: 'center', padding: '20px 0' }}>
                 <StyledSubmitButton onClick={handleForm} >{isEditing ? 'Update' : 'Post'}</StyledSubmitButton>
             </div>
-
-
         </div>
     )
 }

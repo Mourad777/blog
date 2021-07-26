@@ -154,6 +154,10 @@ class PhotosController extends Controller
     public function destroy($id)
     {
         //
+        $post = Photo::findOrFail($id);
+        $s3 = Storage::disk('s3');
+        $key = $post->url;
+        $s3->delete($key);
         Photo::destroy($id);
     }
 }

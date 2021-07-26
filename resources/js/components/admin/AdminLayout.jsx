@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,14 +20,16 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail'
+import SettingsIcon from '@material-ui/icons/Settings'
 import StarBorder from '@material-ui/icons/StarBorder'
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import CommentIcon from '@material-ui/icons/Comment';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
-
 import PhotoIcon from '@material-ui/icons/PhotoLibrary'
 import VideoIcon from '@material-ui/icons/MovieCreation';
-import { useParams, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
+import CategoriesIcon from '@material-ui/icons/AccountTree';
+import CountriesIcon from '@material-ui/icons/Public';
 
 const drawerWidth = 240;
 
@@ -95,7 +97,8 @@ export default function PersistentDrawerLeft({ children }) {
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [location, setLocation] = useState('');
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -105,11 +108,24 @@ export default function PersistentDrawerLeft({ children }) {
         setOpen(false);
     };
 
-    const [nestedOpen, setNestedOpen] = React.useState(false);
+    const [nestedOpen, setNestedOpen] = useState(false);
 
     const handleClick = () => {
         setNestedOpen(!nestedOpen);
     };
+
+    history.listen((location, action) => {
+        setLocation(location.pathname)
+    });
+
+    useEffect(() => {
+        const path = history.location.pathname;
+        setLocation(path);
+        if (path === '/admin/create-post' || path === '/admin/posts') {
+            setNestedOpen(true)
+        }
+    }, []);
+
 
     return (
         <div className={classes.root}>
@@ -165,9 +181,9 @@ export default function PersistentDrawerLeft({ children }) {
                             {[
                                 { text: 'New post', icon: PostAddIcon, url: '/admin/create-post' },
                                 { text: 'View posts', icon: DynamicFeedIcon, url: '/admin/posts' },
-                                { text: 'Comments', icon: CommentIcon }
+                                // { text: 'Comments', icon: CommentIcon }
                             ].map((item, index) => (
-                                <ListItem onClick={() => history.push(item.url)} button key={item.text} className={classes.nested}>
+                                <ListItem style={item.url === location ? { background: 'rgb(240,240,240)' } : {}} onClick={() => history.push(item.url)} button key={item.text} className={classes.nested}>
                                     <ListItemIcon><item.icon /></ListItemIcon>
                                     <ListItemText primary={item.text} />
                                 </ListItem>
@@ -180,8 +196,10 @@ export default function PersistentDrawerLeft({ children }) {
                     {[
                         { text: 'Photos', icon: PhotoIcon, url: '/admin/photos' },
                         { text: 'Videos', icon: VideoIcon, url: '/admin/videos' },
+                        { text: 'Categories', icon: CategoriesIcon, url: '/admin/categories' },
+                        { text: 'Countries', icon: CountriesIcon, url: '/admin/countries' },
                     ].map((item, index) => (
-                        <ListItem onClick={() => history.push(item.url)} button key={item.text}>
+                        <ListItem style={item.url === location ? { background: 'rgb(240,240,240)' } : {}} onClick={() => history.push(item.url)} button key={item.text}>
                             <ListItemIcon><item.icon /></ListItemIcon>
                             <ListItemText primary={item.text} />
                         </ListItem>
@@ -191,9 +209,12 @@ export default function PersistentDrawerLeft({ children }) {
                 <List>
                     {[
                         { text: 'Messages', icon: MailIcon, url: '/admin/messages' },
+                        { text: 'Settings', icon: SettingsIcon, url: '/admin/settings' },
                         // { text: 'Videos', icon: VideoIcon, url: '/admin/videos' },
                     ].map((item, index) => (
-                        <ListItem onClick={() => history.push(item.url)} button key={item.text}>
+                        <ListItem
+                            style={item.url === location ? { background: 'rgb(240,240,240)' } : {}}
+                            onClick={() => history.push(item.url)} button key={item.text}>
                             <ListItemIcon><item.icon /></ListItemIcon>
                             <ListItemText primary={item.text} />
                         </ListItem>

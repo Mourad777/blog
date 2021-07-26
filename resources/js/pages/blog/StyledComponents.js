@@ -9,7 +9,7 @@ import mapLowRes from '../../../../public/assets/map-notepad-white-md.jpg'
 //430px
 //StyledLatestPostsTitle
 //StyledLatestPostsSection
-//font contact styledthumb
+//font contact styledthumb contact StyledLatestPostsOuterWrapper
 export const StyledPostRow = styled.div`
 border: rgba(218, 173, 134) solid;
 border-width: ${props => props.index === 0 ? "40" : "20"
@@ -26,24 +26,11 @@ height:100vh;
 position:relative;
 `;
 
-export const StyledSpacerSectionOne = styled.section`
-    height:100vh;
-    background:transparent;
-    position:relative;
-    
-`;
 
 export const StyledHeroSectionTextContainer = styled.div`
 height:100vh;
 `;
 
-export const StyledLatestPostsSection = styled.section`
-    overflow:hidden !important;
-    z-index:2 !important;
-    height:100vh !important;
-    position:relative !important;
-    
-`;
 
 export const StyledLatestPostsTopLayer = styled.div`
 width: "100%";
@@ -52,24 +39,10 @@ height: 80px;
 position:relative;
 `;
 
-export const StyledSeeAllPostsText = styled.p`
-    font-family: Mulish;
-    font-size: 1.3em;
-    color: rgb(255, 255, 255);
-    text-align: center;
-    position: absolute;
-    z-index: 1;
-    transform: translate(-50%, -50%);
-    top: 176%;
-    left: 50%;
-    cursor:pointer;
-    border:1px solid #fff;
-    border-radius:5px;
-    padding:5px;
-`;
 
 export const StyledLatestPostsOuterWrapper = styled.div`
 display:flex;
+height:100%;
 `;
 
 export const StyledLatestPostsInnerWrapper = styled.div`
@@ -116,40 +89,7 @@ position: absolute;
 z-index: -9;
 `;
 
-export const StyledSvgPath = styled.svg`
-width: 6%;
-padding-bottom: 42%;
-height: 1px;
-overflow: visible;
-z-index: -2;
-position: fixed;
-top: ${props => props.windowWidth === 1 ? '11px' : '95px'};
-margin-left: ${props => props.windowWidth === 1 ? '-32px' : '56px'}
-`;
 
-export const StyledPath = styled.path`
-fill: none;
-stroke-dashoffset: 3255;
-stroke: rgb(132, 4, 4, 0.6);
-stroke-width: ${props => props.windowWidth === 1 ? 2 : 6};
-stroke-miterlimit: 10;
-stroke-dasharray: 3255;
-
-z-index-2;
-`;
-
-export const StyledCircle = styled.circle`
-transition: all 0.15s ease-in;
-fill: #840404;
-transition-delay: .05s;
-z-index:-2;
-`;
-// transform:
-//    ${props => props.winSize === 1
-//         ? `translate(-33%,${(props => props.scroll < 0.18) ? (1 - (props.scroll) * 5) * 10 : 0
-//         }%)`
-//         : `translate(-33%,${(props => props.scroll < 0.18) ? (1 - (props.scroll) * 5) * 6 : 0
-//         }%)`};
 export const StyledLatestPostsTitle = styled.svg`
 z-index:0;
 position: absolute;
@@ -161,12 +101,6 @@ left: ${props => props.winSize === 1 ? '48%' : '50%'};
 width: ${props => props.winSize === 1 ? '500px' : '900px'};
 transform:translateX(-33%);
 fill: white;
-`;
-
-export const StyledHorizontalScrollOuterContainer = styled.section`
-position: relative;
-width: 100%;
-min-height: 100vh;
 `;
 
 export const StyledWorldMapTitle = styled.h3`
@@ -237,20 +171,6 @@ export const StyledContactFormSubmitButton = styled.button`
     background: white;
 `;
 
-export const StyledBackdrop = styled.div`
-position:fixed;
-left: 50%;
-top: 50%;
-padding:0 40px 0 40px;
--webkit-transform: translate(-50%, -50%);
-transform: translate(-50%, -50%);
-height:100vh;
-width:100%;
-background:rgba(178, 178, 178,0.7);
-z-index:3;
-`;
-
-
 export const StyledPostContainer = styled.div`
 position:fixed;
 left: 50%;
@@ -265,21 +185,6 @@ background:white;
 z-index:4;
 overflow-y:scroll;
 `;
-
-export const StyledCountryContainer = styled.div`
-position:fixed;
-left: 50%;
-top: 50%;
-padding:0 40px 0 40px;
--webkit-transform: translate(-50%, -50%);
-transform: translate(-50%, -50%);
-height:80vh;
-width:90%;
-background:white;
-z-index:4;
-overflow-y:scroll;
-`;
-
 
 
 export const StyledFormTextInput = styled.input`
@@ -307,30 +212,7 @@ export const StyledFormTextInput = styled.input`
     }
 `
 
-export const StyledCheckbox = styled.input`
-    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
-    margin: 0;
-    outline: 0;
-    -webkit-appearance: none;
-    tap-highlight-color: rgba(255,255,255,0);
-    line-height: 1.21428571em;
-    padding: .67857143em 1em;
-    font-size: 1em;
-    background: #fff;
-    border: 1px solid rgba(34,36,38,.15);
-    color: rgba(0,0,0,.87);
-    border-radius: .28571429rem;
-    box-shadow: 0 0 0 0 transparent inset;
-    transition: color .1s ease,border-color .1s ease;
-    width:100%;
-    &:focus {
-        color: rgba(0,0,0,.95);
-        border-color: #85b7d9;
-        border-radius: .28571429rem;
-        background: #fff;
-        box-shadow: 0 0 0 0 rgb(34 36 38 / 35%) inset;
-    }
-`
+
 
 export const StyledBlueButton = styled.button`
     width:${props => props.maxWidth ? '100%' : ''};
@@ -431,4 +313,63 @@ border-radius: 10px;
 background-position: center;
 background-size: cover;
 background-repeat: no-repeat;
+`
+
+export const StyledLoader = styled.div`
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-ellipsis div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: ${props=>props.background};
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+  .lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+  }
+  @keyframes lds-ellipsis1 {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes lds-ellipsis3 {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  @keyframes lds-ellipsis2 {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(24px, 0);
+    }
+  }
+  
 `

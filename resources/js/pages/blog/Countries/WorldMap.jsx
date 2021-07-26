@@ -17,7 +17,7 @@ const WorldMap = ({ winSize, reference, postsFromDB = [], photos, videos }) => {
     }
 
     return (
-        <div style={{ paddingTop: 50, background: '#ece7e2', height: '100vh', width: '100%',zIndex:1 }} ref={reference}>
+        <div style={{ paddingTop: 50, background: '#ece7e2', height: '100vh', width: '100%',zIndex:1,overflow:'hidden' }} ref={reference}>
             <p style={{ fontFamily: 'Mulish,sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center' }}>Pick a destination!</p>
             <ComposableMap
                 style={

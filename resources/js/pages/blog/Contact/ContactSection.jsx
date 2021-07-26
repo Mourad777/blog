@@ -38,29 +38,42 @@ const ContactForm = () => {
             console.log('message error response', messageResponse);
         }
         setIsLoading(false);
+        setName('')
+        setEmail('')
+        setMessage('')
         console.log('message response', messageResponse);
 
     }
 
     return (
         <StyledContactFormContainer>
-            {isLoading &&<h1>Loader</h1>}
             <p style={{ fontFamily: 'Mulish,sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center' }}>Get In Touch</p>
+            {isLoading &&
+                <div
+
+                    className="lds-ellipsis"
+                    style={{ top: "20%",left:'50%',transform:'translateX(-50%)',position:'absolute', margin: "auto", display: "block" }}
+                >
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>}
             <StyledInputGroup>
                 <StyledInputLabel>Full name</StyledInputLabel>
-                <StyledTextInput value={name} onChange={(e) => setNameHandler(e.target.value)} type="text" />
+                <StyledTextInput disabled={isLoading} value={name} onChange={(e) => setNameHandler(e.target.value)} type="text" />
             </StyledInputGroup>
 
             <StyledInputGroup>
                 <StyledInputLabel>E-mail</StyledInputLabel>
-                <StyledTextInput value={email} onChange={(e) => setEmailHandler(e.target.value)} type="text" />
+                <StyledTextInput disabled={isLoading} value={email} onChange={(e) => setEmailHandler(e.target.value)} type="text" />
             </StyledInputGroup>
 
             <StyledInputGroup>
                 <StyledInputLabel>Message</StyledInputLabel>
-                <StyledTextareaInput value={message} onChange={(e) => setMessageHandler(e.target.value)} rows="4" />
+                <StyledTextareaInput disabled={isLoading} value={message} onChange={(e) => setMessageHandler(e.target.value)} rows="4" />
             </StyledInputGroup>
-            <StyledContactFormSubmitButton onClick={submitMessageHandler}>
+            <StyledContactFormSubmitButton disabled={isLoading} onClick={submitMessageHandler}>
                 Submit
             </StyledContactFormSubmitButton>
         </StyledContactFormContainer>

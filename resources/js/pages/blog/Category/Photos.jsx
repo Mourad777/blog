@@ -14,7 +14,7 @@ function PhotoGallery({ winSize, photos }) {
     if (winSize === 1) galleryWidth = '100%';
     if (winSize === 2) galleryWidth = '50%';
     if (winSize > 2) galleryWidth = '30%';
-    const items = [...photos, ...photos, ...photos].map(p => <div style={{ overflow: 'hidden' }}>
+    const items = photos.map(p => <div style={{ overflow: 'hidden' }}>
         <img
             src={p.src}
             onClick={() => history.push(`/photo/${p.id}`)}

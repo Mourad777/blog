@@ -127,5 +127,9 @@ class CategoriesController extends Controller
     public function destroy($id)
     {
         //
+        Category::findOrFail($id)->posts()->detach();
+        Category::findOrFail($id)->videos()->detach();
+        Category::findOrFail($id)->photos()->detach();
+        Category::destroy($id);
     }
 }

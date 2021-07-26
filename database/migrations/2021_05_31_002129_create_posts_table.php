@@ -18,6 +18,7 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->string('author')->nullable();
             $table->tinyInteger('is_published');
+            $table->tinyInteger('is_comments_enabled');
             $table->string('image')->nullable();
             $table->string('summary')->nullable();
             $table->text('content')->nullable();

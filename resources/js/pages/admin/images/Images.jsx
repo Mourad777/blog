@@ -1,8 +1,5 @@
 import React, { useState, createRef, useEffect, Fragment } from "react";
-import Gallery from "react-photo-gallery";
-import Photo from "./Photo";
 import arrayMove from "array-move";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import {
     StyledBlueButton, StyledFormTextInput, StyledRedButton, StyledSubmitButton,
 } from '../../blog/StyledComponents';
@@ -12,74 +9,10 @@ import { Checkbox, Segment, Dropdown } from 'semantic-ui-react'
 import { countries } from "../util/countries-iso";
 import TagInput from "../../../components/TagInput/TagInput";
 import EXIF from "exif-js";
-import {
-    DateInput,
-    TimeInput,
-    DateTimeInput,
-    DatesRangeInput
-} from 'semantic-ui-calendar-react';
-import loadImage from "blueimp-load-image";
-
-
-//json.parse
-const processCategories = (categories) => {
-    const processedCategories = categories.map(cat => {
-        return { key: cat.name, value: cat.name, text: cat.name, _id: cat.id }
-    });
-    return processedCategories;
-}
-
-const SortablePhoto = SortableElement(item => <Photo {...item} />);
-const SortableGallery = SortableContainer(({ items, handleImageDetails, handleDeleteImage }) => (
-    <Gallery photos={items} renderImage={props => (
-        <SortablePhoto handleImageDetails={handleImageDetails} handleDeleteImage={handleDeleteImage} {...props} />
-    )} />
-));
-
-const updateOrder = async (items) => {
-    const updateOrderUrl = `${AppUrl}api/configurations/update`;
-    const order = items.map(item => item.id);
-    const configFormData = new FormData();
-    configFormData.append('photo_gallery_order', JSON.stringify(order));
-    const resUpdateOrder = await axios.post(updateOrderUrl, configFormData,
-        {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        });
-}
-
-const getPhotos = async (setItems) => {
-    const fetchPhotosUrl = `${AppUrl}api/photos`;
-    const resFetchPhotos = await axios.get(fetchPhotosUrl);
-    console.log('Fetch photos response', resFetchPhotos);
-
-    const fetchConfigUrl = `${AppUrl}api/configurations`;
-    const resFetchConfigurations = await axios.get(fetchConfigUrl);
-    console.log('Fetch config response', resFetchConfigurations);
-    const formattedPhotos = resFetchPhotos.data.map(item => {
-        return {
-            ...item,
-            src: item.src,
-            height: 1,
-            width: 1.5,
-            id: item.id,
-        }
-    });
-
-    if (resFetchConfigurations.data !== 'no_config') {
-        const order = JSON.parse(resFetchConfigurations.data.photo_gallery_order);
-        const orderedFormattedPhotos = [];
-        order.forEach(number => {
-            formattedPhotos.forEach(photo => {
-                if (photo.id === number) {
-                    orderedFormattedPhotos.push(photo);
-                }
-            })
-        });
-        setItems(orderedFormattedPhotos)
-    } else {
-        setItems(formattedPhotos)
-    }
-}
+import { DateInput, } from 'semantic-ui-calendar-react';
+import { processCategories } from "../util/helper-functions";
+import { deletePhoto, getCategories, getPhotos, handleNewCategorySubmit, updateOrder } from "../util/api";
+import SortableGallery from '../gallery/Gallery'
 
 function PhotoGallery() {
     const [items, setItems] = useState([]);
@@ -107,28 +40,30 @@ function PhotoGallery() {
 
     const fileInputRef = createRef();
 
+
     const onSortEnd = async ({ oldIndex, newIndex }) => {
         const reArrangedPhotos = arrayMove(items, oldIndex, newIndex);
         setItems(reArrangedPhotos);
         //update order
-        updateOrder(reArrangedPhotos)
+        updateOrder(reArrangedPhotos, 'photo_gallery_order')
     };
+
+    const getInitialData = async () => {
+        const categoriesResponse = await getCategories();
+
+        const processedCategories = processCategories(categoriesResponse.data);
+        setCategories(processedCategories);
+
+        getPhotos(setItems, setIsLoading)
+    }
 
     useEffect(() => {
 
-        const getCategories = async () => {
-            const categoriesResponse = await axios.get(`${AppUrl}api/categories`);
-            const processedCategories = processCategories(categoriesResponse.data);
-            setCategories(processedCategories);
-        }
-        getCategories()
-        //fetch photos
-
-        getPhotos(setItems)
+        getInitialData()
     }, []);
 
     const handleDate = (event, { name, value }) => {
-       setDateTaken(value);
+        setDateTaken(value);
     }
 
     const handleImageUpload = async e => {
@@ -137,8 +72,6 @@ function PhotoGallery() {
         const newPhotoFormData = new FormData();
         const file = e.target.files[0];
         EXIF.getData(file, async function () {
-            
-            const orientationAdjustedFile = { ...file, exifdata: { ...file.exifdata, Orientation: 1 } }
             const photoMetaData = this.exifdata;
             const isMetaDataEmpty = photoMetaData && Object.keys(photoMetaData).length === 0 && photoMetaData.constructor === Object;
             if (!isMetaDataEmpty) {
@@ -163,30 +96,45 @@ function PhotoGallery() {
 
                 const savePhotoUrl = `${AppUrl}api/photos/save`;
                 setIsLoading(true)
-                const resUploadPhoto = await axios.post(savePhotoUrl, newPhotoFormData,
-                    {
-                        headers: { 'Content-Type': 'multipart/form-data' }
-                    });
+                let resUploadPhoto;
+                try {
+                    resUploadPhoto = await axios.post(savePhotoUrl, newPhotoFormData,
+                        {
+                            headers: { 'Content-Type': 'multipart/form-data' }
+                        });
+                } catch (e) {
+                    setIsLoading(false)
+                    console.log('Upload photo response error', e)
+                }
+                console.log('Upload photo response', resUploadPhoto)
+
                 setIsLoading(false)
-                console.log('upload photo response: ', resUploadPhoto.data);
                 const newArray = [{ ...resUploadPhoto.data, src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
                 setItems(newArray);
-                updateOrder(newArray)
+                updateOrder(newArray, 'photo_gallery_order')
+                handleImageDetails(newArray[0])
             } else {
                 newPhotoFormData.append('image', file);
 
                 const savePhotoUrl = `${AppUrl}api/photos/save`;
-                setIsLoading(true)
-                const resUploadPhoto = await axios.post(savePhotoUrl, newPhotoFormData,
-                    {
-                        headers: { 'Content-Type': 'multipart/form-data' }
-                    });
+                setIsLoading(true);
+                let resUploadPhoto;
+                try {
+                    resUploadPhoto = await axios.post(savePhotoUrl, newPhotoFormData,
+                        {
+                            headers: { 'Content-Type': 'multipart/form-data' }
+                        });
+                } catch (e) {
+                    setIsLoading(false)
+                }
                 setIsLoading(false)
-                console.log('upload photo response: ', resUploadPhoto.data);
+                console.log('upload photo response: ', resUploadPhoto);
                 const newArray = [{ src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
                 setItems(newArray);
-                updateOrder(newArray)
+                updateOrder(newArray, 'photo_gallery_order')
+                handleImageDetails(newArray[0])
             }
+            
         });
 
     };
@@ -203,8 +151,7 @@ function PhotoGallery() {
         setPhotographer(photo.photographer)
         setDescription(photo.description)
         setDateTaken(photo.date_taken)
-
-        setTags(Array.isArray(JSON.parse(photo.tags)) ? JSON.parse(photo.tags) : [])
+        setTags(Array.isArray(JSON.parse(photo.tags ? photo.tags : '""')) ? JSON.parse(photo.tags) : [])
         setSelectedCategories((photo.categories || []).map(cat => cat.name));
         setCountry(photo.country)
 
@@ -227,13 +174,22 @@ function PhotoGallery() {
         formData.append('country', country || '');
         formData.append('date_taken', dateTaken || '');
         formData.append('selected_categories', JSON.stringify(selectedCategoriesIds))
+        setIsLoading(true);
+        let updatePhotoDetailsResponse;
+        try {
+            updatePhotoDetailsResponse = await axios.post(`${AppUrl}api/photos/update/${selectedPhoto.id}`, formData,
+                {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+        } catch (e) {
+            setIsLoading(false);
+            console.log('Update photo details response error', e)
+        }
+        console.log('Update photo details response', updatePhotoDetailsResponse)
 
-        const updatePhotoDetailsResponse = await axios.post(`${AppUrl}api/photos/update/${selectedPhoto.id}`, formData,
-            {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+        setIsLoading(false);
         setSelectedPhoto(null);
-        getPhotos(setItems)
+        getPhotos(setItems, setIsLoading)
     }
 
     const handleSelectedCategories = (e, { label, checked }) => {
@@ -244,32 +200,20 @@ function PhotoGallery() {
         }
     };
 
-    const handleNewCategorySubmit = async () => {
-        const formData = new FormData();
-        formData.append('name', newCategory);
-        await axios.post(`${AppUrl}api/categories/save`, formData,
-            {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            })
-            .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-
-        const categoriesResponse = await axios.get(`${AppUrl}api/categories`);
+    const submitCategory = async () => {
+        handleNewCategorySubmit(newCategory, setIsLoading)
+        const categoriesResponse = await getCategories();
         const processedCategories = processCategories(categoriesResponse.data);
-        setCategories(processedCategories)
+        setCategories(processedCategories);
         setNewCategory('')
     }
 
     const handleDeleteImage = async (id) => {
-        await axios.delete(`${AppUrl}api/photos/delete/${id}`, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        })
-            .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
+        await deletePhoto(id,setIsLoading)
 
         // //update order 
-
-
         const newArray = items.filter(p => p.id !== id);
-        updateOrder(newArray)
+        updateOrder(newArray, 'photo_gallery_order')
         setItems(newArray);
     }
     return (
@@ -338,7 +282,7 @@ function PhotoGallery() {
                         <label style={{ fontSize: '1.2em' }}>Create a new category</label>
                         <StyledFormTextInput value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder='New Category' />
                         <div style={{ marginTop: 10 }}>
-                            <StyledBlueButton disabled={!newCategory} onClick={handleNewCategorySubmit} icon="image"
+                            <StyledBlueButton disabled={!newCategory} onClick={submitCategory} icon="image"
                             >
                                 Create Category
                             </StyledBlueButton>
@@ -398,7 +342,14 @@ function PhotoGallery() {
                                 onChange={handleImageUpload}
                             />
                         </div>
-                        <SortableGallery handleImageDetails={handleImageDetails} handleDeleteImage={handleDeleteImage} items={items} onSortEnd={onSortEnd} axis={"xy"} />
+                        <SortableGallery
+                            handleDetails={handleImageDetails}
+                            handleDelete={handleDeleteImage}
+                            items={items}
+                            onSortEnd={onSortEnd}
+                            axis={"xy"}
+                            galleryType="photo"
+                        />
                     </Fragment>
                 )}
         </div>

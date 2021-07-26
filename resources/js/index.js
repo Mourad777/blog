@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import AdminLayout from "./components/admin/AdminLayout"
-import { BrowserRouter, withRouter} from "react-router-dom";
+import { BrowserRouter, withRouter } from "react-router-dom";
 import Home from './pages/blog/Main/Home'
 import './style.css'
 import { Switch, Route } from "react-router-dom";
@@ -11,6 +11,7 @@ import CreatePost from "./pages/admin/create-post/CreatePost"
 import Images from "./pages/admin/images/Images"
 import Videos from "./pages/admin/videos/Videos"
 import Messages from "./pages/admin/messages/Messages"
+import Message from "./pages/admin/messages/Message"
 import Post from "./pages/blog/Posts/Post"
 import Category from "./pages/blog/Category/Category";
 import Photo from "./pages/blog/Photos/Photo";
@@ -18,6 +19,8 @@ import Video from "./pages/blog/Videos/Video";
 import { getWindowSizeInteger } from "./pages/blog/utility";
 import './fonts/WaitingfortheSunrise/WaitingfortheSunrise-Regular.ttf';
 import _ from "lodash";
+import Categories from "./pages/admin/categories/Categories";
+import Countries from "./pages/admin/countries/Countries";
 
 const ScrollToTop = withRouter(({ history }) => {
     useEffect(() => {
@@ -38,7 +41,7 @@ const App = () => {
     const [height, setHeight] = useState(window.innerHeight);
 
     useEffect(() => {
-        addEventListener("resize", _.throttle(getWindowSize,200), { passive: true });
+        addEventListener("resize", _.throttle(getWindowSize, 200), { passive: true });
     }, []);
 
     const getWindowSize = () => {
@@ -76,8 +79,17 @@ const App = () => {
                         <Route exact path="/admin/videos">
                             <Videos />
                         </Route>
+                        <Route exact path="/admin/categories">
+                            <Categories />
+                        </Route>
+                        <Route exact path="/admin/countries">
+                            <Countries />
+                        </Route>
                         <Route exact path="/admin/messages">
                             <Messages />
+                        </Route>
+                        <Route exact path="/admin/message/:id">
+                            <Message />
                         </Route>
                     </AdminLayout>
                 </Route>
@@ -97,7 +109,7 @@ const App = () => {
                     <Video winSize={winSize} />
                 </Route>
                 <Route path="/">
-                    <Home winSize={winSize} scrollWidth={scrollWidth} height={height}/>
+                    <Home winSize={winSize} scrollWidth={scrollWidth} height={height} />
                 </Route>
             </Switch>
 

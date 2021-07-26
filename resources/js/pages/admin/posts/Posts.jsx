@@ -42,13 +42,13 @@ const Posts = ({ winSize }) => {
                     {winSize > 1 && (<tr><th style={{ fontSize: '1.2em' }}></th><th style={{ fontSize: '1.2em' }}>Title</th><th style={{ fontSize: '1.2em' }}>Author</th><th style={{ fontSize: '1.2em' }}>Published</th></tr>)}
 
                     {posts.map(p => (
-                        <Fragment>
-                            <tr key={p.id}>
+                        <Fragment key={p.id}>
+                            <tr>
                                 {winSize > 1 && (
                                     <Fragment>
                                         <td><StyledThumbnailPreview small file={p.image} /></td>
                                         <td>{p.title}</td><td>{p.author}</td>
-                                        <td><div style={{ display: 'flex', justifyContent: 'space-around' }}><Checkbox checked={true} onChange={handlePublished} /></div></td>
+                                        <td><div style={{ display: 'flex', justifyContent: 'space-around' }}><Checkbox disabled checked={!!p.is_published} onChange={handlePublished} /></div></td>
                                         <td><StyledBlueButton onClick={() => history.push(`/admin/post/${p.id}/comments`)}>Comments {p.comment_count}</StyledBlueButton> </td>
                                         <td><StyledBlueButton onClick={() => history.push(`/admin/edit-post/${p.id}`)}>Edit</StyledBlueButton> </td>
                                         <td><StyledRedButton onClick={() => handleDeletePost(p.id)}> Delete</StyledRedButton> </td>
@@ -60,7 +60,7 @@ const Posts = ({ winSize }) => {
                                     <StyledThumbnailPreview file={p.image} />
                                     <span style={titleStyle}>{p.title}</span>
                                     <p style={{ margin: '5px 0', fontSize: '1.3em' }}>{`Posted on ${new Date(p.created_at).toLocaleDateString()} ${!!p.author ? 'by ' + p.author : ''}`}</p>
-                                    <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}><span style={{ ...labelStyle, marginRight: 10 }}>Published: </span><Checkbox checked={true} onChange={handlePublished} /></div>
+                                    <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}><span style={{ ...labelStyle, marginRight: 10 }}>Published: </span><Checkbox disabled checked={!!p.is_published} onChange={handlePublished} /></div>
 
 
                                     <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>

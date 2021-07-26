@@ -18,6 +18,7 @@ class CreateVideosTable extends Migration
             $table->string('title')->nullable();
             $table->string('thumbnail')->nullable();
             $table->string('videographer')->nullable();
+            $table->tinyInteger('is_comments_enabled');
             // $table->tinyInteger('is_published');
             $table->string('url');
             $table->text('description')->nullable();

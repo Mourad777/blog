@@ -1,52 +1,49 @@
 import React, { useState, useEffect, useRef } from "react";
-import ReactPaginate from 'react-paginate';
-import { gsap } from 'gsap/all'
-import '../global-styles.css/pagination.css'
-import { AppUrl } from "../utility";
-import axios from 'axios'
 import { useHistory } from "react-router";
-import Gallery from "react-photo-gallery";
-export default ({ reference, photos, winSize,scrollWidth }) => {
-    // const [photo, setPhoto] = useState("");
+import Paginate from "../../../components/blog/Paginate/Paginate";
+
+export default ({ reference, photos, winSize, scrollWidth, height }) => {
+
     const [data, setData] = useState([]);
-    const [offset, setOffset] = useState(0);
-    const perPage = 9;
+    const perPage = winSize > 1 && height < 640 ? 3 : 9;
     const [pageCount, setPageCount] = useState(0);
+    const [selectedPage, setSelectedPage] = useState(0);
     const [gridWidth, setGridWidth] = useState(0);
     const history = useHistory();
+
     const getData = async () => {
-        const slice = photos.slice(offset === 1 || offset === 0 ? 0 : offset * perPage - perPage, offset === 0 ? perPage : offset * perPage);
+        const slice = photos.slice((selectedPage + 1) * perPage - perPage, (selectedPage + 1) * perPage);
         setData(slice)
         setPageCount(Math.ceil(photos.length / perPage))
     }
 
     useEffect(() => {
         getData()
-    }, [offset, photos]);
+    }, [selectedPage, photos]);
 
     useEffect(() => {
-        getData()
-    }, [winSize])
+        setSelectedPage(0)
+        getData();
+    }, [winSize, height])
 
     const handlePageClick = (e) => {
-        const selectedPage = e.selected;
-        setOffset(selectedPage + 1)
+        setSelectedPage(e.selected);
     };
 
     const gridContainerReference = useRef(null);
     useEffect(() => {
         setGridWidth(gridContainerReference.current.scrollWidth);
-    }, [gridContainerReference,scrollWidth]);
-    
+    }, [gridContainerReference, scrollWidth]);
+
     return (
-        <div style={{ height: '100vh', background: 'rgb(218, 173, 134)', width: '100%',overflow:'hidden' }} ref={reference}>
+        <div style={{ height: '100vh', background: 'rgb(218, 173, 134)', width: '100%', overflow: 'hidden' }} ref={reference}>
             <p style={{ fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }}>Photos</p>
             <div
                 style={{
                     overflow: "hidden",
                     maxWidth: 650,
                     margin: "auto",
-                    width:winSize === 1 ? '100%' : '70%'
+                    width: winSize === 1 ? '100%' : '70%'
                 }}
             >
 
@@ -61,15 +58,15 @@ export default ({ reference, photos, winSize,scrollWidth }) => {
                 >
                     {data.map((p, i) => (
                         <div
-                        key={`photo-grid-item[${i+1}]`}
-                        onClick={()=>history.push(`/photo/${p.id}`)}
-                        style={{
-                            position: 'relative',
-                            display: 'block',
-                            height: !!gridWidth ? (gridWidth - 6) / 3 : '',
-                            cursor:'pointer'
+                            key={`photo-grid-item[${i + 1}]`}
+                            onClick={() => history.push(`/photo/${p.id}`)}
+                            style={{
+                                position: 'relative',
+                                display: 'block',
+                                height: !!gridWidth ? (gridWidth - 6) / 3 : '',
+                                cursor: 'pointer'
 
-                        }}>
+                            }}>
                             <figure style={{ margin: 0, height: '100%' }}>
                                 <img style={{
                                     width: '100%',
@@ -83,18 +80,7 @@ export default ({ reference, photos, winSize,scrollWidth }) => {
                 </div>
             </div>
             <div style={{ display: 'flex' }}>
-                <ReactPaginate
-                    previousLabel={"prev"}
-                    nextLabel={"next"}
-                    breakLabel={"..."}
-                    breakClassName={"break-me"}
-                    pageCount={pageCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={handlePageClick}
-                    containerClassName={"pagination"}
-                    subContainerClassName={"pages pagination"}
-                    activeClassName={"active"} />
+                <Paginate totalPages={pageCount} page={selectedPage} handlePageClick={handlePageClick} />
             </div>
         </div >
     );
