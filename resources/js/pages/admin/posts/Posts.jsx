@@ -1,40 +1,37 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import axios from 'axios'
 import { StyledBlueButton, StyledRedButton, StyledThumbnailPreview } from '../../blog/StyledComponents';
 import { useHistory } from 'react-router';
-import { AppUrl } from '../../blog/utility';
 import { Checkbox, Icon } from 'semantic-ui-react'
+import { deletePost, getPosts } from '../util/api';
+import Loader from '../../../components/admin/Loader/Loader';
+
 const Posts = ({ winSize }) => {
     const history = useHistory();
     const [posts, setPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState([]);
 
-    const getPosts = async () => {
-        const res = await axios.get(`${AppUrl}api/posts`);
-        console.log('res post', res)
-        const posts = res.data;
-        setPosts(posts);
+    const getInitialData = async () => {
+        await getPosts(setPosts, setIsLoading)
     }
 
     useEffect(() => {
-        getPosts()
-    }, [])
+        getInitialData()
+    }, []);
 
     const handleDeletePost = async (id) => {
-        await axios.delete(`${AppUrl}api/posts/delete/${id}`, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        })
-            .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-
-        getPosts()
+        await deletePost(id, setIsLoading)
+        await getPosts(setPosts, setIsLoading)
     }
 
     const handlePublished = () => {
 
     }
     const labelStyle = { fontSize: '1.4em', display: 'block' };
-    const titleStyle = { fontSize: '1.9em', display: 'block',fontStyle:'bold' };
+    const titleStyle = { fontSize: '1.9em', display: 'block', fontStyle: 'bold' };
     return (
         <div style={{ margin: 'auto', maxWidth: 800 }}>
+            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+
             <h1>Posts</h1>
             <table style={{ margin: 'auto', width: '100%' }}>
                 <tbody>

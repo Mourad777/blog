@@ -1,37 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { List } from "semantic-ui-react";
-import { StyledBlueButton, StyledRedButton } from "../../blog/StyledComponents";
-import { AppUrl } from "../../blog/utility";
 import Avatar from 'react-avatar';
 import { useParams } from "react-router-dom";
+import Loader from "../../../components/admin/Loader/Loader";
+import { getMessage } from "../util/api";
 
 const Messages = ({ }) => {
     const [message, setMessage] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const params = useParams();
     const messageId = params.id;
-    useEffect(() => {
-        const getMessage = async () => {
-            setIsLoading(true)
-            let res;
-            try {
-                res = await axios.get(`${AppUrl}api/message/${messageId}`);
-            } catch (e) {
-                console.log('Message response error: ', e);
-                setIsLoading(false)
-            }
-            setIsLoading(false)
-            console.log('Fetch message response', res)
-            const message = res.data;
-            setMessage(message);
 
-        }
-        getMessage();
-    }, [])
+    const getInitialData = async () => {
+        await getMessage(messageId, setMessage, setIsLoading);
+    }
+
+    useEffect(() => {
+        getInitialData()
+    }, []);
 
     return (
         <div >
-            {isLoading && <h1>Loading</h1>}
+            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+
             <div style={{ display: 'flex' }}>
                 <Avatar
                     size={60}

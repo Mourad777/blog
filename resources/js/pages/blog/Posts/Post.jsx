@@ -122,7 +122,7 @@ const Post = ({ winSize }) => {
 
     return (
         <Fragment>
-            <div style={{ position: 'relative', width: '100%', height: 300,overflow:'hidden' }}>
+            <div style={{ position: 'relative', width: '100%', height: 300, overflow: 'hidden' }}>
                 <div style={{
                     zIndex: 1, top: 50, left: '50%', transform: 'translateX(-50%)', position: 'absolute',
                     background: 'rgb(0,0,0,0.6)',
@@ -130,7 +130,7 @@ const Post = ({ winSize }) => {
                     padding: 20,
                     minWidth: 300,
                 }}><h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: winSize === 1 ? '2em' : '2.5em', fontFamily: "Merriweather", color: 'white' }}>{post.title}</h1></div>
-                <img src={post.image} style={{ width: '100%', maxHeight: 400, objectFit: 'cover', position: 'absolute' }} />
+                {!!post.image && <img src={post.image} style={{ width: '100%', maxHeight: 400, objectFit: 'cover', position: 'absolute' }} />}
             </div>
 
             <div ref={postContainer} style={{ width: '100%', height: '100%', background: '#fff', padding: '40px 20px', maxWidth: 600, margin: 'auto' }}>

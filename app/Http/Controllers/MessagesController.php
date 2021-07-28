@@ -40,6 +40,7 @@ class MessagesController extends Controller
         $message = new Message;
         $message->email = $request->email;
         $message->name = $request->name;
+        $message->is_seen = 0;
         $message->message = $request->message;
         $message->save();
         

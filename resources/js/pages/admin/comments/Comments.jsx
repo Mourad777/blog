@@ -1,30 +1,12 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import axios from 'axios'
 import { StyledRedButton } from '../../blog/StyledComponents';
 import { useParams } from 'react-router';
-import { AppUrl } from '../../blog/utility';
 import { Checkbox } from 'semantic-ui-react'
+import { getComments, getDocument, toggleCommentApproval } from '../util/api';
+import Loader from '../../../components/admin/Loader/Loader';
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-const processComments = (comments) => {
-    //recursive function to get replies
-    const processedComments = [];
-
-    const getReplies = (comments) => {
-        comments.forEach(c => {
-            processedComments.push(c)
-            if ((c.replies || []).length > 0) {
-                getReplies(c.replies)
-            }
-        })
-    }
-
-    getReplies(comments)
-
-    return processedComments;
 }
 
 const Comments = ({ isPost, isVideo }) => {
@@ -35,46 +17,41 @@ const Comments = ({ isPost, isVideo }) => {
     if (isVideo) {
         docType = 'video'
     }
+
     const params = useParams();
     const [comments, setComments] = useState([]);
     const [document, setDocument] = useState({});
-    const getComments = async (docId) => {
-        const res = await axios.get(`${AppUrl}api/comments/${docType}/${docId}`);
-        console.log('res comments', res)
-        const comments = res.data;
-        setComments(processComments(comments));
+    const [isLoading, setIsLoading] = useState(false);
+
+    const getInitialData = async () => {
+        const docId = params.id;
+        await getDocument(docId, docType, setDocument, setIsLoading);
+        await getComments(docId, docType, setComments, setIsLoading);
     }
 
     useEffect(() => {
-        const docId = params.id;
-        const getDocument = async (docId) => {
-            const res = await axios.get(`${AppUrl}api/${docType}s/${docId}`);
-            console.log('res post or video', res)
-            const doc = res.data;
-
-            setDocument(doc);
-
-        }
-        getDocument(docId);
-        getComments(docId);
+        getInitialData()
     }, [])
 
-    const handleDeleteComment = async (commentId) => {
+    // export const deleteComment = async (id, setIsLoading) => {
+    //     setIsLoading(true)
+
+    //     setIsLoading(false)
+    // }
+
+    const handleDeleteComment = async (commentId, setIsLoading) => {
 
     }
 
     const handleCommentApproval = async (id) => {
-
-        const formData = new FormData();
-        formData.append('comment_id', id)
-        await axios.post(`${AppUrl}api/comments/approve-comment`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        })
-            .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-        getComments(params.id)
+        const docId = params.id;
+        await toggleCommentApproval(docId, setIsLoading)
+        await getComments(docId, docType, setComments, setIsLoading);
     }
+
     return (
         <div style={{ margin: 'auto', maxWidth: 800 }}>
+            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
             <h1>{capitalizeFirstLetter(docType)} Comments from {document.title}</h1>
             <table style={{ margin: 'auto', width: '100%' }}>
                 <tbody>

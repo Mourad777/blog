@@ -3,25 +3,16 @@ import { useParams } from 'react-router';
 import _ from 'lodash';
 import { Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
-// import geo from "../../../../pages/blog/geo.json"
 import { ScrollTrigger } from 'gsap/all';
 import Photos from './Photos'
-import axios from 'axios'
-import { AppUrl } from '../utility';
 import countryCodes from '../Countries/country-codes.json';
 import moment from 'moment';
+import { getCategoryContent, getCountryThumbnails } from '../../admin/util/api';
 import VideoIcon from '../../../../../public/assets/video-icon.jpg'
 
 function capitalize(str) {
     const capStr = str.charAt(0).toUpperCase() + str.slice(1);
     return capStr
-}
-function swap(json) {
-    var ret = {};
-    for (var key in json) {
-        ret[json[key]] = key;
-    }
-    return ret;
 }
 
 const Country = ({ winSize }) => {
@@ -32,34 +23,24 @@ const Country = ({ winSize }) => {
     const [posts, setPosts] = useState([]);
     const [photos, setPhotos] = useState([]);
     const [videos, setVideos] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [countryThumbnails, setCountryThumbnails] = useState([])
+
+    const getInitialData = async () => {
+        if(countryIso) {
+            await getCountryThumbnails(setCountryThumbnails, setIsLoading);
+        }
+        await getCategoryContent(countryIso, selectedCategory, setPosts, setPhotos, setVideos);
+    }
 
     useEffect(() => {
         const triggers = ScrollTrigger.getAll();
         triggers.forEach(tr => {
             tr.kill()
         });
-        let url;
-        if (countryIso) {
-            //switch keys and values to search country code by country name
-            const countryCodesSwapped = swap(countryCodes);
-            //capitalize first letter of country name to match the json object
-            // const country = capitalize(selectedCountry);
-            // const countryIso = countryCodesSwapped[country];
-            url = `${AppUrl}api/countries/${countryIso}`;
-        }
-        if (selectedCategory) {
-            url = `${AppUrl}api/categories/${selectedCategory}`
-        }
-        const getContent = async () => {
-            const contentResponse = await axios.get(url);
-            console.log('content response', contentResponse)
-            setPosts(contentResponse.data.posts || []);
-            setPhotos(contentResponse.data.photos || []);
-            setVideos(contentResponse.data.videos || []);
-        }
-        getContent();
-
+        getInitialData()
     }, []);
+
     let videoContainerWidth;
     if (winSize === 1) {
         videoContainerWidth = 300
@@ -71,19 +52,6 @@ const Country = ({ winSize }) => {
         videoContainerWidth = 800
     }
 
-    const titleContainerStyle = {
-        position: 'absolute',
-        color: 'rgb(255, 255, 255)',
-        background: 'rgb(0, 0, 0)',
-        opacity: 0.5,
-        left: '50%',
-        top: 10,
-        transform: 'translateX(-50%)',
-        textAlign: 'center',
-        padding: 5,
-        minWidth: 230,
-        borderRadius: 5,
-    }
     let postColumns, gridWidth;
     if (winSize > 2 && posts.length > 2) {
         postColumns = 'repeat(3, 1fr)';
@@ -97,12 +65,23 @@ const Country = ({ winSize }) => {
         postColumns = 'repeat(1, 1fr)';
         gridWidth = 300;
     }
+    const countryThumbnail = (countryThumbnails.find(t=>t.country === countryIso)||{}).image
     return (
         <div style={{ height: '100%', width: '100%', background: '#ece7e2', minHeight: '100vh', paddingBottom: 20 }}>
+            <div style={{ position: 'relative', width: '100%', height: 300, overflow: 'hidden' }}>
+                <div style={{
+                    zIndex: 1, top: 50, left: '50%', transform: 'translateX(-50%)', position: 'absolute',
+                    background: 'rgb(0,0,0,0.6)',
+                    borderRadius: 2,
+                    padding: 20,
+                    minWidth: 300,
+                }}><h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: winSize === 1 ? '2em' : '2.5em', fontFamily: "Mulish", color: 'white' }}>{capitalize(countryCodes[countryIso] || selectedCategory)}</h1></div>
+                {(!!countryThumbnail) && <img src={countryThumbnail} style={{ width: '100%', maxHeight: 400, objectFit: 'cover', position: 'absolute' }} />}
+            </div>
             <div style={{ padding: 20 }}>
                 <Button content='Home' onClick={() => { history.push('/') }} />
             </div>
-            <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '4em', fontFamily: 'Mulish', paddingTop: 30 }}>{capitalize(countryCodes[countryIso] || selectedCategory)}</p>
+            {/* <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '4em', fontFamily: 'Mulish', paddingTop: 30 }}>{capitalize(countryCodes[countryIso] || selectedCategory)}</p> */}
             {posts.length > 0 && <div className="posts-category-container" style={{ padding: 10 }}>
                 <p style={{ textAlign: 'center', color: 'rgb(218, 173, 134)', fontSize: '3em', fontFamily: 'Mulish' }}>Posts</p>
                 <div style={{
@@ -124,12 +103,12 @@ const Country = ({ winSize }) => {
 
                         }}
                         >{p.title}</p></div>
-                        <div style={{ height: '40%', background: 'blue' }}>
+                        <div style={{ height: '40%', background: '#e2e2e2' }}>
                             <img src={p.image} style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
                         </div>
-                        <span style={{ fontStyle: 'italic', color: '#8b8b8b', padding: 10 }}>{moment(new Date(p.created_at).getTime()).format("MMMM DD YYYY")}</span>
+                        <span style={{ fontStyle: 'italic', color: '#8b8b8b', padding: 10,textAlign:'center' }}>{moment(new Date(p.created_at).getTime()).format("MMMM DD YYYY")}</span>
                         <div style={{ padding: 10 }}>
-                            <p>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem </p>
+                            {!!p.summary&&<p style={{fontFamily:'Mulish'}}> {`${p.summary.substring(0, 100)} ${p.summary.length > 99 ?'...' : ''}`}</p>}
                         </div>
                     </div>)}
                 </div>
@@ -185,18 +164,6 @@ const Country = ({ winSize }) => {
                     </div>
                 </div>
             }
-            {/* <StyledBackdrop onClick={(e) => { history.push('/') }} /> */}
-
-            {/* <h1 style={{ textAlign: 'center', paddingTop: 30 }}>  {selectedCountry.slice(0, 1).toUpperCase() + selectedCountry.slice(1, selectedCountry.length)} </h1> */}
-
-            {/* <svg  viewBox="0 0 750 750">
-                    <path  d={countryShape} />
-                </svg> */}
-
-            {/* {posts.map(p => (<h5 key={p.title} >
-                {p.title}
-            </h5>))} */}
-
         </div >
     )
 }

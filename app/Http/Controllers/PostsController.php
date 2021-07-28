@@ -124,7 +124,7 @@ class PostsController extends Controller
     {
         //
         $post = Post::find($id);
-        $post->image = Storage::disk(name: 's3')->url($post->image);
+        $post->image = $post->image ? Storage::disk(name: 's3')->url($post->image) : '';
         return $post;
     }
 

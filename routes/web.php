@@ -51,7 +51,15 @@ Route::post('/api/categories/update/{id}', 'CategoriesController@update');
 Route::delete('/api/categories/delete/{id}', 'CategoriesController@destroy');
 
 
+Route::get('/api/countries', 'CountriesController@index');
+
 Route::get('/api/countries/{country_iso}', 'CountriesController@show');
+
+Route::post('/api/countries/save', 'CountriesController@store');
+
+Route::post('/api/countries/update/{id}', 'CountriesController@update');
+
+Route::delete('/api/countries/delete/{id}', 'CountriesController@destroy');
 
 
 Route::get('/api/comments/{doc_type}/{id}', 'CommentsController@index');

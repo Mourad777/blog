@@ -30,8 +30,9 @@ const PostText = ({ post, isMobile, index }) => {
                         fontSize: 16,
                         background: 'transparent !important',
                         position: 'absolute',
-                        top: 60,
+                        top: 30,
                         left: !isMobile ? '20%' : '',
+                        transform: !isMobile ? 'translateX(-20%)' : '',
                         textAlign: 'center',
                         maxWidth: 170,
                     }}
@@ -40,7 +41,7 @@ const PostText = ({ post, isMobile, index }) => {
                     <div >
                         {!!post.title && <p style={{ fontSize: '1.5em',fontFamily:'Mulish' }}>{post.title}</p>}
                         {!!post.created_at && <p style={{ fontStyle: 'italic',fontFamily:'Mulish', fontSize:'0.7em', color: 'rgb(251,251,251)', }}>{moment(new Date(post.created_at).getTime()).format("MMMM DD YYYY")}</p>}
-                        {!!post.summary && <p style={{ fontSize: '0.8em',fontFamily:'Merriweather' }}>{`${post.summary.substring(0, 100)} ${post.summary.length > 99 ?'...' : ''}`}</p>}
+                        {!!post.summary && <p style={{ fontSize: '0.8em',fontFamily:'Mulish' }}>{`${post.summary.substring(0, 100)} ${post.summary.length > 99 ?'...' : ''}`}</p>}
                     </div>
                 </div>
 

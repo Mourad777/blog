@@ -7,7 +7,6 @@ import {
     StyledSubmitButton,
     StyledThumbnailPreview,
 } from '../../blog/StyledComponents';
-import axios from 'axios';
 import { AppUrl, getFileName } from '../../blog/utility';
 import { Checkbox, Segment, Dropdown } from 'semantic-ui-react'
 import { countries } from "../util/countries-iso";
@@ -15,8 +14,9 @@ import TagInput from "../../../components/TagInput/TagInput";
 import ReactPlayer from 'react-player'
 import VideoIcon from '../../../../../public/assets/video-icon.jpg'
 import SortableGallery from '../gallery/Gallery'
-import { deleteVideo, getCategories, getPhotos, getVideos, handleNewCategorySubmit, updateOrder,presignedUrlFileUpload } from "../util/api";
+import { deleteVideo, getCategories, getVideos, setNewCategory, updateOrder, presignedUrlFileUpload, updateVideoDetails } from "../util/api";
 import { processCategories } from "../util/helper-functions";
+import Loader from "../../../components/admin/Loader/Loader";
 
 function VideoGallery() {
     const [items, setItems] = useState([]);
@@ -28,7 +28,6 @@ function VideoGallery() {
     const [isCommentsEnabled, setIsCommentsEnabled] = useState(true);
 
     const [description, setDescription] = useState('');
-    // const [dateTaken, setDateTaken] = useState('');
     const [tags, setTags] = useState([]);
     const [country, setCountry] = useState('');
 
@@ -51,7 +50,7 @@ function VideoGallery() {
         const processedCategories = processCategories(categoriesResponse.data);
         setCategories(processedCategories);
 
-        getVideos(setItems, setIsLoading)
+        await getVideos(setItems, setIsLoading)
     }
 
     useEffect(() => {
@@ -63,12 +62,12 @@ function VideoGallery() {
         const file = e.target.files[0];
         const saveModelUrl = `${AppUrl}api/videos/save`;
         setIsLoading(true);
-        const filename = getFileName(file.name)
+        const filename = getFileName(file.name);
         const directory = 'videos';
         const modelData = [{ key: 'key', value: `${directory}/${filename}` }];
-        const {videoUrl,videoId} = await presignedUrlFileUpload(filename, directory, file, saveModelUrl, modelData);
-        setIsLoading(false)
-        
+        const { videoUrl, videoId } = await presignedUrlFileUpload(filename, directory, file, saveModelUrl, modelData);
+        setIsLoading(false);
+
         const newArray = [
             {
                 videoUrl: videoUrl,
@@ -76,7 +75,7 @@ function VideoGallery() {
                 height: 1,
                 width: 1.5,
                 id: videoId,
-                is_comments_enabled:'1',
+                is_comments_enabled: '1',
             },
             ...items
         ]
@@ -86,9 +85,9 @@ function VideoGallery() {
     };
 
     const handleVideoDetails = (video) => {
-        setTitle(video.title||'')
+        setTitle(video.title || '')
         setThumbnail(video.thumbnail)
-        setDescription(video.description||'')
+        setDescription(video.description || '')
         setTags(Array.isArray(JSON.parse(video.tags ? video.tags : '""')) ? JSON.parse(video.tags) : [])
         setSelectedCategories((video.categories || []).map(cat => cat.name));
         setCountry(video.country)
@@ -114,16 +113,11 @@ function VideoGallery() {
         formData.append('is_comments_enabled', isCommentsEnabled ? 1 : 0);
         formData.append('tags', JSON.stringify(tags));
         formData.append('country', country || '');
-        formData.append('selected_categories', JSON.stringify(selectedCategoriesIds))
+        formData.append('selected_categories', JSON.stringify(selectedCategoriesIds));
 
-        const updateVideoDetailsResponse = await axios.post(`${AppUrl}api/videos/update/${selectedVideo.id}`, formData,
-            {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-        console.log('Update Video Details Response', updateVideoDetailsResponse)
-
+        await updateVideoDetails(selectedVideo.id, formData, setIsLoading);
         setSelectedVideo(null);
-        getVideos(setItems, setIsLoading)
+        await getVideos(setItems, setIsLoading);
     }
 
     const handleSelectedCategories = (e, { label, checked }) => {
@@ -135,7 +129,7 @@ function VideoGallery() {
     };
 
     const submitCategory = async () => {
-        handleNewCategorySubmit(newCategory, setIsLoading)
+        setNewCategory(newCategory, setIsLoading)
         const categoriesResponse = await getCategories();
         const processedCategories = processCategories(categoriesResponse.data);
         setCategories(processedCategories);
@@ -159,7 +153,7 @@ function VideoGallery() {
 
     return (
         <div>
-            {isLoading && <h1>Loading</h1>}
+            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
             <h1 style={{ textAlign: 'center' }}>Video Gallery</h1>
             {selectedVideo ?
                 <div style={{ maxWidth: 500, margin: 'auto' }}>

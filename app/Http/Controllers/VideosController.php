@@ -109,7 +109,7 @@ class VideosController extends Controller
         //
         $video = Video::find($id);
         $video->src = Storage::disk(name: 's3')->url($video->url);
-        $video->thumbnail = Storage::disk(name: 's3')->url($video->thumbnail);
+        $video->thumbnail = $video->thumbnail ? Storage::disk(name: 's3')->url($video->thumbnail) : '';
         return $video;
     }
 

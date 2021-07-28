@@ -1,7 +1,122 @@
 import axios from 'axios'
 import { AppUrl } from '../../blog/utility'
 import VideoIcon from '../../../../../public/assets/video-icon.jpg'
+import { processComments } from './helper-functions'
 
+
+//comments api
+export const getComments = async (docId, docType, setComments, setIsLoading) => {
+    setIsLoading(true)
+    let res;
+    try {
+        res = await axios.get(`${AppUrl}api/comments/${docType}/${docId}`);
+    } catch (e) {
+        setIsLoading(false)
+        console.log('Fetch comments response error', res);
+    }
+    console.log('Fetch comments response', res)
+    const comments = res.data;
+    setComments(processComments(comments));
+    setIsLoading(false)
+}
+
+export const getDocument = async (docId, docType, setDocument, setIsLoading) => {
+    setIsLoading(true)
+    let res;
+    try {
+        res = await axios.get(`${AppUrl}api/${docType}s/${docId}`);
+    } catch (e) {
+        console.log('Respost fetch post or video', res)
+        setIsLoading(false)
+    }
+    console.log('Respost fetch post or video', res)
+    const doc = res.data;
+    setDocument(doc);
+    setIsLoading(false)
+
+}
+
+export const toggleCommentApproval = async (id, setIsLoading) => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('comment_id', id)
+    let toggleCommentAprrovalResponse;
+    try {
+        toggleCommentAprrovalResponse = await axios.post(`${AppUrl}api/comments/approve-comment`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+
+    } catch (e) {
+        console.log('Toggle Comment Aprroval Response Error', e)
+        setIsLoading(false)
+    }
+    console.log('Toggle Comment Aprroval Response', toggleCommentAprrovalResponse)
+    setIsLoading(false);
+}
+
+//countries api
+
+export const getCountryThumbnails = async (setCountryThumbnails, setIsLoading) => {
+    setIsLoading(true)
+    let fetchCountryThumbnailsResponse;
+    try {
+        fetchCountryThumbnailsResponse = await axios.get(`${AppUrl}api/countries`);
+    } catch (e) {
+        console.log('Fetch Country Thumbnails Error', e);
+        setIsLoading(false)
+    }
+    setIsLoading(false)
+    console.log('Fetch Country Thumbnails Response', fetchCountryThumbnailsResponse);
+    setCountryThumbnails(fetchCountryThumbnailsResponse.data);
+}
+
+export const uploadCountryThumbnail = async (formData, setIsLoading) => {
+    setIsLoading(true);
+    let uploadThumbnailResponse;
+    try {
+        uploadThumbnailResponse = await axios.post(`${AppUrl}api/countries/save`, formData,
+            {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+    } catch (e) {
+        console.log('Upload Country Thumbnail Error', e);
+        setIsLoading(false);
+    }
+    console.log('Upload Country Thumbnail Response', uploadThumbnailResponse);
+    setIsLoading(false);
+}
+
+export const updateCountryThumbnail = async (id, formData, setIsLoading) => {
+    setIsLoading(true);
+    let updateThumbnailResponse;
+    try {
+        updateThumbnailResponse = await axios.post(`${AppUrl}api/countries/update/${id}`, formData,
+            {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+    } catch (e) {
+        console.log('Update Country Thumbnail Error', e);
+        setIsLoading(false);
+    }
+    console.log('Update Country Thumbnail Response', updateThumbnailResponse);
+    setIsLoading(false);
+}
+
+export const deleteCountryThumbnail = async (id, setIsLoading) => {
+    setIsLoading(true);
+    let deleteCountryThumbnailsResponse;
+    try {
+        deleteCountryThumbnailsResponse = await axios.delete(`${AppUrl}api/countries/delete/${id}`);
+        console.log('Delete Country Thumbnails Response', deleteCountryThumbnailsResponse)
+    } catch (e) {
+        console.log('Delete Country Thumbnail Error', e);
+        setIsLoading(false);
+    }
+    console.log('Delete Country Thumbnail Response', deleteCountryThumbnailsResponse);
+    setIsLoading(false);
+}
+
+//categories api
 export const getCategories = async () => {
     let categoriesResponse;
     try {
@@ -13,7 +128,7 @@ export const getCategories = async () => {
     return categoriesResponse;
 }
 
-export const handleNewCategorySubmit = async (newCategory, setIsLoading) => {
+export const submitNewCategory = async (newCategory, setIsLoading) => {
     const formData = new FormData();
     formData.append('name', newCategory);
     let newCategoryResponse;
@@ -28,6 +143,26 @@ export const handleNewCategorySubmit = async (newCategory, setIsLoading) => {
         console.log('New category response error: ', e)
     }
     console.log('New category response: ', newCategoryResponse)
+}
+
+export const getCategoryContent = async (countryIso, selectedCategory, setPosts, setPhotos, setVideos) => {
+    let url;
+    if (countryIso) {
+        url = `${AppUrl}api/countries/${countryIso}`;
+    }
+    if (selectedCategory) {
+        url = `${AppUrl}api/categories/${selectedCategory}`
+    }
+    let contentResponse;
+    try {
+        contentResponse = await axios.get(url);
+    } catch (e) {
+        console.log('Content response error', e)
+    }
+    console.log('content response', contentResponse)
+    setPosts(contentResponse.data.posts || []);
+    setPhotos(contentResponse.data.photos || []);
+    setVideos(contentResponse.data.videos || []);
 }
 
 //updates the order of photos or videos in a gallery after
@@ -105,6 +240,39 @@ export const getPhotos = async (setItems, setIsLoading) => {
     }
 }
 
+export const updatePhotoDetails = async (id, formData, setIsLoading) => {
+    setIsLoading(true);
+    let updatePhotoDetailsResponse;
+    try {
+        updatePhotoDetailsResponse = await axios.post(`${AppUrl}api/photos/update/${id}`, formData,
+            {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+    } catch (e) {
+        setIsLoading(false);
+        console.log('Update photo details response error', e)
+    }
+    console.log('Update photo details response', updatePhotoDetailsResponse)
+
+    setIsLoading(false);
+}
+
+export const updateVideoDetails = async (id, formData, setIsLoading) => {
+    setIsLoading(true);
+    let updateVideoDetailsResponse;
+    try {
+        updateVideoDetailsResponse = await axios.post(`${AppUrl}api/videos/update/${id}`, formData,
+            {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+    } catch (e) {
+        setIsLoading(false);
+        console.log('Update Video Details Error', e)
+    }
+    setIsLoading(false);
+    console.log('Update Video Details Response', updateVideoDetailsResponse);
+}
+
 export const getVideos = async (setItems, setIsLoading) => {
     const fetchVideosUrl = `${AppUrl}api/videos`;
     setIsLoading(true);
@@ -157,6 +325,20 @@ export const getVideos = async (setItems, setIsLoading) => {
     }
 }
 
+export const getVideo = async (id, setVideo, setIsLoading) => {
+    setIsLoading(true);
+    let videoResponse;
+    try {
+        videoResponse = await axios.get(`${AppUrl}api/videos/${id}`);
+    } catch (e) {
+        console.log('Fetch Video Error', e)
+        setIsLoading(false)
+    }
+    console.log('Fetch Video Response', videoResponse);
+    setVideo(videoResponse.data);
+    setIsLoading(false);
+}
+
 export const deleteVideo = async (id, setIsLoading) => {
     let deleteVideoResponse;
     setIsLoading(true);
@@ -185,6 +367,26 @@ export const deletePhoto = async (id, setIsLoading) => {
     }
     setIsLoading(false);
     console.log('Delete photo response', deletePhotoResponse)
+}
+
+export const uploadPhoto = async (formData, items, setIsLoading) => {
+
+    const savePhotoUrl = `${AppUrl}api/photos/save`;
+    setIsLoading(true)
+    let resUploadPhoto;
+    try {
+        resUploadPhoto = await axios.post(savePhotoUrl, formData,
+            {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+    } catch (e) {
+        setIsLoading(false)
+        console.log('Upload photo response error', e)
+    }
+    console.log('Upload photo response', resUploadPhoto)
+
+    setIsLoading(false)
+    return [{ ...resUploadPhoto.data, src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items];
 }
 
 export const presignedUrlFileUpload = async (filename, directory, file, saveModelUrl, modelData) => {
@@ -228,13 +430,11 @@ export const presignedUrlFileUpload = async (filename, directory, file, saveMode
         {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
-        console.log('Save model response',saveModelResponse)
-    return {videoUrl:resPresignedUrl.data.url,videoId:saveModelResponse.data.id}
-
-
+    console.log('Save model response', saveModelResponse)
+    return { videoUrl: resPresignedUrl.data.url, videoId: saveModelResponse.data.id }
 }
 
-export const deleteCategory = async (id,setIsLoading) => {
+export const deleteCategory = async (id, setIsLoading) => {
     let deleteResponse;
     setIsLoading(true);
     try {
@@ -247,3 +447,115 @@ export const deleteCategory = async (id,setIsLoading) => {
     }
     console.log('Delete Response', deleteResponse);
 }
+
+//posts api
+export const getPosts = async (setPosts, setIsLoading) => {
+    let res;
+    setIsLoading(true)
+    try {
+        res = await axios.get(`${AppUrl}api/posts`);
+
+    } catch (e) {
+        console.log('Fetch posts error', e)
+        setIsLoading(false)
+    }
+    console.log('Fetch posts response', res)
+    const posts = res.data;
+    setPosts(posts);
+    setIsLoading(false)
+}
+
+export const initializePostForm = async (id, setIsLoading) => {
+    let res;
+    setIsLoading(true)
+    try {
+        res = await axios.get(`${AppUrl}api/posts/edit/${id}`);
+
+    } catch (e) {
+        console.log('Fetch post error', e)
+        setIsLoading(false)
+    }
+    setIsLoading(false)
+    console.log('Fetch post response', res)
+    return res.data;
+}
+
+export const updatePostForm = async (url, formData, setIsLoading) => {
+    let res;
+    setIsLoading(true)
+    try {
+        res = await axios.post(url, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+    } catch (e) {
+        console.log('Update post error', e)
+        setIsLoading(false)
+    }
+    setIsLoading(false)
+    console.log('Update post response', res)
+}
+
+export const deletePost = async (id, setIsLoading) => {
+    let res;
+    setIsLoading(true)
+    try {
+        res = await axios.delete(`${AppUrl}api/posts/delete/${id}`, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+    } catch (e) {
+        console.log('Fetch posts error', e)
+        setIsLoading(false)
+    }
+    setIsLoading(false)
+    console.log('Fetch posts response', res)
+}
+
+//messages api
+
+export const getMessages = async (setMessages, setIsLoading) => {
+    setIsLoading(true)
+    let res;
+    try {
+        res = await axios.get(`${AppUrl}api/messages`);
+    } catch (e) {
+        console.log('Messages response error: ', e);
+        setIsLoading(false)
+    }
+    setIsLoading(false)
+    console.log('Fetch messages response', res)
+    const messages = res.data;
+    setMessages(messages);
+}
+
+
+export const getMessage = async (messageId, setMessage, setIsLoading) => {
+    setIsLoading(true)
+    let res;
+    try {
+        res = await axios.get(`${AppUrl}api/message/${messageId}`);
+    } catch (e) {
+        console.log('Message response error: ', e);
+        setIsLoading(false)
+    }
+    setIsLoading(false)
+    console.log('Fetch message response', res)
+    const message = res.data;
+    setMessage(message);
+}
+
+
+//tinymce editor
+export const editor_photo_upload_handler = async (blobInfo, success, failure, progress) => {
+    const formData = new FormData();
+    formData.append('image', blobInfo.blob());
+    const res = await axios.post(`${AppUrl}api/tinymce/upload`,
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
+
+    console.log('res.data', res.data)
+    success(res.data.location)
+    return res.data.location;
+};

@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState, Fragment } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './SearchInput.css'
 import { Icon } from 'semantic-ui-react'
-import { AppUrl, getSearchInputStyle } from '../utility';
+import { getSearchInputStyle } from '../utility';
+import PostIcon from '../../../../../public/assets/post-icon.jpg'
+import PhotoIcon from '../../../../../public/assets/photo-icon.jpg'
 import VideoIcon from '../../../../../public/assets/video-icon.jpg'
+import CountryIcon from '../../../../../public/assets/country-icon.jpg'
+import CategoryIcon from '../../../../../public/assets/category-icon.jpg'
 import { useHistory } from 'react-router-dom';
 import countryCodes from '../Countries/country-codes.json'
 
@@ -26,7 +30,7 @@ function useOutsideAlerter(ref, handleOutsideClick) {
     }, [ref]);
 }
 
-const Search = ({ posts, photos, videos, winSize }) => {
+const Search = ({ posts, photos, videos, countryThumbnails, winSize }) => {
 
     const adjustedPhotos = photos.map(p => ({
         type: 'photo',
@@ -36,7 +40,7 @@ const Search = ({ posts, photos, videos, winSize }) => {
         title: (p.title || '').toLowerCase(),
         content: '',
         image: p.src,
-        tags:(JSON.parse(p.tags)||[]).map(t=>t.toLowerCase()),
+        tags: (JSON.parse(p.tags) || []).map(t => t.toLowerCase()),
 
     }));
     const adjustedVideos = videos.map(v => ({
@@ -48,7 +52,7 @@ const Search = ({ posts, photos, videos, winSize }) => {
         title: (v.title || '').toLowerCase(),
         content: '',
         image: v.thumbnail,
-        tags:(JSON.parse(v.tags)||[]).map(t=>t.toLowerCase()),
+        tags: (JSON.parse(v.tags) || []).map(t => t.toLowerCase()),
     }));
     const adjustedPosts = posts.map(p => ({
         type: 'post',
@@ -59,7 +63,7 @@ const Search = ({ posts, photos, videos, winSize }) => {
         title: (p.title || '').toLowerCase(),
         content: (p.content || '').toLowerCase(),
         image: p.image,
-        tags:(JSON.parse(p.tags)||[]).map(t=>t.toLowerCase()),
+        tags: (JSON.parse(p.tags) || []).map(t => t.toLowerCase()),
     }));
 
     const [searchValue, setSearchValue] = useState('');
@@ -81,28 +85,34 @@ const Search = ({ posts, photos, videos, winSize }) => {
 
     [...posts, ...photos, ...videos]
         .forEach(item => {
-                item.categories.forEach(cat=>{
-                    if(!categories.map(c=>c.name).includes(cat.name)){
-                        categories.push(cat)
+            item.categories.forEach(cat => {
+                if (!categories.map(c => c.name).includes(cat.name)) {
+                    categories.push(cat)
 
-                    }
-                })
-            
+                }
+            })
+
         });
 
-        const adjustedCategories = categories.map(c=>({
-            title: c.name,
-            type: 'category',
-            id: c.name,
-            summary: '',
-            author: '',
-            content: '',
-        }))
+    const adjustedCategories = categories.map(c => ({
+        title: c.name,
+        type: 'category',
+        id: c.name,
+        summary: '',
+        author: '',
+        content: '',
+    }))
 
 
-    const options = [...adjustedPhotos, ...adjustedVideos, ...adjustedPosts,
-         ...countries,
-         ...adjustedCategories];
+    const options = [
+        ...adjustedPhotos,
+        ...adjustedVideos,
+        ...adjustedPosts,
+        ...countries,
+        ...adjustedCategories]
+    // .filter(item=>item.id);
+
+
 
     const handleSearchValue = (e) => {
         setSearchValue(e.target.value);
@@ -119,11 +129,19 @@ const Search = ({ posts, photos, videos, winSize }) => {
     const filteredResults = options
         .filter(item => (
             item.title.includes(searchValue.toLowerCase()) ||
-            (item.tags||[]).includes(searchValue.toLowerCase()) ||
+            (item.tags || []).includes(searchValue.toLowerCase()) ||
             item.summary.includes(searchValue.toLowerCase()) ||
             item.author.includes(searchValue.toLowerCase()) ||
             item.content.includes(searchValue.toLowerCase())) &&
             !!searchValue.toLowerCase());
+
+    const filteredResultsWithoutDuplicates = [...filteredResults.reduce((itemsMap, item) =>                                                                   
+        itemsMap.has(item.id && item.type) ? itemsMap : itemsMap.set(item.id, item)
+      , new Map()).values()];
+
+    
+    console.log('filteredResults', filteredResults)
+    console.log('filteredResultsWithoutDuplicates', filteredResultsWithoutDuplicates)
 
 
     const handleResult = ({ type, selectedResult }) => {
@@ -133,6 +151,8 @@ const Search = ({ posts, photos, videos, winSize }) => {
         if (type === 'country') history.push(`/destination/${selectedResult}`)
         if (type === 'category') history.push(`/category/${selectedResult}`)
     }
+
+
 
     return (
         <div
@@ -163,15 +183,35 @@ const Search = ({ posts, photos, videos, winSize }) => {
             >
                 <div style={{ background: '#fff', borderRadius: 5, width: 300 }} >
                     {
-                        filteredResults.map(res => (
-                            <div onClick={() => handleResult({ type: res.type, selectedResult: res.id })} key={`search-result[${res.id}]`} style={{ display: 'flex', padding: 5, cursor: 'pointer' }}>
-                                <div ><img style={{
-                                    width: '100%',
-                                    maxWidth: 50,
-                                }} src={res.image || VideoIcon} /></div>
-                                <p style={{ padding: 5 }}>{res.title}</p>
-                            </div>
-                        ))}
+                        filteredResultsWithoutDuplicates.map(res => {
+                            let image;
+                            if (res.type === 'country') {
+                                image = (countryThumbnails.find(t => t.country === res.id) || {}).image || CountryIcon;
+                            }
+                            if (res.type === 'category') {
+                                image =
+                                    // countryThumbnails.find(t => t.country === res.id)||
+                                    CategoryIcon;
+                            }
+                            if (res.type === 'post') {
+                                image = res.image || PostIcon;
+                            }
+                            if (res.type === 'photo') {
+                                image = res.image || PhotoIcon;
+                            }
+                            if (res.type === 'video') {
+                                image = res.image || VideoIcon;
+                            }
+                            return (
+                                <div onClick={() => handleResult({ type: res.type, selectedResult: res.id })} key={`search-result[${res.id}][${res.type}]`} style={{ display: 'flex', alignItems: 'center', padding: 5, cursor: 'pointer' }}>
+                                    <div ><img style={{
+                                        width: '100%',
+                                        maxWidth: 50,
+                                    }} src={image} /></div>
+                                    <p style={{ padding: 5 }}>{res.title}</p>
+                                </div>
+                            )
+                        })}
                 </div>
             </div>
         </div>

@@ -3,16 +3,15 @@ import arrayMove from "array-move";
 import {
     StyledBlueButton, StyledFormTextInput, StyledRedButton, StyledSubmitButton,
 } from '../../blog/StyledComponents';
-import axios from 'axios';
-import { AppUrl } from '../../blog/utility';
 import { Checkbox, Segment, Dropdown } from 'semantic-ui-react'
 import { countries } from "../util/countries-iso";
 import TagInput from "../../../components/TagInput/TagInput";
 import EXIF from "exif-js";
 import { DateInput, } from 'semantic-ui-calendar-react';
 import { processCategories } from "../util/helper-functions";
-import { deletePhoto, getCategories, getPhotos, handleNewCategorySubmit, updateOrder } from "../util/api";
+import { deletePhoto, getCategories, getPhotos, updateOrder, updatePhotoDetails } from "../util/api";
 import SortableGallery from '../gallery/Gallery'
+import Loader from "../../../components/admin/Loader/Loader";
 
 function PhotoGallery() {
     const [items, setItems] = useState([]);
@@ -40,7 +39,6 @@ function PhotoGallery() {
 
     const fileInputRef = createRef();
 
-
     const onSortEnd = async ({ oldIndex, newIndex }) => {
         const reArrangedPhotos = arrayMove(items, oldIndex, newIndex);
         setItems(reArrangedPhotos);
@@ -58,7 +56,6 @@ function PhotoGallery() {
     }
 
     useEffect(() => {
-
         getInitialData()
     }, []);
 
@@ -69,8 +66,9 @@ function PhotoGallery() {
     const handleImageUpload = async e => {
 
         e.preventDefault()
-        const newPhotoFormData = new FormData();
         const file = e.target.files[0];
+        const newPhotoFormData = new FormData();
+        newPhotoFormData.append('image', file);
         EXIF.getData(file, async function () {
             const photoMetaData = this.exifdata;
             const isMetaDataEmpty = photoMetaData && Object.keys(photoMetaData).length === 0 && photoMetaData.constructor === Object;
@@ -85,7 +83,6 @@ function PhotoGallery() {
                     ISOSpeedRatings,
                     DateTime,
                 } = this.exifdata
-                newPhotoFormData.append('image', file);
                 newPhotoFormData.append('camera', Make + ' ' + Model);
                 newPhotoFormData.append('lens', Lens);
                 newPhotoFormData.append('focal_length', `${FocalLength.numerator / FocalLength.denominator}mm`);
@@ -94,63 +91,33 @@ function PhotoGallery() {
                 newPhotoFormData.append('iso', ISOSpeedRatings);
                 newPhotoFormData.append('date_taken', DateTime);
 
-                const savePhotoUrl = `${AppUrl}api/photos/save`;
-                setIsLoading(true)
-                let resUploadPhoto;
-                try {
-                    resUploadPhoto = await axios.post(savePhotoUrl, newPhotoFormData,
-                        {
-                            headers: { 'Content-Type': 'multipart/form-data' }
-                        });
-                } catch (e) {
-                    setIsLoading(false)
-                    console.log('Upload photo response error', e)
-                }
-                console.log('Upload photo response', resUploadPhoto)
-
-                setIsLoading(false)
-                const newArray = [{ ...resUploadPhoto.data, src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
+                const newArray = uploadPhoto(newPhotoFormData, items, setIsLoading)
                 setItems(newArray);
                 updateOrder(newArray, 'photo_gallery_order')
                 handleImageDetails(newArray[0])
             } else {
-                newPhotoFormData.append('image', file);
-
-                const savePhotoUrl = `${AppUrl}api/photos/save`;
-                setIsLoading(true);
-                let resUploadPhoto;
-                try {
-                    resUploadPhoto = await axios.post(savePhotoUrl, newPhotoFormData,
-                        {
-                            headers: { 'Content-Type': 'multipart/form-data' }
-                        });
-                } catch (e) {
-                    setIsLoading(false)
-                }
-                setIsLoading(false)
-                console.log('upload photo response: ', resUploadPhoto);
-                const newArray = [{ src: resUploadPhoto.data.src, height: 1, width: 1.5, id: resUploadPhoto.data.id }, ...items]
+                const newArray = uploadPhoto(newPhotoFormData, items, setIsLoading)
                 setItems(newArray);
                 updateOrder(newArray, 'photo_gallery_order')
                 handleImageDetails(newArray[0])
             }
-            
+
         });
 
     };
 
     const handleImageDetails = (photo) => {
-        setCamera(photo.camera)
-        setLens(photo.lens)
-        setFocalLength(photo.focal_length)
-        setShutterSpeed(photo.shutter_speed)
-        setIso(photo.iso)
-        setAperture(photo.aperture)
+        setCamera(photo.camera || '')
+        setLens(photo.lens || '')
+        setFocalLength(photo.focal_length || '')
+        setShutterSpeed(photo.shutter_speed || '')
+        setIso(photo.iso || '')
+        setAperture(photo.aperture || '')
 
-        setTitle(photo.title)
-        setPhotographer(photo.photographer)
-        setDescription(photo.description)
-        setDateTaken(photo.date_taken)
+        setTitle(photo.title || '')
+        setPhotographer(photo.photographer || '')
+        setDescription(photo.description || '')
+        setDateTaken(photo.date_taken || '')
         setTags(Array.isArray(JSON.parse(photo.tags ? photo.tags : '""')) ? JSON.parse(photo.tags) : [])
         setSelectedCategories((photo.categories || []).map(cat => cat.name));
         setCountry(photo.country)
@@ -158,7 +125,7 @@ function PhotoGallery() {
         setSelectedPhoto(photo)
     }
 
-    const submitImageDetails = async (photo) => {
+    const submitImageDetails = async () => {
         const selectedCategoriesIds = categories.filter(cat => selectedCategories.includes(cat.text)).map(cat => cat._id);
         const formData = new FormData();
         formData.append('title', title || '');
@@ -174,20 +141,8 @@ function PhotoGallery() {
         formData.append('country', country || '');
         formData.append('date_taken', dateTaken || '');
         formData.append('selected_categories', JSON.stringify(selectedCategoriesIds))
-        setIsLoading(true);
-        let updatePhotoDetailsResponse;
-        try {
-            updatePhotoDetailsResponse = await axios.post(`${AppUrl}api/photos/update/${selectedPhoto.id}`, formData,
-                {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-        } catch (e) {
-            setIsLoading(false);
-            console.log('Update photo details response error', e)
-        }
-        console.log('Update photo details response', updatePhotoDetailsResponse)
 
-        setIsLoading(false);
+        updatePhotoDetails(selectedPhoto.id, formData, setIsLoading)
         setSelectedPhoto(null);
         getPhotos(setItems, setIsLoading)
     }
@@ -201,7 +156,7 @@ function PhotoGallery() {
     };
 
     const submitCategory = async () => {
-        handleNewCategorySubmit(newCategory, setIsLoading)
+        setNewCategory(newCategory, setIsLoading)
         const categoriesResponse = await getCategories();
         const processedCategories = processCategories(categoriesResponse.data);
         setCategories(processedCategories);
@@ -209,7 +164,7 @@ function PhotoGallery() {
     }
 
     const handleDeleteImage = async (id) => {
-        await deletePhoto(id,setIsLoading)
+        await deletePhoto(id, setIsLoading)
 
         // //update order 
         const newArray = items.filter(p => p.id !== id);
@@ -218,7 +173,8 @@ function PhotoGallery() {
     }
     return (
         <div>
-            {isLoading && <h1>Loading</h1>}
+            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+
             <h1 style={{ textAlign: 'center' }}>Photo Gallery</h1>
             {selectedPhoto ?
                 <div style={{ maxWidth: 500, margin: 'auto' }}>

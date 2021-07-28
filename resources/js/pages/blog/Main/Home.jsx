@@ -5,7 +5,6 @@ import "./Home.module.css";
 import WorldMap from "../Countries/WorldMap";
 import Loader from "./Loader";
 import { gsap, ScrollTrigger, ScrollToPlugin } from 'gsap/all'
-import axios from 'axios'
 import { animate } from './gsapAnimations'
 import PhotosSection from "../Photos/PhotosSection";
 import VideosSection from "../Videos/VideosSection";
@@ -26,6 +25,7 @@ import _ from "lodash";
 import VideoIcon from '../../../../../public/assets/video-icon.jpg'
 import { useHistory } from "react-router-dom";
 import mapLowRes from '../../../../../public/assets/map-notepad-desk-md.jpg'
+import { getCountryThumbnails, getPhotos, getPosts, getVideos } from "../../admin/util/api";
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
 // gsap.ticker.fps(30)
@@ -48,6 +48,8 @@ const Home = ({ scrollWidth, winSize, height }) => {
     const [videos, setVideos] = useState([]);
     const [scrollPosition, setScrollPostion] = useState(0);
     const [scrollSection, setScrollSection] = useState(0);
+    const [isLoading, setIsLoading] = useState(0);
+    const [countryThumbnails, setCountryThumbnails] = useState([])
 
     const handleScrollPosition = (value) => {
         setScrollPostion(value)
@@ -59,120 +61,40 @@ const Home = ({ scrollWidth, winSize, height }) => {
         if (window.scrollY > window.innerHeight / 4) {
             // do something 
             setScrollSection(winSize > 2 ? 2 : 1)
-            console.log('passed section 1 hero')
         }
         if (window.scrollY > window.innerHeight * 1 + window.innerHeight / 2) {
             // do something 
             setScrollSection(2)
-            console.log('passed section 2 posts')
         }
         if (window.scrollY > window.innerHeight * 2 + window.innerHeight / 2) {
             // do something 
             setScrollSection(3)
-            console.log('passed section 3 destinations')
         }
         if (window.scrollY > window.innerHeight * 3 + window.innerHeight / 2) {
             // do something 
             setScrollSection(4)
-            console.log('passed section 4 photos')
         }
         if (window.scrollY > window.innerHeight * 4 + window.innerHeight / 2) {
             // do something 
             setScrollSection(5)
-            console.log('passed section 5 videos')
         }
         if (window.scrollY > window.innerHeight * 5 + window.innerHeight / 2) {
             // do something 
             setScrollSection(6)
-            console.log('passed section 6 contact')
         }
 
     }, [scrollPosition, scrollWidth, winSize])
 
     useEffect(() => {
-        //function that inserts placeholders in the posts array when necessary
-        //for example if there are no posts
-        const getPosts = async () => {
-            const postsResponse = await axios.get(`${AppUrl}api/posts`);
-            console.log('postsResponse', postsResponse)
-            const retrievedPosts = postsResponse.data;
-            if (retrievedPosts.length > 0) {
-                setPostsFromDB(retrievedPosts)
-            }
-        }
-        getPosts()
-
-        //fetch photos
-        const getPhotos = async () => {
-            const fetchPhotosUrl = `${AppUrl}api/photos`;
-            const resFetchPhotos = await axios.get(fetchPhotosUrl);
-            console.log('Fetch photos response', resFetchPhotos);
-
-            const fetchConfigUrl = `${AppUrl}api/configurations`;
-            const resFetchConfigurations = await axios.get(fetchConfigUrl);
-            console.log('Fetch config response', resFetchConfigurations);
-            const formattedPhotos = resFetchPhotos.data.map(item => {
-                return {
-                    ...item,
-                    src: item.src,
-                    id: item.id,
-                }
-            });
-
-            if (resFetchConfigurations.data !== 'no_config') {
-                const order = JSON.parse(resFetchConfigurations.data.photo_gallery_order);
-                const orderedFormattedPhotos = [];
-                order.forEach(number => {
-                    formattedPhotos.forEach(photo => {
-                        if (photo.id === number) {
-                            orderedFormattedPhotos.push(photo);
-                        }
-                    })
-                });
-
-                setPhotos(orderedFormattedPhotos)
-            } else {
-                setPhotos(formattedPhotos)
-            }
-        }
-        getPhotos()
-
-        //fetch videos
-        const getVideos = async () => {
-            const fetchVideosUrl = `${AppUrl}api/videos`;
-            const resFetchVideos = await axios.get(fetchVideosUrl);
-            console.log('Fetch videos response', resFetchVideos);
-
-            const fetchConfigUrl = `${AppUrl}api/configurations`;
-            const resFetchConfigurations = await axios.get(fetchConfigUrl);
-            console.log('Fetch config response', resFetchConfigurations);
-            const formattedVideos = resFetchVideos.data.map(item => {
-                return {
-                    ...item,
-                    src: item.src,
-                    id: item.id,
-                    thumbnail: item.thumbnail,
-
-                }
-            });
-
-            if (resFetchConfigurations.data !== 'no_config') {
-                const order = JSON.parse(resFetchConfigurations.data.video_gallery_order);
-                const orderedFormattedVideos = [];
-                order.forEach(number => {
-                    formattedVideos.forEach(video => {
-                        if (video.id === number) {
-                            orderedFormattedVideos.push(video);
-                        }
-                    })
-                });
-                setVideos(orderedFormattedVideos)
-            } else {
-                setVideos(formattedVideos)
-            }
-        }
-        getVideos()
+        getInitialData()
     }, [])
+
+    const getInitialData = async () => {
+        await getPosts(setPostsFromDB, setIsLoading);
+        await getPhotos(setPhotos, setIsLoading);
+        await getVideos(setVideos, setIsLoading);
+        await getCountryThumbnails(setCountryThumbnails, setIsLoading);
+    }
 
     useEffect(() => {
         const triggers = ScrollTrigger.getAll();
@@ -403,6 +325,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
                             posts={postsFromDB}
                             photos={photos}
                             videos={videos}
+                            countryThumbnails={countryThumbnails}
                             tags={[]}
                             categories={[]}
                             heroPicMainRef={heroPicMainRef}

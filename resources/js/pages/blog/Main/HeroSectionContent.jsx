@@ -18,15 +18,14 @@ const HeroSectionContent = ({
     photos,
     videos,
     posts,
-    categories,
-    tags,
     height,
+    countryThumbnails,
 }) => {
 
     return (
         <Fragment>
 
-            <Search photos={photos} videos={videos} posts={posts} winSize={winSize} />
+            <Search photos={photos} videos={videos} posts={posts} winSize={winSize} countryThumbnails={countryThumbnails} />
 
             <div id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize), position: 'fixed' }} />
             {["One", "Two", "One"].map((piece, i) => (

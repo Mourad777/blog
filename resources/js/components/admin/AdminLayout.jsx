@@ -24,6 +24,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import StarBorder from '@material-ui/icons/StarBorder'
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import CommentIcon from '@material-ui/icons/Comment';
+import ChromeReaderModeIcon from '@material-ui/icons/ChromeReaderMode';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import PhotoIcon from '@material-ui/icons/PhotoLibrary'
 import VideoIcon from '@material-ui/icons/MovieCreation';
@@ -171,7 +172,7 @@ export default function PersistentDrawerLeft({ children }) {
 
                     <ListItem button onClick={handleClick}>
                         <ListItemIcon>
-                            <InboxIcon />
+                            <ChromeReaderModeIcon />
                         </ListItemIcon>
                         <ListItemText primary="Posts" />
                         {nestedOpen ? <ExpandLess /> : <ExpandMore />}

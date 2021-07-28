@@ -7,8 +7,10 @@ import { Replies } from '../Posts/Post';
 import { List, TextArea, Form, Button } from 'semantic-ui-react'
 import { StyledFormTextInput, StyledBlueButton, StyledRedButton } from '../StyledComponents';
 import Avatar from 'react-avatar';
+import { getCountryThumbnails, getComments, getVideo } from '../../admin/util/api';
 
-const Video = ({winSize}) => {
+
+const Video = ({ winSize }) => {
     const params = useParams();
     const history = useHistory();
     const selectedVideo = params.videoId;
@@ -19,6 +21,7 @@ const Video = ({winSize}) => {
     const [content, setComment] = useState('');
     const [email, setEmail] = useState('');
     const [replyComment, setReplyComment] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleName = (e) => {
         setName(e.target.value)
@@ -30,24 +33,13 @@ const Video = ({winSize}) => {
         setComment(e.target.value)
     }
 
+    const getInitialData = async () => {
+        await getVideo(selectedVideo,setVideo,setIsLoading);
+        await getComments(selectedVideo, 'video', setComments, setIsLoading);
+    }
 
     useEffect(() => {
-        const getVideo = async () => {
-            const videoResponse = await axios.get(`${AppUrl}api/videos/${selectedVideo}`);
-            console.log('video response', videoResponse)
-            setVideo(videoResponse.data);
-        }
-        getVideo()
-
-
-        const getComments = async () => {
-            const commentsRes = await axios.get(`${AppUrl}api/comments/video/${selectedVideo}`);
-            console.log('Fetch comments response', commentsRes.data)
-            setComments(commentsRes.data);
-        }
-        getComments()
-
-
+        getInitialData()
         const triggers = ScrollTrigger.getAll();
         triggers.forEach(tr => {
             tr.kill()
@@ -84,6 +76,7 @@ const Video = ({winSize}) => {
 
     return (
         <div style={{ background: '#ece7e2', height: '100%', width: '100%', paddingBottom: 20 }}>
+            {/* {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>} */}
             <div style={{ position: 'relative', width: '100%', height: 300, overflow: 'hidden' }}>
                 <div style={{
                     zIndex: 1, top: 50, left: '50%', transform: 'translateX(-50%)', position: 'absolute',
@@ -92,7 +85,7 @@ const Video = ({winSize}) => {
                     padding: 20,
                     minWidth: 300,
                 }}><h1 style={{ textAlign: 'center', margin: '20px 0', fontSize: winSize === 1 ? '2em' : '2.5em', fontFamily: "Mulish", color: 'white' }}>{video.title}</h1></div>
-                <img src={video.thumbnail} style={{ width: '100%', maxHeight: 400, objectFit: 'cover', position: 'absolute' }} />
+                {!!video.thumbnail && <img src={video.thumbnail} style={{ width: '100%', maxHeight: 400, objectFit: 'cover', position: 'absolute' }} />}
             </div>
             <div style={{ padding: 20 }}>
                 <Button content='Home' onClick={() => { history.push('/') }} />

@@ -7,31 +7,18 @@ import {
     StyledSubmitButton,
     StyledThumbnailPreview,
 } from '../../blog/StyledComponents';
-import { Checkbox, Segment, Dropdown,TextArea,Form } from 'semantic-ui-react'
-import axios from 'axios'
+import { Checkbox, Segment, Dropdown, TextArea, Form } from 'semantic-ui-react'
 import './editor.css'
 import { useParams, useHistory } from 'react-router';
 import { AppUrl } from '../../blog/utility';
 import { countries } from '../util/countries-iso';
 import TagInput from '../../../components/TagInput/TagInput';
 import { processCategories } from '../util/helper-functions';
-import { getCategories } from '../util/api';
+import { editor_photo_upload_handler, getCategories, initializePostForm, submitNewCategory, updatePostForm } from '../util/api';
+import Loader from '../../../components/admin/Loader/Loader';
 
 const fontStyles =
     "Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago;Merriweather=merriweather; Montserrat=montserrat; Quicksand=quicksand; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats";
-
-async function upload_handler(blobInfo, success, failure, progress) {
-    const formData = new FormData();
-    formData.append('image', blobInfo.blob());
-    const res = await axios.post(`${AppUrl}api/tinymce/upload`,
-        formData,
-        { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
-
-    console.log('res.data', res.data)
-    success(res.data.location)
-    return res.data.location;
-};
 
 const CreatePost = ({ isEditing }) => {
     const params = useParams();
@@ -49,6 +36,7 @@ const CreatePost = ({ isEditing }) => {
     const [initialContent, setInitialContent] = useState('Write something...');
     const [isCommentsEnabled, setIsCommentsEnabled] = useState(true);
     const [isPublished, setIsPublished] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const fileInputRef = createRef();
 
@@ -92,18 +80,37 @@ const CreatePost = ({ isEditing }) => {
         setIsPublished(!isPublished);
     }
 
+    const getInitialData = async () => {
+        const categoriesResponse = await getCategories();
+        const processedCategories = processCategories(categoriesResponse.data);
+        setCategories(processedCategories);
+
+        if (isEditing) {
+            const id = params.id;
+            const post = await initializePostForm(id, setIsLoading)
+            setTitle(post.title || '');
+            setAuthor(post.author || '');
+            setSummary(post.summary || '');
+            setIsPublished(!!parseInt(post.is_published));
+            setIsCommentsEnabled(!!parseInt(post.is_comments_enabled));
+            setSelectedCategories(post.categories.map(cat => cat.name));
+
+            setCountry(post.country);
+            if (post.tags) setTags(JSON.parse(post.tags));
+            setInitialContent(post.content);
+            setContent(post.content);
+            setFile(post.aws_url);
+        }
+    }
+
     const handleNewCategorySubmit = async () => {
         const formData = new FormData();
         formData.append('name', newCategory);
-        await axios.post(`${AppUrl}api/categories/save`, formData,
-            {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            })
-            .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
+        await submitNewCategory(formData, setIsLoading)
 
-        const categoriesResponse = await axios.get(`${AppUrl}api/categories`);
+        const categoriesResponse = await getCategories();
         const processedCategories = processCategories(categoriesResponse.data);
-        setCategories(processedCategories)
+        setCategories(processedCategories);
         setNewCategory('')
     }
 
@@ -141,43 +148,13 @@ const CreatePost = ({ isEditing }) => {
         formData.append('is_comments_enabled', isCommentsEnabled ? 1 : 0);
         let url = `${AppUrl}api/posts/save`;
         if (isEditing) url = `${AppUrl}api/posts/update/${params.id}`;
-        await axios.post(url, formData,
-            {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            })
-            .then(res => console.log('res', res.data)).catch(e => console.log('error', e));
-
+        await updatePostForm(url, formData, setIsLoading)
         history.push('/admin/posts');
     }
 
 
     useEffect(() => {
-        const getInitialData = async () => {
-            const categoriesResponse = await getCategories();
-            const processedCategories = processCategories(categoriesResponse.data);
-            setCategories(processedCategories);
-
-            if (isEditing) {
-                const id = params.id;
-                const postResponse = await axios.get(`${AppUrl}api/posts/edit/${id}`);
-                const post = postResponse.data;
-                console.log('Post response', postResponse)
-                setTitle(post.title || '');
-                setAuthor(post.author || '');
-                setSummary(post.summary || '');
-                setIsPublished(!!parseInt(post.is_published));
-                setIsCommentsEnabled(!!parseInt(post.is_comments_enabled));
-                setSelectedCategories(post.categories.map(cat => cat.name));
-
-                setCountry(post.country);
-                if (post.tags) setTags(JSON.parse(post.tags));
-                setInitialContent(post.content);
-                setContent(post.content);
-                setFile(post.aws_url);
-            }
-        }
         getInitialData()
-
     }, [])
     const handleSelectedCategories = (e, { label, checked }) => {
         if (checked) {
@@ -189,6 +166,8 @@ const CreatePost = ({ isEditing }) => {
 
     return (
         <div style={{ margin: 'auto', maxWidth: 800 }}>
+            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+
             <h1>{isEditing ? 'Edit Post' : 'New Post'}</h1>
 
             <div>
@@ -269,7 +248,7 @@ const CreatePost = ({ isEditing }) => {
                 <Checkbox checked={!!isCommentsEnabled} onChange={() => handleComments()} /></div>
             <div style={{ marginTop: 20 }}>
                 <label style={{ fontSize: '1.2em' }}>Summary</label>
-            <Form><TextArea value={summary} onChange={handleSummary} style={{ minHeight: 100, width: '100%' }} /></Form>
+                <Form><TextArea value={summary} onChange={handleSummary} style={{ minHeight: 100, width: '100%' }} /></Form>
             </div>
             <div style={{ marginTop: 20 }}>
                 <Editor
@@ -279,7 +258,7 @@ const CreatePost = ({ isEditing }) => {
 
                         plugins: 'link image code autoresize',
                         toolbar: 'insert undo redo | bold italic | alignleft aligncenter alignright | code',
-                        images_upload_handler: upload_handler,
+                        images_upload_handler: editor_photo_upload_handler,
                         content_style:
                             `@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
                              @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
