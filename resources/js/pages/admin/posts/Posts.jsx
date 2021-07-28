@@ -30,7 +30,7 @@ const Posts = ({ winSize }) => {
     const titleStyle = { fontSize: '1.9em', display: 'block', fontStyle: 'bold' };
     return (
         <div style={{ margin: 'auto', maxWidth: 800 }}>
-            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+            {isLoading && <div style={{ position: 'fixed',zIndex:5, top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
 
             <h1>Posts</h1>
             <table style={{ margin: 'auto', width: '100%' }}>

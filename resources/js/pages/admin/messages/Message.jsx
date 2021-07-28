@@ -20,7 +20,7 @@ const Messages = ({ }) => {
 
     return (
         <div >
-            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+            {isLoading && <div style={{position: 'fixed',zIndex:5,top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
 
             <div style={{ display: 'flex' }}>
                 <Avatar

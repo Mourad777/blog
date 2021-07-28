@@ -9,7 +9,7 @@ import TagInput from "../../../components/TagInput/TagInput";
 import EXIF from "exif-js";
 import { DateInput, } from 'semantic-ui-calendar-react';
 import { processCategories } from "../util/helper-functions";
-import { deletePhoto, getCategories, getPhotos, updateOrder, updatePhotoDetails } from "../util/api";
+import { deletePhoto, getCategories, getPhotos, updateOrder, updatePhotoDetails, uploadPhoto } from "../util/api";
 import SortableGallery from '../gallery/Gallery'
 import Loader from "../../../components/admin/Loader/Loader";
 
@@ -91,12 +91,13 @@ function PhotoGallery() {
                 newPhotoFormData.append('iso', ISOSpeedRatings);
                 newPhotoFormData.append('date_taken', DateTime);
 
-                const newArray = uploadPhoto(newPhotoFormData, items, setIsLoading)
+                const newArray = await uploadPhoto(newPhotoFormData, items, setIsLoading)
+                
                 setItems(newArray);
                 updateOrder(newArray, 'photo_gallery_order')
                 handleImageDetails(newArray[0])
             } else {
-                const newArray = uploadPhoto(newPhotoFormData, items, setIsLoading)
+                const newArray = await uploadPhoto(newPhotoFormData, items, setIsLoading)
                 setItems(newArray);
                 updateOrder(newArray, 'photo_gallery_order')
                 handleImageDetails(newArray[0])
@@ -173,7 +174,7 @@ function PhotoGallery() {
     }
     return (
         <div>
-            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+            {isLoading && <div style={{ position: 'fixed',zIndex:5, top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
 
             <h1 style={{ textAlign: 'center' }}>Photo Gallery</h1>
             {selectedPhoto ?

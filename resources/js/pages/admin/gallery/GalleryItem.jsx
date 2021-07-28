@@ -6,12 +6,12 @@ const imgWithClick = { cursor: "pointer" };
 //commentCount
 const Photo = ({ index, onClick, photo, margin, direction, top, left, handleDetails, handleDelete, galleryType }) => {
   const history = useHistory()
-  const imgStyle = { margin: margin, padding: 20, objectFit: 'cover', maxWidth: 400 };
+  const imgStyle = { margin: margin, padding: 10, objectFit: 'cover', width: 300,height:300 };
   if (direction === "column") {
     imgStyle.position = "absolute";
     imgStyle.left = left;
     imgStyle.top = top;
-    imgStyle.objectFit = 'cover'
+    imgStyle.objectFit = 'cover';
   }
 
   const handleClick = event => {

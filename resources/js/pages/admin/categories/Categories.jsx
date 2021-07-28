@@ -96,7 +96,7 @@ const Categories = ({ winSize }) => {
 
     return (
         <div style={{ maxWidth: 800, position: 'relative' }}>
-            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+            {isLoading && <div style={{ position: 'fixed',zIndex:5, top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
             <h1>Categories</h1>
             <span style={{ fontSize: '1.2em' }}>New Category</span>
             <StyledFormTextInput disabled={isLoading} style={{ marginTop: 10 }} value={newCategory}

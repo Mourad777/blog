@@ -49,7 +49,7 @@ const Countries = ({ winSize }) => {
 
     return (
         <div style={{ maxWidth: 500, margin: 'auto' }}>
-            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+            {isLoading && <div style={{ position: 'fixed',zIndex:5, top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
             <h1>Countries</h1>
             <div style={{ marginTop: 20 }}>
                 <label style={{ fontSize: '1.2em' }}>Country</label>

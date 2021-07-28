@@ -166,7 +166,7 @@ const CreatePost = ({ isEditing }) => {
 
     return (
         <div style={{ margin: 'auto', maxWidth: 800 }}>
-            {isLoading && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
+            {isLoading && <div style={{ position: 'fixed',zIndex:5, top: '50%', left: '50%', transform: 'translateX(-50%)' }}><Loader /></div>}
 
             <h1>{isEditing ? 'Edit Post' : 'New Post'}</h1>
 
