@@ -59,7 +59,7 @@ const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference }) => {
 
     let titleStyle = { zIndex:1, fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff',background:'#daad86', textAlign: 'center', marginBottom: 0 }
     if (isLargeMobileLandscape) {
-        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-4%' }
+        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-40px' }
     }
 
     return (<div ref={reference} style={{ height: '100vh', overflow: 'hidden', zIndex: 6, position: 'relative' }}>

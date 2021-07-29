@@ -15,7 +15,7 @@ const WorldMap = ({ winSize, reference, postsFromDB = [], photos, videos, isLarg
     }
     let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center', marginBottom: 0 }
     if (isLargeMobileLandscape) {
-        titleStyle = { ...titleStyle, position: 'absolute',fontSize: '4em', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-16%' }
+        titleStyle = { ...titleStyle, position: 'absolute',fontSize: '4em', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-130px' }
     }
 
     return (

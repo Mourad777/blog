@@ -46,7 +46,7 @@ const ContactForm = ({isLargeMobileLandscape}) => {
     }
     let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }
     if (isLargeMobileLandscape) {
-        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-15%' }
+        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-130px' }
     }
 
     return (
