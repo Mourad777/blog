@@ -77,11 +77,15 @@ const HeroSectionContent = ({
             </div>
             <button onClick={() => handleScroll(refPosts)} id="hero-button-1" className="hero-button" style={{
                 ...getHeroSectionButtonOneStyle(winSize, height),
+                opacity: (winSize === 1 && height < 480) || (isLargeMobileLandscape && height < 250) ? 0 : 1, transition: 'opacity 0.3s ease-in'
+
                 // background:'blue'
 
             }}>Read my Blog</button>
             <button onClick={() => handleScroll(refVideos)} id="hero-button-2" className="hero-button" style={{
                 ...getHeroSectionButtonTwoStyle(winSize, height),
+                opacity: (winSize === 1 && height < 480) || (isLargeMobileLandscape && height < 250) ? 0 : 1, transition: 'opacity 0.3s ease-in'
+
 
             }}>Watch my Videos</button>
 
