@@ -53,7 +53,7 @@ export const getHeroSectionButtonOneStyle = (windowWidth,windowHeight) => {
     let right, bottom;
     if (windowWidth === 1) {
         right = 200;
-        bottom = 300;
+        bottom = 265;
     }
     if (windowWidth === 2) {
         right = 400;
