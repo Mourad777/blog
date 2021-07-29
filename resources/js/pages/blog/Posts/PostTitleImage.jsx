@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from 'react-router-dom';
 
-const PostTitleImage = ({ post,index }) => {
+const PostTitleImage = ({ post,index,isLargeMobileLandscape }) => {
     const history = useHistory();
     return (
         <div style={{ padding: 0, zIndex: 2 }} className="col-12 col-sm-6">
@@ -14,7 +14,7 @@ const PostTitleImage = ({ post,index }) => {
                         history.push(`/post/${post.id}`)
                     }}
                     style={{
-                        height: 250,
+                        height:isLargeMobileLandscape ? 100 : 250,
                         background: `url('${post.image}') center center / cover no-repeat`,
                         cursor: 'pointer',
                     }}

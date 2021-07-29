@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router";
 import Paginate from "../../../components/blog/Paginate/Paginate";
 
-export default ({ reference, photos, winSize, scrollWidth, height }) => {
+export default ({ reference, photos, winSize, scrollWidth, height, isLargeMobileLandscape }) => {
 
     const [data, setData] = useState([]);
     const perPage = winSize > 1 && height < 640 ? 3 : 9;
@@ -35,13 +35,20 @@ export default ({ reference, photos, winSize, scrollWidth, height }) => {
         setGridWidth(gridContainerReference.current.scrollWidth);
     }, [gridContainerReference, scrollWidth]);
 
+    let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }
+    if (isLargeMobileLandscape) {
+        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-2%' }
+    }
     return (
-        <div style={{ height: '100vh', background: 'rgb(218, 173, 134)', width: '100%', overflow: 'hidden' }} ref={reference}>
-            <p style={{ fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }}>Photos</p>
+        <div style={{ height: '100vh', background: 'rgb(218, 173, 134)', width: '100%', overflow: 'hidden',position:'relative' }} ref={reference}>
+            
+                <p style={titleStyle}>Photos</p>
+            
             <div
                 style={{
                     overflow: "hidden",
                     maxWidth: 650,
+                    paddingTop:55,
                     margin: "auto",
                     width: winSize === 1 ? '100%' : '70%'
                 }}

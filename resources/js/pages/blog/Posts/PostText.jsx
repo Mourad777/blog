@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-const PostText = ({ post, isMobile, index }) => {
+const PostText = ({ post, isMobile, index, isLargeMobileLandscape }) => {
 
     return (
         <div
@@ -15,7 +15,7 @@ const PostText = ({ post, isMobile, index }) => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    minHeight: isMobile ? 'calc(100vh - 461px)' : 200,
+                    minHeight: isLargeMobileLandscape ? 100 : isMobile ? 'calc(100vh - 461px)' : 200,
                     minWidth: isMobile ? '' : 478,
                     position: 'relative',
                 }}
@@ -30,18 +30,18 @@ const PostText = ({ post, isMobile, index }) => {
                         fontSize: 16,
                         background: 'transparent !important',
                         position: 'absolute',
-                        top: 30,
-                        left: !isMobile ? '20%' : '',
-                        transform: !isMobile ? 'translateX(-20%)' : '',
+                        top: isLargeMobileLandscape ? 5 : 30,
+                        left:isLargeMobileLandscape ?'5%' : !isMobile ? '20%' : '',
+                        transform:isLargeMobileLandscape ? 'translateX(-5%)' : !isMobile ? 'translateX(-20%)' : '',
                         textAlign: 'center',
                         maxWidth: 170,
                     }}
 
                 >
                     <div >
-                        {!!post.title && <p style={{ fontSize: '1.5em',fontFamily:'Mulish' }}>{post.title}</p>}
-                        {!!post.created_at && <p style={{ fontStyle: 'italic',fontFamily:'Mulish', fontSize:'0.7em', color: 'rgb(251,251,251)', }}>{moment(new Date(post.created_at).getTime()).format("MMMM DD YYYY")}</p>}
-                        {!!post.summary && <p style={{ fontSize: '0.8em',fontFamily:'Mulish' }}>{`${post.summary.substring(0, 100)} ${post.summary.length > 99 ?'...' : ''}`}</p>}
+                        {!!post.title && <p style={{fontWeight:'bold', fontSize: isLargeMobileLandscape ? '1em' : '1.5em', fontFamily: 'Mulish' }}>{post.title}</p>}
+                        {!!post.created_at && <p style={{ fontStyle: 'italic', fontFamily: 'Mulish', fontSize: '0.7em', color: 'rgb(251,251,251)', }}>{moment(new Date(post.created_at).getTime()).format("MMMM DD YYYY")}</p>}
+                        {(!isLargeMobileLandscape && !!post.summary) && <p style={{ fontSize: '0.8em', fontFamily: 'Mulish' }}>{`${post.summary.substring(0, 100)} ${post.summary.length > 99 ? '...' : ''}`}</p>}
                     </div>
                 </div>
 

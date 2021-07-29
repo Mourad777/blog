@@ -4,7 +4,7 @@ import VideoIcon from '../../../../../public/assets/video-icon.jpg'
 import ReactPaginate from 'react-paginate';
 
 
-export default ({ reference, videos, winSize }) => {
+export default ({ reference, videos, winSize, isLargeMobileLandscape }) => {
     const history = useHistory();
     const [offset, setOffset] = useState(0);
     const [data, setData] = useState([]);
@@ -12,12 +12,12 @@ export default ({ reference, videos, winSize }) => {
     let perPage = 3;
     let margin = '1.66%'
     let width = '30%'
-    if(winSize === 1){
+    if (winSize === 1) {
         width = '80%'
         perPage = 1
         margin = '6.66%'
     }
-    if(winSize === 2) {
+    if (winSize === 2) {
         perPage = 2
         width = '40%'
         margin = '3.33%'
@@ -32,26 +32,30 @@ export default ({ reference, videos, winSize }) => {
     useEffect(() => {
         getData()
     }, [offset, videos]);
-    useEffect(()=>{
+    useEffect(() => {
         getData()
         setOffset(1)
-    },[winSize])
+    }, [winSize])
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
         setOffset(selectedPage + 1)
     };
+    let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center', marginBottom: 0 }
+    if (isLargeMobileLandscape) {
+        titleStyle = { ...titleStyle, position: 'absolute', fontSize: '4em', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-5%' }
+    }
     return (
-        <div style={{ paddingTop: 50, height: '100vh', background: 'rgb(236, 231, 226)', width: '100%' }} ref={reference}>
-            <p style={{ fontFamily: 'Mulish,sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center' }}>Videos</p>
+        <div style={{ paddingTop: 50, height: '100vh', background: 'rgb(236, 231, 226)', width: '100%', position: 'relative' }} ref={reference}>
+            <p style={titleStyle}>Videos</p>
             <div
                 style={{
                     overflow: "hidden",
                     width: "85vw",
                     maxWidth: 900,
                     margin: "auto",
-                    display:'flex',
-                    justifyContent:'space-around'
+                    display: 'flex',
+                    justifyContent: 'space-around'
                 }}
             >
                 {data.map((video, i) => (
@@ -61,7 +65,7 @@ export default ({ reference, videos, winSize }) => {
                             history.push(`/video/${video.id}`)
                         }}
                         style={{
-                            background:'#fff',
+                            background: '#fff',
                             cursor: "pointer",
                             float: "left",
                             position: "relative",
@@ -70,9 +74,9 @@ export default ({ reference, videos, winSize }) => {
                             overflow: "hidden",
                         }}
                     >
-                        <div style={{height:'10vh',background:'#fff'}}><p style={{textAlign:'center',paddingTop:10}}>{video.title}</p></div>
-                        <img src={video.thumbnail || VideoIcon} style={{ width: '100%', height: '25vh', objectFit: 'cover' }} />
-                        <div style={{height:'100%',background:'#fff'}}><p style={{textAlign:'center',paddingTop:10}}>{video.description}</p></div>
+                        <div style={{minHeight:60, height: '10vh', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10,fontFamily:'Mulish',fontWeight:'bold',fontSize:'1.2em' }}>{video.title}</p></div>
+                        <img src={video.thumbnail || VideoIcon} style={{ width: '100%', height: isLargeMobileLandscape ? '40vh' : '25vh', objectFit:!video.thumbnail && isLargeMobileLandscape ?'scale-down' : 'cover' }} />
+                        {!isLargeMobileLandscape && <div style={{ height: '100%', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10 }}>{video.description}</p></div>}
                     </div>
                     // </Link>
                 ))}

@@ -64,7 +64,7 @@ export const getHeroSectionButtonOneStyle = (windowWidth,windowHeight) => {
         bottom = 470;
     }
     if(isLargeMobileLandscape){
-        right = 500;
+        right = 550;
         bottom = 250;
     }
     // if (windowWidth === 4) {

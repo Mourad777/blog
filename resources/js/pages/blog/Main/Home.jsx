@@ -332,23 +332,24 @@ const Home = ({ scrollWidth, winSize, height }) => {
                             isAssetLoaded={isAssetLoaded}
                             refPosts={refSection2}
                             refVideos={refSection5}
+                            isLargeMobileLandscape={isLargeMobileLandscape}
                         />
                     </StyledHeroSection>
                     {/* the spacer section is so that gsap will snap to latest post section if the top part of that section is in view port */}
                     <div id="spacer" style={{ overflow: 'hidden', width: '100%', height: '100vh', zIndex: -10 }} ref={refSectionX} />
-                    <PostsSection reference={refSection2} postsFromDB={postsFromDB} winSize={winSize} />
+                    <PostsSection isLargeMobileLandscape={isLargeMobileLandscape} reference={refSection2} postsFromDB={postsFromDB} winSize={winSize} />
 
-                    <WorldMap reference={refSection3} postsFromDB={postsFromDB} videos={videos} photos={photos} winSize={winSize} />
+                    <WorldMap reference={refSection3} isLargeMobileLandscape={isLargeMobileLandscape} postsFromDB={postsFromDB} videos={videos} photos={photos} winSize={winSize} />
                     {/* <Country reference={refSectionDestination} postsFromDB={postsFromDB} /> */}
 
-                    <PhotosSection photos={photos} reference={refSection4} winSize={winSize} height={height} scrollWidth={scrollWidth} />
+                    <PhotosSection photos={photos} isLargeMobileLandscape={isLargeMobileLandscape} reference={refSection4} winSize={winSize} height={height} scrollWidth={scrollWidth} />
                     {/* <PhotosSectionDetail reference={refSectionPhotos}/> */}
 
-                    <VideosSection videos={videos} reference={refSection5} winSize={winSize} />
+                    <VideosSection videos={videos} isLargeMobileLandscape={isLargeMobileLandscape} reference={refSection5} winSize={winSize} />
                     {/* <VideosSectionDetail reference={refSectionVideos}/> */}
 
                     <StyledContactSection ref={refSection6} id="contact-section">
-                        <ContactForm />
+                        <ContactForm isLargeMobileLandscape={isLargeMobileLandscape} />
                     </StyledContactSection>
                 </div>
 

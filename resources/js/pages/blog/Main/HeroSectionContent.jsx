@@ -24,6 +24,7 @@ const HeroSectionContent = ({
     countryThumbnails,
     refPosts,
     refVideos,
+    isLargeMobileLandscape
 }) => {
 
     const handleScroll = (ref) => {
@@ -35,19 +36,19 @@ const HeroSectionContent = ({
 
             <Search photos={photos} videos={videos} posts={posts} winSize={winSize} countryThumbnails={countryThumbnails} />
 
-            <div id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize,height), position: 'fixed' }} />
+            <div id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize, height), position: 'fixed' }} />
             {["One", "Two", "One"].map((piece, i) => (
                 <div
                     className={`HeroPicPiece${piece}`}
                     key={`[Heropic]${i}`}
-                    style={getHeroSectionPicPiecesStyle(winSize, i + 1,height)}
+                    style={getHeroSectionPicPiecesStyle(winSize, i + 1, height)}
                 />
             ))}
 
             <svg
                 style={{
-                    ...getHeroSectionNameStyle(winSize,height),
-                    opacity: winSize === 1 && height < 600 ? 0 : 1, transition: 'opacity 0.3s ease-in'
+                    ...getHeroSectionNameStyle(winSize, height),
+                    opacity: (winSize === 1 && height < 600) || (isLargeMobileLandscape && height < 330) ? 0 : 1, transition: 'opacity 0.3s ease-in'
                 }}
                 className={isAssetLoaded ? "HeroTextAnimationOne" : ""}
                 viewBox="0 0 120 50"
@@ -60,21 +61,27 @@ const HeroSectionContent = ({
 
             <div style={{
                 ...getHeroSectionTextStyle(winSize, height),
-                opacity: winSize === 1 && height < 530 ? 0 : 1, transition: 'opacity 0.3s ease-in'
+                opacity: (winSize === 1 && height < 530) || (isLargeMobileLandscape && height < 300) ? 0 : 1, transition: 'opacity 0.3s ease-in'
             }} >
-                <p id="heroTextSecondary" style={{ fontFamily: 'Mulish,sans-serif' }} >
+                <p id="heroTextSecondary" style={{
+                    fontFamily: 'Mulish,sans-serif',
+                    borderRadius: 5,
+                    padding: 10,
+                    background: isLargeMobileLandscape ? 'rgb(123,123,123,0.2)' : '',
+                }} >
                     I'm Mourad - Adventure travel photographer,
                     videographer, blogger, and digital nomad. Join me as
                     I share wild stories, beautiful images, and useful
                     travel tips with you from around the world!
                 </p>
             </div>
-            <button onClick={()=>handleScroll(refPosts)} id="hero-button-1" className="hero-button" style={{
-                ...getHeroSectionButtonOneStyle(winSize,height),background:'blue'
+            <button onClick={() => handleScroll(refPosts)} id="hero-button-1" className="hero-button" style={{
+                ...getHeroSectionButtonOneStyle(winSize, height),
+                // background:'blue'
 
             }}>Read my Blog</button>
-            <button onClick={()=>handleScroll(refVideos)} id="hero-button-2" className="hero-button" style={{
-                ...getHeroSectionButtonTwoStyle(winSize,height),
+            <button onClick={() => handleScroll(refVideos)} id="hero-button-2" className="hero-button" style={{
+                ...getHeroSectionButtonTwoStyle(winSize, height),
 
             }}>Watch my Videos</button>
 

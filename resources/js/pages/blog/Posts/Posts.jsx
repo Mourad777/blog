@@ -5,7 +5,7 @@ import RowLayout from './RowLayout';
 import Paginate from '../../../components/blog/Paginate/Paginate';
 import { gsap } from 'gsap/all';
 
-const LatestPosts = ({ winSize, postsFromDB, reference }) => {
+const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference }) => {
 
     const [pageCount, setPageCount] = useState(0);
     const [posts, setPosts] = useState([]);
@@ -22,10 +22,12 @@ const LatestPosts = ({ winSize, postsFromDB, reference }) => {
     // }, [offset, winSize, postsFromDB]);
 
     useEffect(() => {
-        gsap.fromTo(".post-text-1", { opacity: 0.3 }, { opacity: 1, duration: 1 });
-        gsap.fromTo(".post-image-1", { opacity: 0.3 }, { opacity: 1, duration: 1 });
-        gsap.fromTo(".post-text-2", { opacity: 0.3 }, { opacity: 1, duration: 1 });
-        gsap.fromTo(".post-image-2", { opacity: 0.3 }, { opacity: 1, duration: 1 });
+        gsap.fromTo(".post-text-1", { opacity: 0.3 }, { opacity: 1, duration: 0.4 });
+        gsap.fromTo(".post-image-1", { opacity: 0.3 }, { opacity: 1, duration: 0.4 });
+        gsap.fromTo(".post-text-2", { opacity: 0.3 }, { opacity: 1, duration: 0.4 });
+        gsap.fromTo(".post-image-2", { opacity: 0.3 }, { opacity: 1, duration: 0.4 });
+
+    
     }, [selectedPage]);
 
     useEffect(() => {
@@ -55,11 +57,15 @@ const LatestPosts = ({ winSize, postsFromDB, reference }) => {
         setSelectedPage(selectedPage)
     };
 
-    return (<div ref={reference} style={{ height: '100vh', overflow: 'hidden', zIndex: 6 }}>
+    let titleStyle = { zIndex:1, fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff',background:'#daad86', textAlign: 'center', marginBottom: 0 }
+    if (isLargeMobileLandscape) {
+        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '5%' }
+    }
 
-        <StyledLatestPostsTopLayer >
-            <p style={{ fontFamily: 'Mulish,sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center' }}>Posts</p>
-        </StyledLatestPostsTopLayer>
+    return (<div ref={reference} style={{ height: '100vh', overflow: 'hidden', zIndex: 6, position: 'relative' }}>
+
+            <p style={titleStyle}>Posts</p>
+
         <div style={{
             display: 'flex', background: '#DAAD86',
             height:
@@ -71,20 +77,20 @@ const LatestPosts = ({ winSize, postsFromDB, reference }) => {
                 <Paginate totalPages={pageCount} page={selectedPage} handlePageClick={handlePageClick} />}
         </div>
         <StyledLatestPostsOuterWrapper >
-            {winSize > 1 && <OuterColumn isLeft />}
-            <StyledLatestPostsInnerWrapper >
+            {winSize > 1 && <OuterColumn isLargeMobileLandscape={isLargeMobileLandscape} isLeft />}
+            <StyledLatestPostsInnerWrapper isLargeMobileLandscape={isLargeMobileLandscape}>
 
                 {posts.map((post, index) => (
                     <StyledPostRow key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >
 
-                        <RowLayout offset={selectedPage} winSize={winSize} post={post} index={index} />
+                        <RowLayout isLargeMobileLandscape={isLargeMobileLandscape} offset={selectedPage} winSize={winSize} post={post} index={index} />
 
                     </StyledPostRow>
                 ))}
 
                 <div style={{ background: '#daad86', height: '100%' }} />
             </StyledLatestPostsInnerWrapper>
-            {winSize > 1 && <OuterColumn />}
+            {winSize > 1 && <OuterColumn isLargeMobileLandscape={isLargeMobileLandscape} />}
         </StyledLatestPostsOuterWrapper>
 
         <div style={{
@@ -94,4 +100,4 @@ const LatestPosts = ({ winSize, postsFromDB, reference }) => {
     </div>)
 }
 
-export default LatestPosts;
+export default Posts;

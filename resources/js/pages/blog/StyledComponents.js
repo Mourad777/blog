@@ -7,9 +7,9 @@ import mapLowRes from '../../../../public/assets/map-notepad-white-md.jpg'
 //Styledpath StyledDestinationsSection
 //styledmapover
 //430px
-//StyledLatestPostsTitle
-//StyledLatestPostsSection
-//font contact styledthumb contact StyledLatestPostsOuterWrapper
+//StyledLatestPostsTitle contactformcont
+//StyledLatestPostsSection styledcontactsec
+//font contact styledthumb contact StyledLatestPostsOuterWrapper StyledLatestPostsInnerWrapper StyledInputGroup
 export const StyledPostRow = styled.div`
 border: rgba(218, 173, 134) solid;
 border-width: ${props => props.index === 0 ? "40" : "20"
@@ -48,7 +48,7 @@ height:100%;
 export const StyledLatestPostsInnerWrapper = styled.div`
 margin: "auto";
 flex-grow: 1;
-max-width: 600px;
+max-width: ${props=>props.isLargeMobileLandscape ? 400 : 600}px;
 `;
 
 export const StyledDestinationsSection = styled.section`
@@ -109,17 +109,6 @@ text-align: center;
 color: black;
 `;
 
-export const StyledContactFormContainer = styled.form`
-width:100%;
-max-width: 500px;
-position: absolute;
-left: 50%;
-top: 50%;
-padding:0 40px 0 40px;
--webkit-transform: translate(-50%, -50%);
-transform: translate(-50%, -50%);
-`;
-
 export const StyledContactTitle = styled.svg`
 z-index:1;
 position: absolute;
@@ -134,11 +123,11 @@ fill: white;
 export const StyledInputGroup = styled.div`
 display:flex;
 flex-direction:column;
-margin-top:35px;
+padding-top:10px;
 `;
 export const StyledInputLabel = styled.span`
 color: white;
-margin-bottom:15px;
+padding-bottom:15px;
 `;
 
 export const StyledTextInput = styled.input`
@@ -169,6 +158,7 @@ export const StyledContactFormSubmitButton = styled.button`
     height: 40px;
     border: none;
     background: white;
+    color:rgb(216, 161, 114);
 `;
 
 export const StyledPostContainer = styled.div`

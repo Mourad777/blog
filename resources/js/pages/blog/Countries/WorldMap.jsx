@@ -5,20 +5,22 @@ import geo from "./geo.json"
 const geoUrl =
     "https://raw.githubusercontent.com/zcreat";
 
-const WorldMap = ({ winSize, reference, postsFromDB = [], photos, videos }) => {
+const WorldMap = ({ winSize, reference, postsFromDB = [], photos, videos, isLargeMobileLandscape }) => {
     const history = useHistory();
     const handleClick = (geo) => () => {
         const highlightedCountries = [...postsFromDB.map(p => p.country), ...photos.map(p => p.country), ...videos.map(p => p.country)];
         if (highlightedCountries.includes(geo.ISO_A2)) {
             history.push(`/destination/${geo.ISO_A2}`)
-            // history.push(`/destination/${geo.NAME.toLowerCase()}`)
         }
-
+    }
+    let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center', marginBottom: 0 }
+    if (isLargeMobileLandscape) {
+        titleStyle = { ...titleStyle, position: 'absolute',fontSize: '4em', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-5%' }
     }
 
     return (
-        <div style={{ paddingTop: 50, background: '#ece7e2', height: '100vh', width: '100%',zIndex:1,overflow:'hidden' }} ref={reference}>
-            <p style={{ fontFamily: 'Mulish,sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center' }}>Pick a destination!</p>
+        <div style={{ paddingTop: isLargeMobileLandscape ? 0 : 50, background: '#ece7e2', height: '100vh', width: '100%', zIndex: 1, overflow: 'hidden', position: 'relative' }} ref={reference}>
+            <p style={titleStyle}>Destinations</p>
             <ComposableMap
                 style={
                     winSize !== 1
