@@ -222,9 +222,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
 
     return (
         <Fragment>
-
             <div id="main" style={{ overflow: 'hidden' }}>
-
                 <Loader isAssetLoaded={isAssetLoaded} />
                 {(winSize > 1 && !isLargeMobileLandscape) && (
                     <Navigation
@@ -241,7 +239,6 @@ const Home = ({ scrollWidth, winSize, height }) => {
                         }
                     />
                 )}
-
 
                 {/* must use a lower resolution map for mobile devices */}
                 <div id="map-pics-container" style={{ zIndex: 5, position: 'fixed', height: '100vh', width: '100%' }}>
@@ -308,10 +305,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
                     >
                         <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={(photos[2] || {}).src} />
                     </div>}
-
-
                 </div>
-
 
                 <div id="container" style={{ position: "relative" }}>
                     <div id="map-container" style={{ position: 'fixed', height: '100%', width: '100%', top: getMapPosition(winSize,height).top, zIndex: -1 }}>

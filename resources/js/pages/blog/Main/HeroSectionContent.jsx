@@ -46,7 +46,7 @@ const HeroSectionContent = ({
 
             <svg
                 style={{
-                    ...getHeroSectionNameStyle(winSize),
+                    ...getHeroSectionNameStyle(winSize,height),
                     opacity: winSize === 1 && height < 600 ? 0 : 1, transition: 'opacity 0.3s ease-in'
                 }}
                 className={isAssetLoaded ? "HeroTextAnimationOne" : ""}
@@ -59,7 +59,7 @@ const HeroSectionContent = ({
             </svg>
 
             <div style={{
-                ...getHeroSectionTextStyle(winSize, isAssetLoaded),
+                ...getHeroSectionTextStyle(winSize, height),
                 opacity: winSize === 1 && height < 530 ? 0 : 1, transition: 'opacity 0.3s ease-in'
             }} >
                 <p id="heroTextSecondary" style={{ fontFamily: 'Mulish,sans-serif' }} >
