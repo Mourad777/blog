@@ -81,7 +81,7 @@ const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference }) => {
             <StyledLatestPostsInnerWrapper isLargeMobileLandscape={isLargeMobileLandscape}>
 
                 {posts.map((post, index) => (
-                    <StyledPostRow key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >
+                    <StyledPostRow isLargeMobileLandscape={isLargeMobileLandscape} key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >
 
                         <RowLayout isLargeMobileLandscape={isLargeMobileLandscape} offset={selectedPage} winSize={winSize} post={post} index={index} />
 

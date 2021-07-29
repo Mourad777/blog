@@ -91,7 +91,7 @@ const Country = ({ winSize,height }) => {
                     gridGap: '3rem',
                     gridTemplateColumns: postColumns,
                 }}>
-                    {posts.map(p => <div key={p.title} onClick={() => history.push(`/post/${p.id}`)} style={{ borderRadius: 5, background: '#fff', height: '50vh', cursor: 'pointer', }}>
+                    {posts.map(p => <div key={p.title} onClick={() => history.push(`/post/${p.id}`)} style={{ borderRadius: 5, background: '#fff', height: '50vh',minHeight:330, cursor: 'pointer', }}>
                         <div style={{ height: '25%', padding: 10 }}><p style={{
                             fontFamily: 'Mulish',
                             fontWeight: 600,

@@ -6,14 +6,14 @@ import mapLowRes from '../../../../public/assets/map-notepad-white-md.jpg'
 // import mapLowRes from '../../../../public/assets/map-sketch.jpg'
 //Styledpath StyledDestinationsSection
 //styledmapover
-//430px
+//430px StyledPostRow
 //StyledLatestPostsTitle contactformcont
 //StyledLatestPostsSection styledcontactsec
 //font contact styledthumb contact StyledLatestPostsOuterWrapper StyledLatestPostsInnerWrapper StyledInputGroup
 export const StyledPostRow = styled.div`
 border: rgba(218, 173, 134) solid;
-border-width: ${props => props.index === 0 ? "40" : "20"
-    }px 20px ${props => props.index === 2 ? "40" : "20"
+border-width: ${props => props.isLargeMobileLandscape ? 20 : props.index === 0 ? "40" : "20"
+    }px 20px ${props => props.isLargeMobileLandscape ? 20 : props.index === 2 ? "40" : "20"
     }px 20px;
 position: relative;
 margin-left: 0;
