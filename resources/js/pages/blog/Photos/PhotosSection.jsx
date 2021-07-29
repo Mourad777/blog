@@ -37,7 +37,7 @@ export default ({ reference, photos, winSize, scrollWidth, height, isLargeMobile
 
     let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }
     if (isLargeMobileLandscape) {
-        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-2%' }
+        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-7%' }
     }
     return (
         <div style={{ height: '100vh', background: 'rgb(218, 173, 134)', width: '100%', overflow: 'hidden',position:'relative' }} ref={reference}>

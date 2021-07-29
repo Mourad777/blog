@@ -15,7 +15,7 @@ function capitalize(str) {
     return capStr
 }
 
-const Country = ({ winSize }) => {
+const Country = ({ winSize,height }) => {
     const params = useParams();
     const countryIso = params.country;
     const selectedCategory = params.categoryId;
@@ -115,7 +115,7 @@ const Country = ({ winSize }) => {
             </div>}
             {
                 photos.length > 0 && <div className="photo-category-container">
-                    <Photos winSize={winSize} photos={photos} />
+                    <Photos winSize={winSize} height={height} photos={photos} />
                 </div>
             }
             {

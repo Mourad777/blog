@@ -97,7 +97,7 @@ const App = () => {
                     <Post winSize={winSize} />
                 </Route>
                 <Route path="/destination/:country">
-                    <Category winSize={winSize} />
+                    <Category winSize={winSize} height={height}/>
                 </Route>
                 <Route path="/category/:categoryId">
                     <Category winSize={winSize} />

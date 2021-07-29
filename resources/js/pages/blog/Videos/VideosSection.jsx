@@ -43,7 +43,7 @@ export default ({ reference, videos, winSize, isLargeMobileLandscape }) => {
     };
     let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center', marginBottom: 0 }
     if (isLargeMobileLandscape) {
-        titleStyle = { ...titleStyle, position: 'absolute', fontSize: '4em', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-5%' }
+        titleStyle = { ...titleStyle, position: 'absolute', fontSize: '4em', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-6%' }
     }
     return (
         <div style={{ paddingTop: 50, height: '100vh', background: 'rgb(236, 231, 226)', width: '100%', position: 'relative' }} ref={reference}>

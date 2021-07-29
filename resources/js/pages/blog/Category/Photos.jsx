@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import 'react-alice-carousel/lib/alice-carousel.css';
 import Carousel from 'react-alice-carousel';
 import { useHistory } from "react-router-dom";
-function PhotoGallery({ winSize, photos }) {
+function PhotoGallery({ winSize,height, photos }) {
     const history = useHistory();
     const [currentImage, setCurrentImage] = useState(0);
 
@@ -22,9 +22,13 @@ function PhotoGallery({ winSize, photos }) {
             onDragStart={handleDragStart}
         />
     </div>);
+    let isLargeMobileLandscape = false;
+    if (winSize === 2 && height < 420) {
+        isLargeMobileLandscape = true
+    }
     return (
         <div style={{ background: '#daad86', padding: 20 }}>
-            <div style={{ position: 'relative', margin: 'auto', maxWidth: 600 }}>
+            <div style={{ position: 'relative', margin: 'auto', maxWidth:isLargeMobileLandscape ? 200 : 600 }}>
                 <p style={{ textAlign: 'center', color: 'rgb(236, 231, 226)', fontSize: '3em', fontFamily: 'Mulish', paddingTop: 30 }}>Photos</p>
                 <Carousel
                     disableDotsControls={items.length > 10 ? true : false}

@@ -48,7 +48,7 @@ const HeroSectionContent = ({
             <svg
                 style={{
                     ...getHeroSectionNameStyle(winSize, height),
-                    opacity: (winSize === 1 && height < 600) || (isLargeMobileLandscape && height < 300) ? 0 : 1, transition: 'opacity 0.3s ease-in'
+                    opacity: (winSize === 1 && height < 480) || (isLargeMobileLandscape && height < 250) ? 0 : 1, transition: 'opacity 0.3s ease-in'
                 }}
                 className={isAssetLoaded ? "HeroTextAnimationOne" : ""}
                 viewBox="0 0 120 50"
@@ -61,7 +61,7 @@ const HeroSectionContent = ({
 
             <div style={{
                 ...getHeroSectionTextStyle(winSize, height),
-                opacity: (winSize === 1 && height < 530) || (isLargeMobileLandscape && height < 250) ? 0 : 1, transition: 'opacity 0.3s ease-in'
+                opacity: (winSize === 1 && height < 430) || (isLargeMobileLandscape && height < 200) ? 0 : 1, transition: 'opacity 0.3s ease-in'
             }} >
                 <p id="heroTextSecondary" style={{
                     fontFamily: 'Mulish,sans-serif',
