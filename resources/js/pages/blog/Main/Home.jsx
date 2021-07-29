@@ -193,27 +193,32 @@ const Home = ({ scrollWidth, winSize, height }) => {
         }
         //function to listen to viewport width changes
         // addEventListener("resize", getWindowSize, { passive: true });
-    }, [postsFromDB])
+    }, [postsFromDB]);
 
-    const transformStyles1 = scrollPosition >= 200 && scrollPosition < 1000 ? {
+    const transformStyles1 = scrollPosition >= 100 && scrollPosition < 1000 ? {
         opacity: 1,
         scale: 1,
         transform: 'rotate(-15deg) scale(1)',
     } : {};
 
 
-    const transformStyles2 = scrollPosition >= 300 && scrollPosition < 1000 ? {
+    const transformStyles2 = scrollPosition >= 200 && scrollPosition < 1000 ? {
         opacity: 1,
         scale: 1,
         transform: 'rotate(20deg) scale(1)',
     } : {};
 
 
-    const transformStyles3 = scrollPosition >= 500 && scrollPosition < 1000 ? {
+    const transformStyles3 = scrollPosition >= 300 && scrollPosition < 1000 ? {
         opacity: 1,
         scale: 1,
         transform: 'rotate(-10deg) scale(1)',
     } : {};
+
+    let isLargeMobileLandscape = false;
+    if (winSize === 2 && height < 420) {
+        isLargeMobileLandscape = true
+    }
 
     return (
         <Fragment>
@@ -221,7 +226,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
             <div id="main" style={{ overflow: 'hidden' }}>
 
                 <Loader isAssetLoaded={isAssetLoaded} />
-                {winSize > 1 && (
+                {(winSize > 1 && !isLargeMobileLandscape) && (
                     <Navigation
                         scrollSection={scrollSection}
                         componentReferences={
@@ -243,8 +248,8 @@ const Home = ({ scrollWidth, winSize, height }) => {
 
                     {(photos[0] || {}).src && <div id="hero-pic-1" style={{
                         position: 'absolute',
-                        top: '42%',
-                        left: '32%',
+                        top:isLargeMobileLandscape ? '20%' : '42%',
+                        left:isLargeMobileLandscape ? '40%' :  '32%',
                         transform: 'translateX(-50%) translateY(-50%)',
                         // top: winSize === 1 ? 270 : 300,
                         // left: winSize === 1 ? 15 : 100,
@@ -266,8 +271,8 @@ const Home = ({ scrollWidth, winSize, height }) => {
                     </div>}
                     {(photos[1] || {}).src && <div id="hero-pic-2" style={{
                         position: 'absolute',
-                        top: '62%',
-                        left: winSize <= 2 ? '7%' : '35%',
+                        top: isLargeMobileLandscape ? '50%' : '62%',
+                        left:isLargeMobileLandscape ? '20%' :  winSize <= 2 ? '7%' : '35%',
                         height: 100,
                         width: 100,
                         cursor: 'pointer',
@@ -309,9 +314,9 @@ const Home = ({ scrollWidth, winSize, height }) => {
 
 
                 <div id="container" style={{ position: "relative" }}>
-                    <div id="map-container" style={{ position: 'fixed', height: '100%', width: '100%', top: getMapPosition(winSize).top, zIndex: -1 }}>
+                    <div id="map-container" style={{ position: 'fixed', height: '100%', width: '100%', top: getMapPosition(winSize,height).top, zIndex: -1 }}>
                         <div style={{ position: 'relative', height: '100vh' }}>
-                            <StyledMap windowWidth={winSize} width={getMapPosition(winSize).width} lowRes src={mapLowRes} />
+                            <StyledMap windowWidth={winSize} width={getMapPosition(winSize,height).width} lowRes src={mapLowRes} />
 
                             {/* path drawing on world map svg */}
                             <MapPath winSize={winSize} />
@@ -331,6 +336,8 @@ const Home = ({ scrollWidth, winSize, height }) => {
                             heroPicMainRef={heroPicMainRef}
                             winSize={winSize}
                             isAssetLoaded={isAssetLoaded}
+                            refPosts={refSection2}
+                            refVideos={refSection5}
                         />
                     </StyledHeroSection>
                     {/* the spacer section is so that gsap will snap to latest post section if the top part of that section is in view port */}

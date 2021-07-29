@@ -9,6 +9,15 @@ const animations = [
         properties: {
             opacity: -30,
         }
+    },
+    {
+        target: '.hero-button',
+        trigger: '#main',
+        start: 'top top',
+        end: 'center bottom',
+        properties: {
+            opacity: -30,
+        }
     }, 
     // {
     //     target: '#myline',

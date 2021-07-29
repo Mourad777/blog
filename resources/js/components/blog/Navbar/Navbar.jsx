@@ -54,13 +54,13 @@ const LinkWrapper = styled.div`
 export default ({ scrollSection, componentReferences }) => {
     const links = [
         { name: "Welcome", id: "hero-section", ref: componentReferences.welcome },
-        { name: "Latests Posts", id: "latest-posts-section", ref: componentReferences.posts },
+        { name: "Posts", id: "latest-posts-section", ref: componentReferences.posts },
         // selectedSection === 'posts' ? { name: "Posts", id: "posts-section",ref:componentReferences.destinations } : null,
         { name: "Destinations", id: "destinations-section", ref: componentReferences.destinations },
         // selectedSection === 'destination' ? { name: "Posts", id: "destinations-section-detail",ref:'' } : null,
         { name: "Photos", id: "photos-section", ref: componentReferences.photos },
         // selectedSection === 'photos' ? { name: "Photo detail", id: "photos-section-detail",ref:componentReferences.photos } : null,
-        { name: "Latest videos", id: "videos-section", ref: componentReferences.videos },
+        { name: "Videos", id: "videos-section", ref: componentReferences.videos },
         // selectedSection === 'videos' ? { name: "All videos", id: "videos-section-detail",ref:componentReferences.videos } : null,
         { name: "Contact", id: "contact-section", ref: componentReferences.contact }
     ].filter(item => item);

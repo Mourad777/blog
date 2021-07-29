@@ -1,16 +1,18 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 import ScrollDownArrow from '../../../components/blog/ScrollDownArrow/ScrollDownArrow';
-import SearchInput from '../../../components/blog/SearchInput/SearchInput';
 import { heroTextPathOne } from '../svgs';
-import countryCodes from '../Countries/country-codes.json'
 import {
     getHeroSectionPicPiecesStyle,
     getHeroSectionPicStyle,
     getHeroSectionNameStyle,
     getHeroSectionTextStyle,
     getSearchInputStyle,
+    getHeroSectionButtonOneStyle,
+    getHeroSectionButtonTwoStyle
 } from "../utility";
 import Search from './SearchResults';
+import { gsap } from 'gsap/all'
+
 const HeroSectionContent = ({
     winSize,
     heroPicMainRef,
@@ -20,19 +22,25 @@ const HeroSectionContent = ({
     posts,
     height,
     countryThumbnails,
+    refPosts,
+    refVideos,
 }) => {
+
+    const handleScroll = (ref) => {
+        gsap.to(window, { duration: 3, scrollTo: ref.current });
+    }
 
     return (
         <Fragment>
 
             <Search photos={photos} videos={videos} posts={posts} winSize={winSize} countryThumbnails={countryThumbnails} />
 
-            <div id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize), position: 'fixed' }} />
+            <div id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize,height), position: 'fixed' }} />
             {["One", "Two", "One"].map((piece, i) => (
                 <div
                     className={`HeroPicPiece${piece}`}
                     key={`[Heropic]${i}`}
-                    style={getHeroSectionPicPiecesStyle(winSize, i + 1)}
+                    style={getHeroSectionPicPiecesStyle(winSize, i + 1,height)}
                 />
             ))}
 
@@ -61,10 +69,19 @@ const HeroSectionContent = ({
                     travel tips with you from around the world!
                 </p>
             </div>
-            <div className="scroll-down-arrow" style={{position:'absolute',bottom:100,left:'5%',height:70}}>
+            <button onClick={()=>handleScroll(refPosts)} id="hero-button-1" className="hero-button" style={{
+                ...getHeroSectionButtonOneStyle(winSize,height),
+
+            }}>Read my Blog</button>
+            <button onClick={()=>handleScroll(refVideos)} id="hero-button-2" className="hero-button" style={{
+                ...getHeroSectionButtonTwoStyle(winSize,height),
+
+            }}>Watch my Videos</button>
+
+            <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 100, left: '5%', height: 70 }}>
                 <ScrollDownArrow />
             </div>
-            <div className="scroll-down-arrow" style={{position:'absolute',bottom:100,right:'5%',height:70}}>
+            <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 100, right: '5%', height: 70 }}>
                 <ScrollDownArrow />
             </div>
         </Fragment>
