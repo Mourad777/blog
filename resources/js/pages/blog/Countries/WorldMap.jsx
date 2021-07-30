@@ -17,15 +17,21 @@ const WorldMap = ({ winSize, reference, postsFromDB = [], photos, videos, isLarg
     if (isLargeMobileLandscape) {
         titleStyle = { ...titleStyle, position: 'absolute',fontSize: '4em', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-130px' }
     }
-
+    const defaultStyle ={
+        left:'50%',
+        top:'50%',
+        transform:'translate(-50%,-50%)',
+        position:'absolute'
+    }
     return (
         <div style={{ paddingTop: isLargeMobileLandscape ? 0 : 50, background: '#ece7e2', height: '100vh', width: '100%', zIndex: 1, overflow: 'hidden', position: 'relative' }} ref={reference}>
             <p style={titleStyle}>Destinations</p>
             <ComposableMap
                 style={
+                    
                     winSize !== 1
-                        ? { width: "60%", display: "block", margin: "auto" }
-                        : {}
+                        ? {...defaultStyle, width: "60%", display: "block", margin: "auto" }
+                        : defaultStyle
                 }
             >
                 <Geographies geography={geo}>

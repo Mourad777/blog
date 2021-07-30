@@ -89,12 +89,12 @@ const HeroSectionContent = ({
 
             }}>Watch my Videos</button>
 
-            <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 100, left: '5%', height: 70 }}>
+            <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 180, left: '50%', transform: 'translateX(-50%)', height: 70 }}>
                 <ScrollDownArrow />
             </div>
-            <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 100, right: '5%', height: 70 }}>
+            {/* <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 100, right: '5%', height: 70 }}>
                 <ScrollDownArrow />
-            </div>
+            </div> */}
         </Fragment>
     )
 }

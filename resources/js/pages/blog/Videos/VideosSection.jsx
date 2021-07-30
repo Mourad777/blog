@@ -55,7 +55,11 @@ export default ({ reference, videos, winSize, isLargeMobileLandscape }) => {
                     maxWidth: 900,
                     margin: "auto",
                     display: 'flex',
-                    justifyContent: 'space-around'
+                    justifyContent: 'space-around',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%,-50%)',
+                    position: 'absolute'
                 }}
             >
                 {data.map((video, i) => (
@@ -73,11 +77,12 @@ export default ({ reference, videos, winSize, isLargeMobileLandscape }) => {
                             height: "50vh",
                             overflow: "hidden",
                             minHeight:205,
+                            maxHeight:600,
                         }}
                     >
-                        <div style={{minHeight:60, height: '10vh', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10,fontFamily:'Mulish',fontWeight:'bold',fontSize:'1.2em' }}>{video.title}</p></div>
-                        <img src={video.thumbnail || VideoIcon} style={{ width: '100%', height: isLargeMobileLandscape ? '40vh' : '25vh', objectFit:!video.thumbnail && isLargeMobileLandscape ?'scale-down' : 'cover' }} />
-                        {!isLargeMobileLandscape && <div style={{ height: '100%', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10 }}>{video.description}</p></div>}
+                        <div style={{minHeight:60,maxHeight:100, height: '10vh', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10,fontFamily:'Mulish',fontWeight:'bold',fontSize:'1.2em' }}>{video.title}</p></div>
+                        <img src={video.thumbnail || VideoIcon} style={{maxHeight:300, width: '100%', height: isLargeMobileLandscape ? '40vh' : '25vh', objectFit:!video.thumbnail && isLargeMobileLandscape ?'scale-down' : 'cover' }} />
+                        {!isLargeMobileLandscape && <div style={{maxHeight:200, height: '100%', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10 }}>{video.description}</p></div>}
                     </div>
                     // </Link>
                 ))}

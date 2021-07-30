@@ -37,20 +37,25 @@ export default ({ reference, photos, winSize, scrollWidth, height, isLargeMobile
 
     let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }
     if (isLargeMobileLandscape) {
-        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%',left:'-60px' }
+        titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-60px' }
     }
     return (
-        <div style={{ height: '100vh', background: 'rgb(218, 173, 134)', width: '100%', overflow: 'hidden',position:'relative' }} ref={reference}>
-            
-                <p style={titleStyle}>Photos</p>
-            
+        <div style={{ height: '100vh', background: 'rgb(218, 173, 134)', width: '100%', overflow: 'hidden', position: 'relative' }} ref={reference}>
+
+            <p style={titleStyle}>Photos</p>
+
             <div
                 style={{
                     overflow: "hidden",
                     maxWidth: 650,
-                    paddingTop:55,
+                    paddingTop: 55,
                     margin: "auto",
-                    width: winSize === 1 ? '100%' : '70%'
+                    width: winSize === 1 ? '100%' : '70%',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%,-50%)',
+                    position: 'absolute'
+
                 }}
             >
 

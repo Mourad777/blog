@@ -50,7 +50,11 @@ export const getHeroSectionButtonOneStyle = (windowWidth,windowHeight) => {
     if(windowWidth === 2 && windowHeight < 420){
         isLargeMobileLandscape = true
     }
-    let right, bottom;
+    let isTabletVertical = false;
+    if(windowWidth === 2 && windowHeight > 1000){
+        isTabletVertical = true
+    }
+    let right, bottom,fontSize,height,width;
     if (windowWidth === 1) {
         right = 200;
         bottom = 265;
@@ -62,10 +66,20 @@ export const getHeroSectionButtonOneStyle = (windowWidth,windowHeight) => {
     if (windowWidth > 2) {
         right = 800;
         bottom = 470;
+        fontSize = '1.4em';
+        width = 180;
+        height = 80;
     }
     if(isLargeMobileLandscape){
         right = 470;
         bottom = 250;
+    }
+    if(isTabletVertical){
+        right = 545;
+        bottom = 500;
+        fontSize = '1.4em';
+        width = 180;
+        height = 80;
     }
     // if (windowWidth === 4) {
     //     width = 450;
@@ -75,7 +89,7 @@ export const getHeroSectionButtonOneStyle = (windowWidth,windowHeight) => {
     //     width = 450;
     //     top = 0;
     // }
-    return { ...heroSectionButtonBaseStyle, bottom, right };
+    return { ...heroSectionButtonBaseStyle,fontSize,width,height, bottom, right };
 }
 
 export const getHeroSectionButtonTwoStyle = (windowWidth,windowHeight) => {
@@ -83,22 +97,40 @@ export const getHeroSectionButtonTwoStyle = (windowWidth,windowHeight) => {
     if(windowWidth === 2 && windowHeight < 420){
         isLargeMobileLandscape = true
     }
-    let right, bottom;
+    let isTabletVertical = false;
+    if(windowWidth === 2 && windowHeight > 1000){
+        isTabletVertical = true
+    }
+    let right, bottom,fontSize,height,width;
     if (windowWidth === 1) {
         right = 30;
         bottom = 180;
     }
     if (windowWidth === 2) {
         right = 120;
-        bottom = 175;
+        bottom = 100;
     }
     if (windowWidth > 2) {
         right = 270;
         bottom = 300;
+        fontSize = '1.4em';
+        width = 180;
+        height = 80;
     }
     if(isLargeMobileLandscape){
         right = 160;
         bottom = 210;
+    }
+    if(isLargeMobileLandscape){
+        right = 160;
+        bottom = 210;
+    }
+    if(isTabletVertical){
+        right = 290;
+        bottom = 270;
+        fontSize = '1.4em';
+        width = 180;
+        height = 80;
     }
     // }
     // if (windowWidth === 4) {
@@ -109,13 +141,17 @@ export const getHeroSectionButtonTwoStyle = (windowWidth,windowHeight) => {
     //     width = 450;
     //     bottom = 0;
     // }
-    return { ...heroSectionButtonBaseStyle, bottom, right };
+    return { ...heroSectionButtonBaseStyle,fontSize,width,height, bottom, right };
 }
 
 export const getMapPosition = (windowWidth,windowHeight) => {
     let isLargeMobileLandscape = false;
     if(windowWidth === 2 && windowHeight < 420){
         isLargeMobileLandscape = true
+    }
+    let isTabletVertical = false;
+    if(windowWidth === 2 && windowHeight > 1000){
+        isTabletVertical = true
     }
     let width, top;
     if (windowWidth === 1) {
@@ -140,6 +176,10 @@ export const getMapPosition = (windowWidth,windowHeight) => {
     }
     if(isLargeMobileLandscape){
         width = 220;
+        top = 0;
+    }
+    if(isTabletVertical){
+        width = 260;
         top = 0;
     }
     return { width, top };
@@ -176,8 +216,12 @@ export const getSearchInputStyle = (windowWidth) => {
 export const getHeroSectionPicStyle = (windowWidth,windowHeight) => {
     let top, right, width, height;
     let isLargeMobileLandscape = false;
+    let isTabletVertical = false;
     if(windowWidth === 2 && windowHeight < 420){
         isLargeMobileLandscape = true
+    }
+    if(windowWidth === 2 && windowHeight > 1000){
+        isTabletVertical = true
     }
     if (windowWidth === 1) {
         top = "calc(100vh - 825px)";
@@ -215,6 +259,12 @@ export const getHeroSectionPicStyle = (windowWidth,windowHeight) => {
         width = 1360;
         height = "calc(100vh + 200px)";
     }
+    if(isTabletVertical){
+        top = "calc(100vh - 1440px)";
+        right = -910;
+        width = 2560;
+        height = "calc(100vh + 200px)";
+    }
     return {
         background: `url('${herSectionPic}')`,
         backgroundSize: "100%",
@@ -235,6 +285,10 @@ export const getHeroSectionPicPiecesStyle = (windowWidth, piece, windowHeight) =
     let isLargeMobileLandscape = false;
     if(windowWidth === 2 && windowHeight < 420){
         isLargeMobileLandscape = true
+    }
+    let isTabletVertical = false;
+    if(windowWidth === 2 && windowHeight > 1000){
+        isTabletVertical = true
     }
     let top, right, width, height;
     if (windowWidth === 1) {
@@ -275,6 +329,12 @@ export const getHeroSectionPicPiecesStyle = (windowWidth, piece, windowHeight) =
         height = 1000;
         width = 160;
     }
+    if(isTabletVertical){
+        top = "calc(100vh - 885px)";
+        right = piece === 1 ? 330 : piece === 2 ? 70 : -190;
+        height = 1000;
+        width = 451;
+    }
     let image;
     if (piece === 1) image = herSectionPieceOne;
     if (piece === 2) image = herSectionPieceTwo;
@@ -299,6 +359,10 @@ export const getHeroSectionNameStyle = (windowWidth,windowHeight) => {
     if(windowWidth === 2 && windowHeight < 420){
         isLargeMobileLandscape = true
     }
+    let isTabletVertical = false;
+    if(windowWidth === 2 && windowHeight > 1000){
+        isTabletVertical = true
+    }
     let top, right, height, width;
     if (windowWidth === 1) {
         top = "calc(100vh - 550px)";
@@ -306,12 +370,12 @@ export const getHeroSectionNameStyle = (windowWidth,windowHeight) => {
         width = 300;
     }
     if (windowWidth === 2) {
-        top = "calc(100vh - 220px)";
+        top = "calc(100vh - 360px)";
         right = -390;
-        width = 300;
+        width = 350;
     }
     if (windowWidth === 3) {
-        top = "calc(100vh - 350px)";
+        top = "calc(100vh - 460px)";
         right = -710;
         width = 565;
     }
@@ -330,6 +394,12 @@ export const getHeroSectionNameStyle = (windowWidth,windowHeight) => {
         right = -390;
         width = 300;
     }
+    if (isTabletVertical) {
+        top = "calc(100vh - 1000px)";
+        right = -390;
+        width = 500;
+    }
+    
     return {
         position: "fixed",
         strokeDasharray: 180,
@@ -353,6 +423,10 @@ export const getHeroSectionTextStyle = (windowWidth,windowHeight) => {
     if(windowWidth === 2 && windowHeight < 420){
         isLargeMobileLandscape = true
     }
+    let isTabletVertical = false;
+    if(windowWidth === 2 && windowHeight > 1000){
+        isTabletVertical = true
+    }
     let top, right, fontSize, width;
     if (windowWidth === 1) {
         top = "calc(100vh - 440px)";
@@ -361,13 +435,13 @@ export const getHeroSectionTextStyle = (windowWidth,windowHeight) => {
         width = 300;
     }
     if (windowWidth === 2) {
-        top = "calc(100vh - 114px)";
+        top = "calc(100vh - 230px)";
         right = 220;
         fontSize = "1.1em";
         width = 380;
     }
     if (windowWidth === 3) {
-        top = "calc(100vh - 155px)";
+        top = "calc(100vh - 250px)";
         right = 350;
         fontSize = "1.6em";
         width = 720;
@@ -389,6 +463,12 @@ export const getHeroSectionTextStyle = (windowWidth,windowHeight) => {
         right = 220;
         fontSize = "1.1em";
         width = 380;
+    }
+    if (isTabletVertical) {
+        top = "calc(100vh - 820px)";
+        right = 220;
+        fontSize = "1.6em";
+        width = 480;
     }
     return {
         fontFamily: "Mulish",

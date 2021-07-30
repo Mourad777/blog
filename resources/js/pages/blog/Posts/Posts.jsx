@@ -5,7 +5,7 @@ import RowLayout from './RowLayout';
 import Paginate from '../../../components/blog/Paginate/Paginate';
 import { gsap } from 'gsap/all';
 
-const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference }) => {
+const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference,height }) => {
 
     const [pageCount, setPageCount] = useState(0);
     const [posts, setPosts] = useState([]);
@@ -78,7 +78,7 @@ const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference }) => {
         </div>
         <StyledLatestPostsOuterWrapper >
             {winSize > 1 && <OuterColumn isLargeMobileLandscape={isLargeMobileLandscape} isLeft />}
-            <StyledLatestPostsInnerWrapper isLargeMobileLandscape={isLargeMobileLandscape}>
+            <StyledLatestPostsInnerWrapper height={height} isLargeMobileLandscape={isLargeMobileLandscape}>
 
                 {posts.map((post, index) => (
                     <StyledPostRow isLargeMobileLandscape={isLargeMobileLandscape} key={`post[${post._id}]index[${index}]`} className="row" index={index} winSize={winSize} >

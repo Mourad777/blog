@@ -8,6 +8,7 @@ import { getMapPosition } from '../utility';
 
 const MapPath = ({ 
     winSize,
+    winHeight,
 }) => (
     <svg
         id="mySVG"
@@ -15,7 +16,7 @@ const MapPath = ({
         viewBox="0 0 1000 1000" preserveAspectRatio="none"
         // windowWidth={winSize}
         style={{
-            width: `${getMapPosition(winSize).width}%`,
+            width: `${getMapPosition(winSize,winHeight).width}%`,
             // paddingBottom: '42%',
             height: 'auto',
             overflow: 'visible',

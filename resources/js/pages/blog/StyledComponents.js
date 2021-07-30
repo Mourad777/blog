@@ -5,7 +5,7 @@ import styled from "styled-components";
 import mapLowRes from '../../../../public/assets/map-notepad-white-md.jpg'
 // import mapLowRes from '../../../../public/assets/map-sketch.jpg'
 //Styledpath StyledDestinationsSection
-//styledmapover
+//styledmapover postsinner
 //430px StyledPostRow
 //StyledLatestPostsTitle contactformcont
 //StyledLatestPostsSection styledcontactsec
@@ -48,6 +48,7 @@ height:100%;
 export const StyledLatestPostsInnerWrapper = styled.div`
 margin: "auto";
 flex-grow: 1;
+border-top:${props=>props.height > 1100 ? '200px solid #daad86' : ''};
 max-width: ${props=>props.isLargeMobileLandscape ? 400 : 600}px;
 `;
 
