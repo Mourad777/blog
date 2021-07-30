@@ -72,6 +72,7 @@ export default ({ reference, videos, winSize, isLargeMobileLandscape }) => {
                             width,
                             height: "50vh",
                             overflow: "hidden",
+                            minHeight:205,
                         }}
                     >
                         <div style={{minHeight:60, height: '10vh', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10,fontFamily:'Mulish',fontWeight:'bold',fontSize:'1.2em' }}>{video.title}</p></div>
