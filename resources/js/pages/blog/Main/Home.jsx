@@ -24,8 +24,10 @@ import { Fragment } from "react";
 import _ from "lodash";
 import VideoIcon from '../../../../../public/assets/video-icon.jpg'
 import { useHistory } from "react-router-dom";
-import mapLowRes from '../../../../../public/assets/map-notepad-desk-md.jpg'
+// import notepad from '../../../../../public/assets/map-notepad-desk-md.jpg'
+import notepad from '../../../../../public/assets/images/notepad.webp'
 import { getCountryThumbnails, getPhotos, getPosts, getVideos } from "../../admin/util/api";
+import ImgNextGen from "../../../components/blog/NextGenImg/NextGenImg";
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
 // gsap.ticker.fps(30)
@@ -181,7 +183,8 @@ const Home = ({ scrollWidth, winSize, height }) => {
 
     useEffect(() => {
         //function that determines when heavy images are loaded
-        const src = $(heroPicMainRef.current).css("background-image");
+        const src = $(heroPicMainRef.current).css("src");
+        assetLoadedHandler()
         if (src) {
             const url = src.match(/\((.*?)\)/)[1].replace(/('|")/g, "");
             const img = new Image();
@@ -245,8 +248,8 @@ const Home = ({ scrollWidth, winSize, height }) => {
 
                     {(photos[0] || {}).src && <div id="hero-pic-1" style={{
                         position: 'absolute',
-                        top:isLargeMobileLandscape ? '20%' : '42%',
-                        left:isLargeMobileLandscape ? '40%' :  '32%',
+                        top: isLargeMobileLandscape ? '20%' : '42%',
+                        left: isLargeMobileLandscape ? '40%' : '32%',
                         transform: 'translateX(-50%) translateY(-50%)',
                         // top: winSize === 1 ? 270 : 300,
                         // left: winSize === 1 ? 15 : 100,
@@ -269,7 +272,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
                     {(photos[1] || {}).src && <div id="hero-pic-2" style={{
                         position: 'absolute',
                         top: isLargeMobileLandscape ? '50%' : '62%',
-                        left:isLargeMobileLandscape ? '20%' :  winSize <= 2 ? '7%' : '35%',
+                        left: isLargeMobileLandscape ? '20%' : winSize <= 2 ? '7%' : '35%',
                         height: 100,
                         width: 100,
                         cursor: 'pointer',
@@ -308,10 +311,28 @@ const Home = ({ scrollWidth, winSize, height }) => {
                 </div>
 
                 <div id="container" style={{ position: "relative" }}>
-                    <div id="map-container" style={{ position: 'fixed', height: '100%', width: '100%', top: getMapPosition(winSize,height).top, zIndex: -1 }}>
+                    <div id="map-container" style={{ position: 'fixed', height: '100%', width: '100%', top: getMapPosition(winSize, height).top, zIndex: -1 }}>
                         <div style={{ position: 'relative', height: '100vh' }}>
-                            <StyledMap windowWidth={winSize} width={getMapPosition(winSize,height).width} lowRes src={mapLowRes} />
-
+                            <StyledMap windowWidth={winSize} width={getMapPosition(winSize, height).width} lowRes src={notepad} />
+                            {/* <ImgNextGen
+                                styles={
+                                    {
+                                        width: `${getMapPosition(winSize, height).width}%`,
+                                        height: 'auto',
+                                        backgroundRepeat: 'no-repeat',
+                                        zIndex: -3,
+                                        position: 'absolute',
+                                        left: '50%',
+                                        top: '50%',
+                                        transform: 'translateX(-50%) translateY(-50%)',
+                                    }
+                                }
+                                srcWebp={notepad}
+                                srcJrx={notepad}
+                                srcJp2={notepad}
+                                fallback={notepad}
+                                alt="Map of north america"
+                            /> */}
                             {/* path drawing on world map svg */}
                             <MapPath winSize={winSize} />
 

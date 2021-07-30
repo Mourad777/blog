@@ -75,10 +75,10 @@ var Loader = function Loader() {
 
 /***/ }),
 
-/***/ "./resources/js/pages/admin/comments/Comments.jsx":
-/*!********************************************************!*\
-  !*** ./resources/js/pages/admin/comments/Comments.jsx ***!
-  \********************************************************/
+/***/ "./resources/js/pages/admin/countries/Countries.jsx":
+/*!**********************************************************!*\
+  !*** ./resources/js/pages/admin/countries/Countries.jsx ***!
+  \**********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -88,9 +88,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../blog/StyledComponents */ "./resources/js/pages/blog/StyledComponents.js");
-/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
-/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+/* harmony import */ var _blog_StyledComponents__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../blog/StyledComponents */ "./resources/js/pages/blog/StyledComponents.js");
+/* harmony import */ var _util_countries_iso__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/countries-iso */ "./resources/js/pages/admin/util/countries-iso.jsx");
 /* harmony import */ var _util_api__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/api */ "./resources/js/pages/admin/util/api.js");
 /* harmony import */ var _components_admin_Loader_Loader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../components/admin/Loader/Loader */ "./resources/js/components/admin/Loader/Loader.jsx");
 
@@ -118,56 +118,35 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
-var Comments = function Comments(_ref) {
-  var isPost = _ref.isPost,
-      isVideo = _ref.isVideo;
-  var docType;
+var Countries = function Countries(_ref) {
+  var winSize = _ref.winSize;
 
-  if (isPost) {
-    docType = 'post';
-  }
-
-  if (isVideo) {
-    docType = 'video';
-  }
-
-  var params = Object(react_router__WEBPACK_IMPORTED_MODULE_3__["useParams"])();
-
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
-      comments = _useState2[0],
-      setComments = _useState2[1];
+      country = _useState2[0],
+      setCountry = _useState2[1];
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({}),
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      document = _useState4[0],
-      setDocument = _useState4[1];
+      countryThumbnails = _useState4[0],
+      setCountryThumbnails = _useState4[1];
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
       isLoading = _useState6[0],
       setIsLoading = _useState6[1];
 
   var getInitialData = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      var docId;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              docId = params.id;
-              _context.next = 3;
-              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getDocument"])(docId, docType, setDocument, setIsLoading);
+              _context.next = 2;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getCountryThumbnails"])(setCountryThumbnails, setIsLoading);
 
-            case 3:
-              _context.next = 5;
-              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getComments"])(docId, docType, setComments, setIsLoading);
-
-            case 5:
+            case 2:
             case "end":
               return _context.stop();
           }
@@ -182,17 +161,54 @@ var Comments = function Comments(_ref) {
 
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     getInitialData();
-  }, []); // export const deleteComment = async (id, setIsLoading) => {
-  //     setIsLoading(true)
-  //     setIsLoading(false)
-  // }
+  }, []);
 
-  var handleDeleteComment = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(commentId, setIsLoading) {
+  var handleCountry = function handleCountry(e, _ref3) {
+    var value = _ref3.value;
+    e.preventDefault();
+    setCountry(value);
+  };
+
+  var handleFileChange = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(e) {
+      var file, formData, existingCountry;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              file = e.target.files[0];
+              formData = new FormData();
+              formData.append('country', country);
+              formData.append('image', file); //check if country already has image
+
+              existingCountry = countryThumbnails.find(function (c) {
+                return c.country === country;
+              });
+
+              if (!existingCountry) {
+                _context2.next = 11;
+                break;
+              }
+
+              _context2.next = 8;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["updateCountryThumbnail"])(existingCountry.id, formData, setIsLoading);
+
+            case 8:
+              _context2.next = 10;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getCountryThumbnails"])(setCountryThumbnails, setIsLoading);
+
+            case 10:
+              return _context2.abrupt("return");
+
+            case 11:
+              _context2.next = 13;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["uploadCountryThumbnail"])(formData, setIsLoading);
+
+            case 13:
+              _context2.next = 15;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getCountryThumbnails"])(setCountryThumbnails, setIsLoading);
+
+            case 15:
             case "end":
               return _context2.stop();
           }
@@ -200,27 +216,27 @@ var Comments = function Comments(_ref) {
       }, _callee2);
     }));
 
-    return function handleDeleteComment(_x, _x2) {
-      return _ref3.apply(this, arguments);
+    return function handleFileChange(_x) {
+      return _ref4.apply(this, arguments);
     };
   }();
 
-  var handleCommentApproval = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(id) {
-      var docId;
+  var fileInputRef = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_1__["createRef"])();
+
+  var handleFileDelete = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(id) {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              docId = params.id;
-              _context3.next = 3;
-              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["toggleCommentApproval"])(docId, setIsLoading);
+              _context3.next = 2;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["deleteCountryThumbnail"])(id, setIsLoading);
 
-            case 3:
-              _context3.next = 5;
-              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getComments"])(docId, docType, setComments, setIsLoading);
+            case 2:
+              _context3.next = 4;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getCountryThumbnails"])(setCountryThumbnails, setIsLoading);
 
-            case 5:
+            case 4:
             case "end":
               return _context3.stop();
           }
@@ -228,15 +244,15 @@ var Comments = function Comments(_ref) {
       }, _callee3);
     }));
 
-    return function handleCommentApproval(_x3) {
-      return _ref4.apply(this, arguments);
+    return function handleFileDelete(_x2) {
+      return _ref5.apply(this, arguments);
     };
   }();
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
-      margin: 'auto',
-      maxWidth: 800
+      maxWidth: 500,
+      margin: 'auto'
     }
   }, isLoading && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
@@ -246,77 +262,58 @@ var Comments = function Comments(_ref) {
       left: '50%',
       transform: 'translateX(-50%)'
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_admin_Loader_Loader__WEBPACK_IMPORTED_MODULE_6__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h1", null, capitalizeFirstLetter(docType), " Comments from ", document.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("table", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_admin_Loader_Loader__WEBPACK_IMPORTED_MODULE_6__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h1", null, "Countries"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
-      margin: 'auto',
-      width: '100%'
+      marginTop: 20
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
-    style: {
-      fontSize: '1.2em'
-    }
-  }, "User"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
     style: {
       fontSize: '1.2em'
     }
-  }, "E-mail"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+  }, "Country"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["Dropdown"], {
+    clearable: true,
+    placeholder: "Select Country",
+    fluid: true,
+    search: true,
+    selection: true,
+    options: _util_countries_iso__WEBPACK_IMPORTED_MODULE_4__["countries"],
+    onChange: handleCountry,
+    value: country
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
-      fontSize: '1.2em',
-      textAlign: 'center'
+      marginTop: 20
     }
-  }, "Approved")), comments.map(function (c, i) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], {
-      key: c.id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
-      style: {
-        height: 60,
-        padding: 20
-      },
-      key: c.id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, i + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, c.user), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, c.email), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      style: {
-        display: 'flex',
-        justifyContent: 'space-around'
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__["Checkbox"], {
-      checked: !!c.is_approved,
-      onChange: function onChange() {
-        return handleCommentApproval(c.id);
-      }
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__["StyledRedButton"], {
-      onClick: function onClick() {
-        return handleDeleteComment(c.id);
-      }
-    }, "Delete"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
-      style: {
-        height: 60,
-        padding: 10,
-        width: '100%',
-        margin: 20
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
-      style: {
-        background: '#efefef',
-        paddingLeft: 20
-      },
-      colSpan: "4"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("textarea", {
-      readOnly: true,
-      rows: "4",
-      cols: "50",
-      style: {
-        fontWeight: 600,
-        border: 'none',
-        background: '#efefef',
-        fontFamily: 'Mulish',
-        fontSize: '1.1em',
-        lineHeight: 1.8
-      }
-    }, c.content))));
-  }))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_3__["StyledThumbnailPreview"], {
+    file: (countryThumbnails.find(function (c) {
+      return c.country === country;
+    }) || {}).image // file={file instanceof File ? URL.createObjectURL(file) : file} 
+
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    style: {
+      marginTop: 20
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_3__["StyledBlueButton"], {
+    onClick: function onClick() {
+      return fileInputRef.current.click();
+    },
+    icon: "image"
+  }, "Upload Thumbnail"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_3__["StyledRedButton"], {
+    onClick: function onClick() {
+      return handleFileDelete((countryThumbnails.find(function (c) {
+        return c.country === country;
+      }) || {}).id);
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+    className: "trash icon"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    ref: fileInputRef,
+    type: "file",
+    hidden: true,
+    onChange: handleFileChange
+  })));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Comments);
+/* harmony default export */ __webpack_exports__["default"] = (Countries);
 
 /***/ })
 

@@ -12,7 +12,7 @@ import {
 } from "../utility";
 import Search from './SearchResults';
 import { gsap } from 'gsap/all'
-
+import welcomeBackground from '../../../../../public/assets/images/welcome-background.webp'
 const HeroSectionContent = ({
     winSize,
     heroPicMainRef,
@@ -36,7 +36,7 @@ const HeroSectionContent = ({
 
             <Search photos={photos} videos={videos} posts={posts} winSize={winSize} countryThumbnails={countryThumbnails} />
 
-            <div id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize, height), position: 'fixed' }} />
+            <img src={welcomeBackground} id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize, height),position: 'fixed' }} />
             {["One", "Two", "One"].map((piece, i) => (
                 <div
                     className={`HeroPicPiece${piece}`}

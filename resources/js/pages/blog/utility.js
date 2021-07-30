@@ -1,5 +1,5 @@
 // import herSectionPic from '../../../../public/assets/hero-section-blur-1-min.png'
-import herSectionPic from '../../../../public/assets/hero-section-main-new-small.png'
+import welcomeBackground from '../../../../public/assets/images/welcome-background.webp'
 import herSectionPieceOne from '../../../../public/assets/hero-section-piece-1-min.png'
 import herSectionPieceTwo from '../../../../public/assets/hero-section-piece-2-min.png'
 import herSectionPieceThree from '../../../../public/assets/hero-section-piece-3-min.png';
@@ -214,7 +214,7 @@ export const getSearchInputStyle = (windowWidth) => {
 }
 
 export const getHeroSectionPicStyle = (windowWidth,windowHeight) => {
-    let top, right, width, height;
+    let top, right,  height;
     let isLargeMobileLandscape = false;
     let isTabletVertical = false;
     if(windowWidth === 2 && windowHeight < 420){
@@ -224,57 +224,50 @@ export const getHeroSectionPicStyle = (windowWidth,windowHeight) => {
         isTabletVertical = true
     }
     if (windowWidth === 1) {
-        top = "calc(100vh - 825px)";
-        right = -500;
-        width = 1360;
-        height = "calc(100vh + 200px)";
+        top = "calc(100vh - 865px)";
+        right = -510;
+        height = 920;
     }
     if (windowWidth === 2) {
-        top = "calc(100vh - 1020px)";
-        right = -460;
-        width = 1650;
-        height = "calc(100vh + 400px)";
+        top = "calc(100vh - 1175px)";
+        right = -650;
+        height = 1300;
     }
     if (windowWidth === 3) {
         top = "calc(100vh - 1260px)";
         right = -400;
-        width = 2100;
         height = "calc(100vh + 700px)";
     }
     if (windowWidth === 4) {
         top = "calc(100vh - 1959px)";
         right = -200;
-        width = 3000;
         height = "calc(100vh + 700px)";
     }
     if (windowWidth === 5) {
         top = "calc(100vh - 2344px)";
         right = -200;
-        width = 3900;
         height = "calc(100vh + 300px)";
     }
     if(isLargeMobileLandscape){
         top = "calc(100vh - 765px)";
         right = -250;
-        width = 1360;
         height = "calc(100vh + 200px)";
     }
     if(isTabletVertical){
         top = "calc(100vh - 1440px)";
         right = -910;
-        width = 2560;
         height = "calc(100vh + 200px)";
     }
     return {
-        background: `url('${herSectionPic}')`,
-        backgroundSize: "100%",
-        backgroundRepeat: "no-repeat",
+        src: welcomeBackground,
+        // backgroundSize: "100%",
+        // backgroundRepeat: "no-repeat",
         position: "fixed",
-        backgroundPosition: "top center",
-        height: 4000,
+        // backgroundPosition: "top center",
+        height,
         right,
         top,
-        width,
+        width:'auto',
         zIndex: -1,
         // transform: `translateX(${5000 * scroll}px)`,
         // transition: "transform 1s ease-out",
