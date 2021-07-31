@@ -107,11 +107,11 @@ const HeroSectionContent = ({
 
             }}>Watch my Videos</button>
 
-            <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 180, left: isLargeMobileLandscape ? '15%' : '50%', transform: `translateX(${isLargeMobileLandscape ? -15 : -50}%)`, height: 70 }}>
+            <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 200, left: isLargeMobileLandscape ? '15%' : '50%', transform: `translateX(${isLargeMobileLandscape ? -15 : -50}%)`, height: 70 }}>
                 <ScrollDownArrow />
             </div>
 
-            {isLargeMobileLandscape && <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 180, right: '15%', transform: 'translateX(15%)', height: 70 }}>
+            {isLargeMobileLandscape && <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 200, right: '15%', transform: 'translateX(15%)', height: 70 }}>
                 <ScrollDownArrow />
             </div>}
             {/* <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 100, right: '5%', height: 70 }}>
