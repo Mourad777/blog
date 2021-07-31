@@ -345,12 +345,12 @@ export const getHeroSectionNameStyle = (windowWidth, windowHeight) => {
         width = 300;
     }
     if (windowWidth === 2) {
-        top = "calc(100vh - 360px)";
+        top = "calc(100vh - 380px)";
         right = -390;
         width = 350;
     }
     if (windowWidth === 3) {
-        top = "calc(100vh - 460px)";
+        top = "calc(100vh - 480px)";
         right = -710;
         width = 565;
     }
@@ -410,13 +410,13 @@ export const getHeroSectionTextStyle = (windowWidth, windowHeight) => {
         width = 300;
     }
     if (windowWidth === 2) {
-        top = "calc(100vh - 230px)";
+        top = "calc(100vh - 250px)";
         right = 220;
         fontSize = "1.1em";
         width = 380;
     }
     if (windowWidth === 3) {
-        top = "calc(100vh - 250px)";
+        top = "calc(100vh - 270px)";
         right = 350;
         fontSize = "1.6em";
         width = 720;
