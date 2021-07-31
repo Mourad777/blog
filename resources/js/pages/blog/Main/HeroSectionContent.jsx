@@ -29,19 +29,29 @@ const HeroSectionContent = ({
     countryThumbnails,
     refPosts,
     refVideos,
-    isLargeMobileLandscape
+    isLargeMobileLandscape,
+    onImageLoad,
 }) => {
 
     const handleScroll = (ref) => {
         gsap.to(window, { duration: 3, scrollTo: ref.current });
     }
 
+
     return (
         <Fragment>
 
             <Search photos={photos} videos={videos} posts={posts} winSize={winSize} countryThumbnails={countryThumbnails} />
 
-            <img src={welcomeBackground} id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize, height), position: 'fixed' }} />
+            <img
+                src={welcomeBackground}
+                id="hero-pic-main"
+                ref={heroPicMainRef}
+                onLoad={()=>onImageLoad('welcome-background')}
+                style={{
+                    ...getHeroSectionPicStyle(winSize, height),
+                    position: 'fixed'
+                }} />
             {["One", "Two", "One"].map((piece, i) => {
                 let image;
                 if (i + 1 === 1) image = herSectionPieceOne;
@@ -49,6 +59,7 @@ const HeroSectionContent = ({
                 if (i + 1 === 3) image = herSectionPieceThree;
                 return (
                     <img
+                        onLoad={() => onImageLoad(`piece[${i + 1}]`)}
                         src={image}
                         className={`HeroPicPiece${piece}`}
                         key={`[Heropic]${i}`}

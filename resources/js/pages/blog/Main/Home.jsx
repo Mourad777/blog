@@ -45,6 +45,13 @@ const Home = ({ scrollWidth, winSize, height }) => {
     const heroPicMainRef = useRef(null);
 
     const [isAssetLoaded, setIsAssetLoaded] = useState(false);
+
+    const [isheroSectionBackgroundPieceOneLoaded, setIsHeroSectionBackgroundPieceOneLoaded] = useState(false);
+    const [isheroSectionBackgroundPieceTwoLoaded, setIsHeroSectionBackgroundPieceTwoLoaded] = useState(false);
+    const [isheroSectionBackgroundPieceThreeLoaded, setIsHeroSectionBackgroundPieceThreeLoaded] = useState(false);
+
+    const [isheroSectionBackgroundLoaded, setIsHeroSectionBackgroundLoaded] = useState(false);
+
     const [postsFromDB, setPostsFromDB] = useState([]);
     const [photos, setPhotos] = useState([]);
     const [videos, setVideos] = useState([]);
@@ -177,26 +184,26 @@ const Home = ({ scrollWidth, winSize, height }) => {
         }
     }, [refSection2, refSection3, refSection4, refSection5, refSectionX, isAssetLoaded])
 
-    const assetLoadedHandler = () => {
-        setIsAssetLoaded(true);
-    };
-
     useEffect(() => {
-        //function that determines when heavy images are loaded
-        const src = $(heroPicMainRef.current).css("src");
-        assetLoadedHandler()
-        if (src) {
-            const url = src.match(/\((.*?)\)/)[1].replace(/('|")/g, "");
-            const img = new Image();
-            img.onload = function () {
-                assetLoadedHandler();
-            };
-            img.src = url;
-            if (img.complete) img.onload();
+       const assetsLoaded = [
+            isheroSectionBackgroundLoaded,
+            isheroSectionBackgroundPieceOneLoaded,
+            isheroSectionBackgroundPieceTwoLoaded,
+            isheroSectionBackgroundPieceThreeLoaded
+        ]
+        .filter(item=>item)
+        .length;
+
+        console.log('assets loaded: ',assetsLoaded)
+        if(assetsLoaded === 4){
+            setIsAssetLoaded(true)
         }
-        //function to listen to viewport width changes
-        // addEventListener("resize", getWindowSize, { passive: true });
-    }, [postsFromDB]);
+    }, [
+        isheroSectionBackgroundLoaded,
+        isheroSectionBackgroundPieceOneLoaded,
+        isheroSectionBackgroundPieceTwoLoaded,
+        isheroSectionBackgroundPieceThreeLoaded
+    ]);
 
     const transformStyles1 = scrollPosition >= 100 && scrollPosition < 1000 ? {
         opacity: 1,
@@ -221,6 +228,22 @@ const Home = ({ scrollWidth, winSize, height }) => {
     let isLargeMobileLandscape = false;
     if (winSize === 2 && height < 420) {
         isLargeMobileLandscape = true
+    }
+
+    const handleImageLoad = (image) => {
+        if(image === 'welcome-background'){
+            setIsHeroSectionBackgroundLoaded(true)
+        }
+        if(image === 'piece[1]'){
+            setIsHeroSectionBackgroundPieceOneLoaded(true)
+        }
+        if(image === 'piece[2]'){
+            setIsHeroSectionBackgroundPieceTwoLoaded(true)
+        }
+        if(image === 'piece[3]'){
+            setIsHeroSectionBackgroundPieceThreeLoaded(true)
+        }
+        
     }
 
     return (
@@ -354,6 +377,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
                             refPosts={refSection2}
                             refVideos={refSection5}
                             isLargeMobileLandscape={isLargeMobileLandscape}
+                            onImageLoad={handleImageLoad}
                         />
                     </StyledHeroSection>
                     {/* the spacer section is so that gsap will snap to latest post section if the top part of that section is in view port */}
