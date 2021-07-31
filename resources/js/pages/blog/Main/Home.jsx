@@ -104,7 +104,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
             tr.kill()
         });
         if (isAssetLoaded) {
-            const sections = [refSection2, refSection3, refSection4, refSection5, refSection6, refSectionX].filter(i => i);
+            const sections = [refSection2, refSection3, refSection4, refSection5, refSectionX].filter(i => i);
             sections.forEach((pan, i) => {
                 if (!pan) return;
 
@@ -175,7 +175,7 @@ const Home = ({ scrollWidth, winSize, height }) => {
 
             animate()
         }
-    }, [refSection2, refSection3, refSection4, refSection5, refSection6, refSectionX, isAssetLoaded])
+    }, [refSection2, refSection3, refSection4, refSection5, refSectionX, isAssetLoaded])
 
     const assetLoadedHandler = () => {
         setIsAssetLoaded(true);
@@ -358,19 +358,19 @@ const Home = ({ scrollWidth, winSize, height }) => {
                     </StyledHeroSection>
                     {/* the spacer section is so that gsap will snap to latest post section if the top part of that section is in view port */}
                     <div id="spacer" style={{ overflow: 'hidden', width: '100%', height: '100vh', zIndex: -10 }} ref={refSectionX} />
-                    <PostsSection height={height} isLargeMobileLandscape={isLargeMobileLandscape} reference={refSection2} postsFromDB={postsFromDB} winSize={winSize} />
+                    <PostsSection scrollWidth={scrollWidth} height={height} isLargeMobileLandscape={isLargeMobileLandscape} reference={refSection2} postsFromDB={postsFromDB} winSize={winSize} />
 
-                    <WorldMap reference={refSection3} isLargeMobileLandscape={isLargeMobileLandscape} postsFromDB={postsFromDB} videos={videos} photos={photos} winSize={winSize} />
+                    <WorldMap reference={refSection3} isLargeMobileLandscape={isLargeMobileLandscape}  postsFromDB={postsFromDB} videos={videos} scrollWidth={scrollWidth} photos={photos} height={height} winSize={winSize} />
                     {/* <Country reference={refSectionDestination} postsFromDB={postsFromDB} /> */}
 
-                    <PhotosSection photos={photos} isLargeMobileLandscape={isLargeMobileLandscape} reference={refSection4} winSize={winSize} height={height} scrollWidth={scrollWidth} />
+                    <PhotosSection photos={photos} isLargeMobileLandscape={isLargeMobileLandscape} reference={refSection4} winSize={winSize}  height={height} scrollWidth={scrollWidth} />
                     {/* <PhotosSectionDetail reference={refSectionPhotos}/> */}
 
-                    <VideosSection videos={videos} isLargeMobileLandscape={isLargeMobileLandscape} reference={refSection5} winSize={winSize} />
+                    <VideosSection videos={videos} isLargeMobileLandscape={isLargeMobileLandscape} height={height} reference={refSection5} scrollWidth={scrollWidth} winSize={winSize} />
                     {/* <VideosSectionDetail reference={refSectionVideos}/> */}
 
-                    <StyledContactSection ref={refSection6} id="contact-section">
-                        <ContactForm isLargeMobileLandscape={isLargeMobileLandscape} />
+                    <StyledContactSection id="contact-section">
+                        <ContactForm isLargeMobileLandscape={isLargeMobileLandscape} height={height} scrollWidth={scrollWidth} />
                     </StyledContactSection>
                 </div>
 

@@ -4,7 +4,7 @@ import VideoIcon from '../../../../../public/assets/video-icon.jpg'
 import ReactPaginate from 'react-paginate';
 
 
-export default ({ reference, videos, winSize, isLargeMobileLandscape }) => {
+export default ({ reference, videos, winSize,height, isLargeMobileLandscape,scrollWidth }) => {
     const history = useHistory();
     const [offset, setOffset] = useState(0);
     const [data, setData] = useState([]);
@@ -41,10 +41,19 @@ export default ({ reference, videos, winSize, isLargeMobileLandscape }) => {
         const selectedPage = e.selected;
         setOffset(selectedPage + 1)
     };
+    const aspectRatio = scrollWidth / height;
     let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#daad86', textAlign: 'center', marginBottom: 0 }
-    if (isLargeMobileLandscape) {
+    if (isLargeMobileLandscape || aspectRatio > 1.9) {
         titleStyle = { ...titleStyle, position: 'absolute', fontSize: '4em', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-60px' }
     }
+    const mobileLandscapePaginateStyle = {
+        position: 'absolute',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        top: 10,
+        display: 'flex',
+    }
+
     return (
         <div style={{ paddingTop: 50, height: '100vh', background: 'rgb(236, 231, 226)', width: '100%', position: 'relative' }} ref={reference}>
             <p style={titleStyle}>Videos</p>
@@ -76,19 +85,19 @@ export default ({ reference, videos, winSize, isLargeMobileLandscape }) => {
                             width,
                             height: "50vh",
                             overflow: "hidden",
-                            minHeight:205,
-                            maxHeight:600,
+                            minHeight: 205,
+                            maxHeight: 600,
                         }}
                     >
-                        <div style={{minHeight:60,maxHeight:100, height: '10vh', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10,fontFamily:'Mulish',fontWeight:'bold',fontSize:'1.2em' }}>{video.title}</p></div>
-                        <img src={video.thumbnail || VideoIcon} style={{maxHeight:300, width: '100%', height: isLargeMobileLandscape ? '40vh' : '25vh', objectFit:!video.thumbnail && isLargeMobileLandscape ?'scale-down' : 'cover' }} />
-                        {!isLargeMobileLandscape && <div style={{maxHeight:200, height: '100%', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10 }}>{video.description}</p></div>}
+                        <div style={{ minHeight: 60, maxHeight: 100, height: '10vh', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10, fontFamily: 'Mulish', fontWeight: 'bold', fontSize: '1.2em' }}>{video.title}</p></div>
+                        <img src={video.thumbnail || VideoIcon} style={{ maxHeight: 300, width: '100%', height: isLargeMobileLandscape ? '40vh' : '25vh', objectFit: !video.thumbnail && isLargeMobileLandscape ? 'scale-down' : 'cover' }} />
+                        {!isLargeMobileLandscape && <div style={{ maxHeight: 200, height: '100%', background: '#fff' }}><p style={{ textAlign: 'center', paddingTop: 10 }}>{video.description}</p></div>}
                     </div>
                     // </Link>
                 ))}
             </div>
 
-            <div style={{ display: 'flex' }}>
+            <div style={isLargeMobileLandscape ? mobileLandscapePaginateStyle : { display: 'flex' }}>
                 <ReactPaginate
                     previousLabel={"prev"}
                     nextLabel={"next"}

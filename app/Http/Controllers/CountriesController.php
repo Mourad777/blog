@@ -76,8 +76,8 @@ class CountriesController extends Controller
 
         $resized_file = Image::make($country_image_file)->rotate($orientation === 8 ? 90 : 0)->resize(1200, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->encode($extension);
-        $file_key = 'country-thumbnails/' . $filename;
+        })->encode('webp');
+        $file_key = 'country-thumbnails/' . $filename . '.webp';
 
         $s3->put($file_key, (string)$resized_file, 'public');
 
@@ -102,8 +102,8 @@ class CountriesController extends Controller
 
         $resized_file = Image::make($country_image_file)->rotate($orientation === 8 ? 90 : 0)->resize(1200, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->encode($extension);
-        $file_key = 'country-thumbnails/' . $filename;
+        })->encode('webp');
+        $file_key = 'country-thumbnails/' . $filename. '.webp';
 
         $s3->put($file_key, (string)$resized_file, 'public');
 

@@ -12,7 +12,12 @@ import {
 } from "../utility";
 import Search from './SearchResults';
 import { gsap } from 'gsap/all'
-import welcomeBackground from '../../../../../public/assets/images/welcome-background.webp'
+import welcomeBackground from '../../../../../public/assets/images/welcome-background.webp';
+
+import herSectionPieceOne from '../../../../../public/assets/images/welcome-section-piece-1.webp'
+import herSectionPieceTwo from '../../../../../public/assets/images/welcome-section-piece-2.webp'
+import herSectionPieceThree from '../../../../../public/assets/images/welcome-section-piece-3.webp';
+
 const HeroSectionContent = ({
     winSize,
     heroPicMainRef,
@@ -36,14 +41,27 @@ const HeroSectionContent = ({
 
             <Search photos={photos} videos={videos} posts={posts} winSize={winSize} countryThumbnails={countryThumbnails} />
 
-            <img src={welcomeBackground} id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize, height),position: 'fixed' }} />
-            {["One", "Two", "One"].map((piece, i) => (
-                <div
-                    className={`HeroPicPiece${piece}`}
-                    key={`[Heropic]${i}`}
-                    style={getHeroSectionPicPiecesStyle(winSize, i + 1, height)}
-                />
-            ))}
+            <img src={welcomeBackground} id="hero-pic-main" ref={heroPicMainRef} style={{ ...getHeroSectionPicStyle(winSize, height), position: 'fixed' }} />
+            {["One", "Two", "One"].map((piece, i) => {
+                let image;
+                if (i + 1 === 1) image = herSectionPieceOne;
+                if (i + 1 === 2) image = herSectionPieceTwo;
+                if (i + 1 === 3) image = herSectionPieceThree;
+                return (
+                    <img
+                        src={image}
+                        className={`HeroPicPiece${piece}`}
+                        key={`[Heropic]${i}`}
+                        style={getHeroSectionPicPiecesStyle(winSize, height, i + 1,)
+                        }
+                    />
+                    // <div
+                    //     className={`HeroPicPiece${piece}`}
+                    //     key={`[Heropic]${i}`}
+                    //     style={getHeroSectionPicPiecesStyle(winSize, i + 1, height)}
+                    // />
+                )
+            })}
 
             <svg
                 style={{
@@ -67,7 +85,7 @@ const HeroSectionContent = ({
                     fontFamily: 'Mulish,sans-serif',
                     borderRadius: 5,
                     padding: 10,
-                    background: isLargeMobileLandscape ? 'rgb(123,123,123,0.2)' : '',
+                    background: 'rgb(123,123,123,0.2)',
                 }} >
                     I'm Mourad - Adventure travel photographer,
                     videographer, blogger, and digital nomad. Join me as
@@ -89,9 +107,13 @@ const HeroSectionContent = ({
 
             }}>Watch my Videos</button>
 
-            <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 180, left: '50%', transform: 'translateX(-50%)', height: 70 }}>
+            <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 180, left: isLargeMobileLandscape ? '15%' : '50%', transform: `translateX(${isLargeMobileLandscape ? -15 : -50}%)`, height: 70 }}>
                 <ScrollDownArrow />
             </div>
+
+            {isLargeMobileLandscape && <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 180, right: '15%', transform: 'translateX(15%)', height: 70 }}>
+                <ScrollDownArrow />
+            </div>}
             {/* <div className="scroll-down-arrow" style={{ position: 'absolute', bottom: 100, right: '5%', height: 70 }}>
                 <ScrollDownArrow />
             </div> */}

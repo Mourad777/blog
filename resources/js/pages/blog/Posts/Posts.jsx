@@ -5,7 +5,7 @@ import RowLayout from './RowLayout';
 import Paginate from '../../../components/blog/Paginate/Paginate';
 import { gsap } from 'gsap/all';
 
-const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference,height }) => {
+const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference, height,scrollWidth }) => {
 
     const [pageCount, setPageCount] = useState(0);
     const [posts, setPosts] = useState([]);
@@ -27,7 +27,7 @@ const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference,height 
         gsap.fromTo(".post-text-2", { opacity: 0.3 }, { opacity: 1, duration: 0.4 });
         gsap.fromTo(".post-image-2", { opacity: 0.3 }, { opacity: 1, duration: 0.4 });
 
-    
+
     }, [selectedPage]);
 
     useEffect(() => {
@@ -57,14 +57,16 @@ const Posts = ({ winSize, isLargeMobileLandscape, postsFromDB, reference,height 
         setSelectedPage(selectedPage)
     };
 
-    let titleStyle = { zIndex:1, fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff',background:'#daad86', textAlign: 'center', marginBottom: 0 }
-    if (isLargeMobileLandscape) {
+    const aspectRatio = scrollWidth / height;
+
+    let titleStyle = { zIndex: 1, fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', background: '#daad86', textAlign: 'center', marginBottom: 0 }
+    if (isLargeMobileLandscape || aspectRatio > 1.9) {
         titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-40px' }
     }
 
     return (<div ref={reference} style={{ height: '100vh', overflow: 'hidden', zIndex: 6, position: 'relative' }}>
 
-            <p style={titleStyle}>Posts</p>
+        <p style={titleStyle}>Posts</p>
 
         <div style={{
             display: 'flex', background: '#DAAD86',

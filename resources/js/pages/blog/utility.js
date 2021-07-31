@@ -1,8 +1,5 @@
 // import herSectionPic from '../../../../public/assets/hero-section-blur-1-min.png'
 import welcomeBackground from '../../../../public/assets/images/welcome-background.webp'
-import herSectionPieceOne from '../../../../public/assets/hero-section-piece-1-min.png'
-import herSectionPieceTwo from '../../../../public/assets/hero-section-piece-2-min.png'
-import herSectionPieceThree from '../../../../public/assets/hero-section-piece-3-min.png';
 import { v1 } from "uuid";
 
 
@@ -45,16 +42,16 @@ const heroSectionButtonBaseStyle = {
     pointer: 'cursor',
 }
 
-export const getHeroSectionButtonOneStyle = (windowWidth,windowHeight) => {
+export const getHeroSectionButtonOneStyle = (windowWidth, windowHeight) => {
     let isLargeMobileLandscape = false;
-    if(windowWidth === 2 && windowHeight < 420){
+    if (windowWidth === 2 && windowHeight < 420) {
         isLargeMobileLandscape = true
     }
     let isTabletVertical = false;
-    if(windowWidth === 2 && windowHeight > 1000){
+    if (windowWidth === 2 && windowHeight > 1000) {
         isTabletVertical = true
     }
-    let right, bottom,fontSize,height,width;
+    let right, bottom, fontSize, height, width;
     if (windowWidth === 1) {
         right = 200;
         bottom = 265;
@@ -64,17 +61,17 @@ export const getHeroSectionButtonOneStyle = (windowWidth,windowHeight) => {
         bottom = 370;
     }
     if (windowWidth > 2) {
-        right = 800;
+        right = 900;
         bottom = 470;
         fontSize = '1.4em';
         width = 180;
         height = 80;
     }
-    if(isLargeMobileLandscape){
+    if (isLargeMobileLandscape) {
         right = 470;
         bottom = 250;
     }
-    if(isTabletVertical){
+    if (isTabletVertical) {
         right = 545;
         bottom = 500;
         fontSize = '1.4em';
@@ -89,22 +86,22 @@ export const getHeroSectionButtonOneStyle = (windowWidth,windowHeight) => {
     //     width = 450;
     //     top = 0;
     // }
-    return { ...heroSectionButtonBaseStyle,fontSize,width,height, bottom, right };
+    return { ...heroSectionButtonBaseStyle, fontSize, width, height, bottom, right };
 }
 
-export const getHeroSectionButtonTwoStyle = (windowWidth,windowHeight) => {
+export const getHeroSectionButtonTwoStyle = (windowWidth, windowHeight) => {
     let isLargeMobileLandscape = false;
-    if(windowWidth === 2 && windowHeight < 420){
+    if (windowWidth === 2 && windowHeight < 420) {
         isLargeMobileLandscape = true
     }
     let isTabletVertical = false;
-    if(windowWidth === 2 && windowHeight > 1000){
+    if (windowWidth === 2 && windowHeight > 1000) {
         isTabletVertical = true
     }
-    let right, bottom,fontSize,height,width;
+    let right, bottom, fontSize, height, width;
     if (windowWidth === 1) {
         right = 30;
-        bottom = 180;
+        bottom = 150;
     }
     if (windowWidth === 2) {
         right = 120;
@@ -117,15 +114,15 @@ export const getHeroSectionButtonTwoStyle = (windowWidth,windowHeight) => {
         width = 180;
         height = 80;
     }
-    if(isLargeMobileLandscape){
+    if (isLargeMobileLandscape) {
         right = 160;
         bottom = 210;
     }
-    if(isLargeMobileLandscape){
-        right = 160;
-        bottom = 210;
+    if (isLargeMobileLandscape) {
+        right = 135;
+        bottom = 140;
     }
-    if(isTabletVertical){
+    if (isTabletVertical) {
         right = 290;
         bottom = 270;
         fontSize = '1.4em';
@@ -141,16 +138,16 @@ export const getHeroSectionButtonTwoStyle = (windowWidth,windowHeight) => {
     //     width = 450;
     //     bottom = 0;
     // }
-    return { ...heroSectionButtonBaseStyle,fontSize,width,height, bottom, right };
+    return { ...heroSectionButtonBaseStyle, fontSize, width, height, bottom, right };
 }
 
-export const getMapPosition = (windowWidth,windowHeight) => {
+export const getMapPosition = (windowWidth, windowHeight) => {
     let isLargeMobileLandscape = false;
-    if(windowWidth === 2 && windowHeight < 420){
+    if (windowWidth === 2 && windowHeight < 420) {
         isLargeMobileLandscape = true
     }
     let isTabletVertical = false;
-    if(windowWidth === 2 && windowHeight > 1000){
+    if (windowWidth === 2 && windowHeight > 1000) {
         isTabletVertical = true
     }
     let width, top;
@@ -174,11 +171,11 @@ export const getMapPosition = (windowWidth,windowHeight) => {
         width = 450;
         top = 0;
     }
-    if(isLargeMobileLandscape){
+    if (isLargeMobileLandscape) {
         width = 220;
         top = 0;
     }
-    if(isTabletVertical){
+    if (isTabletVertical) {
         width = 260;
         top = 0;
     }
@@ -213,20 +210,20 @@ export const getSearchInputStyle = (windowWidth) => {
     return { top }
 }
 
-export const getHeroSectionPicStyle = (windowWidth,windowHeight) => {
-    let top, right,  height;
+export const getHeroSectionPicStyle = (windowWidth, windowHeight) => {
+    let top, right, height;
     let isLargeMobileLandscape = false;
     let isTabletVertical = false;
-    if(windowWidth === 2 && windowHeight < 420){
+    if (windowWidth === 2 && windowHeight < 420) {
         isLargeMobileLandscape = true
     }
-    if(windowWidth === 2 && windowHeight > 1000){
+    if (windowWidth === 2 && windowHeight > 1000) {
         isTabletVertical = true
     }
     if (windowWidth === 1) {
-        top = "calc(100vh - 865px)";
-        right = -510;
-        height = 920;
+        top = "calc(100vh - 1010px)";
+        right = -645;
+        height = 1120;
     }
     if (windowWidth === 2) {
         top = "calc(100vh - 1175px)";
@@ -234,9 +231,9 @@ export const getHeroSectionPicStyle = (windowWidth,windowHeight) => {
         height = 1300;
     }
     if (windowWidth === 3) {
-        top = "calc(100vh - 1260px)";
-        right = -400;
-        height = "calc(100vh + 700px)";
+        top = "calc(100vh - 1400px)";
+        right = -280;
+        height = 1600;
     }
     if (windowWidth === 4) {
         top = "calc(100vh - 1959px)";
@@ -248,15 +245,15 @@ export const getHeroSectionPicStyle = (windowWidth,windowHeight) => {
         right = -200;
         height = "calc(100vh + 300px)";
     }
-    if(isLargeMobileLandscape){
-        top = "calc(100vh - 765px)";
-        right = -250;
-        height = "calc(100vh + 200px)";
+    if (isLargeMobileLandscape) {
+        top = "calc(100vh - 630px)";
+        right = -110;
+        height = 700;
     }
-    if(isTabletVertical){
-        top = "calc(100vh - 1440px)";
-        right = -910;
-        height = "calc(100vh + 200px)";
+    if (isTabletVertical) {
+        top = "calc(100vh - 1530px)";
+        right = -1000;
+        height = 1800;
     }
     return {
         src: welcomeBackground,
@@ -267,93 +264,78 @@ export const getHeroSectionPicStyle = (windowWidth,windowHeight) => {
         height,
         right,
         top,
-        width:'auto',
+        width: 'auto',
         zIndex: -1,
         // transform: `translateX(${5000 * scroll}px)`,
         // transition: "transform 1s ease-out",
     };
 };
 
-export const getHeroSectionPicPiecesStyle = (windowWidth, piece, windowHeight) => {
+export const getHeroSectionPicPiecesStyle = (windowWidth, windowHeight, piece) => {
     let isLargeMobileLandscape = false;
-    if(windowWidth === 2 && windowHeight < 420){
+    if (windowWidth === 2 && windowHeight < 420) {
         isLargeMobileLandscape = true
     }
     let isTabletVertical = false;
-    if(windowWidth === 2 && windowHeight > 1000){
+    if (windowWidth === 2 && windowHeight > 1000) {
         isTabletVertical = true
     }
-    let top, right, width, height;
+    let top, right, height;
     if (windowWidth === 1) {
-        top = "calc(100vh - 760px)";
-        right = piece === 1 ? 155 : piece === 2 ? 65 : -25;
-        height = 1000;
-        width = 160;
+        top = "calc(100vh - 360px)";
+        right = piece === 1 ? 175 : piece === 2 ? 75 : -25;
+        height = 200;
     }
     if (windowWidth === 2) {
         // top = "calc(100vh - 1020px)";
-        top = "calc(100vh - 815px)";
-        right = piece === 1 ? 305 : piece === 2 ? 170 : 35;
-        height = 1000;
-        width = 240;
+        top = "calc(100vh - 670px)";
+        right = piece === 1 ? 520 : piece === 2 ? 260 : 0;
+        height = 500;
     }
     if (windowWidth === 3) {
         // top = "calc(100vh - 1090px)";
-        top = "calc(100vh - 885px)";
-        right = piece === 1 ? 640 : piece === 2 ? 425 : 210;
-        height = 1000;
-        width = 380;
+        top = "calc(100vh - 725px)";
+        right = piece === 1 ? 980 : piece === 2 ? 675 : 380;
+        height = 600;
     }
     if (windowWidth === 4) {
         top = "calc(100vh - 1394px)";
         right = piece === 1 ? 1255 : piece === 2 ? 960 : 665;
         height = 1000;
-        width = 530;
     }
     if (windowWidth === 5) {
         top = "calc(100vh - 1400px)";
         right = piece === 1 ? 1740 : piece === 2 ? 1355 : 970;
         height = 1000;
-        width = 680;
     }
-    if(isLargeMobileLandscape){
-        top = "calc(100vh - 700px)";
-        right = piece === 1 ? 405 : piece === 2 ? 315 : 225;
-        height = 1000;
-        width = 160;
+    if (isLargeMobileLandscape) {
+        top = "calc(100vh - 300px)";
+        right = piece === 1 ? 415 : piece === 2 ? 315 : 215;
+        height = 200;
     }
-    if(isTabletVertical){
-        top = "calc(100vh - 885px)";
-        right = piece === 1 ? 330 : piece === 2 ? 70 : -190;
-        height = 1000;
-        width = 451;
+    if (isTabletVertical) {
+        top = "calc(100vh - 685px)";
+        right = piece === 1 ? 360 : piece === 2 ? 70 : -220;
+        height = 550;
     }
-    let image;
-    if (piece === 1) image = herSectionPieceOne;
-    if (piece === 2) image = herSectionPieceTwo;
-    if (piece === 3) image = herSectionPieceThree;
 
     return {
-        background: `url('${image}')`,
         position: "fixed",
-        backgroundPosition: "center center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "100%",
         top,
         right,
         height,
-        width,
+        width:'auto',
         zIndex: -1,
     };
 };
 
-export const getHeroSectionNameStyle = (windowWidth,windowHeight) => {
+export const getHeroSectionNameStyle = (windowWidth, windowHeight) => {
     let isLargeMobileLandscape = false;
-    if(windowWidth === 2 && windowHeight < 420){
+    if (windowWidth === 2 && windowHeight < 420) {
         isLargeMobileLandscape = true
     }
     let isTabletVertical = false;
-    if(windowWidth === 2 && windowHeight > 1000){
+    if (windowWidth === 2 && windowHeight > 1000) {
         isTabletVertical = true
     }
     let top, right, height, width;
@@ -392,7 +374,7 @@ export const getHeroSectionNameStyle = (windowWidth,windowHeight) => {
         right = -390;
         width = 500;
     }
-    
+
     return {
         position: "fixed",
         strokeDasharray: 180,
@@ -411,13 +393,13 @@ export const getHeroSectionNameStyle = (windowWidth,windowHeight) => {
     };
 };
 
-export const getHeroSectionTextStyle = (windowWidth,windowHeight) => {
+export const getHeroSectionTextStyle = (windowWidth, windowHeight) => {
     let isLargeMobileLandscape = false;
-    if(windowWidth === 2 && windowHeight < 420){
+    if (windowWidth === 2 && windowHeight < 420) {
         isLargeMobileLandscape = true
     }
     let isTabletVertical = false;
-    if(windowWidth === 2 && windowHeight > 1000){
+    if (windowWidth === 2 && windowHeight > 1000) {
         isTabletVertical = true
     }
     let top, right, fontSize, width;

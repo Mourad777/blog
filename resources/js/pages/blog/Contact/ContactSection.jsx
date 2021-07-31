@@ -3,7 +3,7 @@ import { StyledInputGroup, StyledInputLabel, StyledTextInput, StyledTextareaInpu
 import { AppUrl } from '../utility';
 import axios from 'axios';
 
-const ContactForm = ({ isLargeMobileLandscape }) => {
+const ContactForm = ({ isLargeMobileLandscape,scrollWidth,height }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
@@ -44,8 +44,9 @@ const ContactForm = ({ isLargeMobileLandscape }) => {
         console.log('message response', messageResponse);
 
     }
+    const aspectRatio = scrollWidth / height;
     let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }
-    if (isLargeMobileLandscape) {
+    if (isLargeMobileLandscape || aspectRatio > 1.9) {
         titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-130px' }
     }
 
@@ -65,6 +66,7 @@ const ContactForm = ({ isLargeMobileLandscape }) => {
                 </div>}
             <div style={{
                 maxWidth: 500, padding: '0 10px', margin: 'auto', left: '50%',
+                minWidth: 330,
                 top: '50%',
                 transform: 'translate(-50%,-50%)',
                 position: 'absolute'

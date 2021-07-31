@@ -64,10 +64,10 @@ class PhotosController extends Controller
 
             $resized_file = Image::make($image)->rotate($orientation === 8 ? 90 : 0)->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();
-            })->encode($extension);
+            })->encode('webp',90);
             // $image_orientated = $resized_file->orientate();
 
-            $file_key = 'gallery/' . $filename;
+            $file_key = 'gallery/' . $filename . '.webp';
             $s3 = Storage::disk('s3');
             $s3->put($file_key, (string)$resized_file, 'public');
 

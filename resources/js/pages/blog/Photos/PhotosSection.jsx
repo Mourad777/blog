@@ -34,9 +34,9 @@ export default ({ reference, photos, winSize, scrollWidth, height, isLargeMobile
     useEffect(() => {
         setGridWidth(gridContainerReference.current.scrollWidth);
     }, [gridContainerReference, scrollWidth]);
-
+    const aspectRatio = scrollWidth / height;
     let titleStyle = { fontFamily: 'Mulish, sans-serif', fontSize: '4em', color: '#fff', textAlign: 'center', marginBottom: 0 }
-    if (isLargeMobileLandscape) {
+    if (isLargeMobileLandscape || aspectRatio > 1.9) {
         titleStyle = { ...titleStyle, position: 'absolute', transform: 'translateY(-50%) rotate(-90deg)', top: '50%', left: '-60px' }
     }
     return (
