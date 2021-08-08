@@ -32,8 +32,8 @@ const Comments = React.lazy(() => import("./pages/admin/comments/Comments"));
 const CreatePost = React.lazy(() => import("./pages/admin/create-post/CreatePost"));
 const Images = React.lazy(() => import("./pages/admin/images/Images"));
 const Videos = React.lazy(() => import("./pages/admin/videos/Videos"));
-const Messages = React.lazy(() => import("./pages/admin/messages/Message"));
-const Message = React.lazy(() => import("./components/admin/AdminLayout"));
+const Messages = React.lazy(() => import("./pages/admin/messages/Messages"));
+const Message = React.lazy(() => import("./pages/admin/messages/Message"));
 const Post = React.lazy(() => import("./pages/blog/Posts/Post"));
 const Category = React.lazy(() => import("./pages/blog/Category/Category"));
 

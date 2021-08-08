@@ -28,12 +28,13 @@ import { useHistory } from "react-router-dom";
 import notepad from '../../../../../public/assets/images/notepad.webp'
 import { getCountryThumbnails, getPhotos, getPosts, getVideos } from "../../admin/util/api";
 import ImgNextGen from "../../../components/blog/NextGenImg/NextGenImg";
+import { useCallback } from "react";
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
 // gsap.ticker.fps(30)
 // gsap.ticker.lagSmoothing(50,50)
 // gsap.ticker.deltaRatio(30)
-const Home = ({ scrollWidth, winSize, height }) => {
+const Home = (({ scrollWidth, winSize, height }) => {
 
     const refSection1 = useRef(null)
     const refSection2 = useRef(null)
@@ -420,6 +421,6 @@ const Home = ({ scrollWidth, winSize, height }) => {
         </Fragment>
 
     );
-};
+});
 
-export default Home;
+export default React.memo(Home);

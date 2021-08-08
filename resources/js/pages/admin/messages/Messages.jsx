@@ -16,6 +16,7 @@ const Messages = ({ }) => {
     useEffect(() => {
         getInitialData();
     }, []);
+    
 
     const handleMessage = (id) => {
         history.push(`/admin/message/${id}`)

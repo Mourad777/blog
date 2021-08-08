@@ -30,7 +30,7 @@ function useOutsideAlerter(ref, handleOutsideClick) {
     }, [ref]);
 }
 
-const Search = ({ posts, photos, videos, countryThumbnails, winSize }) => {
+const Search = React.memo(({ posts, photos, videos, countryThumbnails, winSize }) => {
 
     const adjustedPhotos = photos.map(p => ({
         type: 'photo',
@@ -139,9 +139,7 @@ const Search = ({ posts, photos, videos, countryThumbnails, winSize }) => {
         itemsMap.has(item.id && item.type) ? itemsMap : itemsMap.set(item.id, item)
       , new Map()).values()];
 
-    
-    console.log('filteredResults', filteredResults)
-    console.log('filteredResultsWithoutDuplicates', filteredResultsWithoutDuplicates)
+
 
 
     const handleResult = ({ type, selectedResult }) => {
@@ -153,7 +151,7 @@ const Search = ({ posts, photos, videos, countryThumbnails, winSize }) => {
     }
 
 
-
+    console.log('search results render',posts, photos, videos, countryThumbnails, winSize)
     return (
         <div
             style={{
@@ -217,6 +215,6 @@ const Search = ({ posts, photos, videos, countryThumbnails, winSize }) => {
         </div>
 
     )
-}
+})
 
 export default Search;

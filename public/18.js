@@ -75,10 +75,10 @@ var Loader = function Loader() {
 
 /***/ }),
 
-/***/ "./resources/js/pages/admin/posts/Posts.jsx":
-/*!**************************************************!*\
-  !*** ./resources/js/pages/admin/posts/Posts.jsx ***!
-  \**************************************************/
+/***/ "./resources/js/pages/admin/countries/Countries.jsx":
+/*!**********************************************************!*\
+  !*** ./resources/js/pages/admin/countries/Countries.jsx ***!
+  \**********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -88,18 +88,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../blog/StyledComponents */ "./resources/js/pages/blog/StyledComponents.js");
-/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
-/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+/* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+/* harmony import */ var _blog_StyledComponents__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../blog/StyledComponents */ "./resources/js/pages/blog/StyledComponents.js");
+/* harmony import */ var _util_countries_iso__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/countries-iso */ "./resources/js/pages/admin/util/countries-iso.jsx");
 /* harmony import */ var _util_api__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/api */ "./resources/js/pages/admin/util/api.js");
 /* harmony import */ var _components_admin_Loader_Loader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../components/admin/Loader/Loader */ "./resources/js/components/admin/Loader/Loader.jsx");
 
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -124,19 +118,24 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var Posts = function Posts(_ref) {
-  var winSize = _ref.winSize;
-  var history = Object(react_router__WEBPACK_IMPORTED_MODULE_3__["useHistory"])();
 
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+var Countries = function Countries(_ref) {
+  var winSize = _ref.winSize;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
-      posts = _useState2[0],
-      setPosts = _useState2[1];
+      country = _useState2[0],
+      setCountry = _useState2[1];
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      isLoading = _useState4[0],
-      setIsLoading = _useState4[1];
+      countryThumbnails = _useState4[0],
+      setCountryThumbnails = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      isLoading = _useState6[0],
+      setIsLoading = _useState6[1];
 
   var getInitialData = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
@@ -145,7 +144,7 @@ var Posts = function Posts(_ref) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getPosts"])(setPosts, setIsLoading);
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getCountryThumbnails"])(setCountryThumbnails, setIsLoading);
 
             case 2:
             case "end":
@@ -164,20 +163,52 @@ var Posts = function Posts(_ref) {
     getInitialData();
   }, []);
 
-  var handleDeletePost = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(id) {
+  var handleCountry = function handleCountry(e, _ref3) {
+    var value = _ref3.value;
+    e.preventDefault();
+    setCountry(value);
+  };
+
+  var handleFileChange = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(e) {
+      var file, formData, existingCountry;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.next = 2;
-              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["deletePost"])(id, setIsLoading);
+              file = e.target.files[0];
+              formData = new FormData();
+              formData.append('country', country);
+              formData.append('image', file); //check if country already has image
 
-            case 2:
-              _context2.next = 4;
-              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getPosts"])(setPosts, setIsLoading);
+              existingCountry = countryThumbnails.find(function (c) {
+                return c.country === country;
+              });
 
-            case 4:
+              if (!existingCountry) {
+                _context2.next = 11;
+                break;
+              }
+
+              _context2.next = 8;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["updateCountryThumbnail"])(existingCountry.id, formData, setIsLoading);
+
+            case 8:
+              _context2.next = 10;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getCountryThumbnails"])(setCountryThumbnails, setIsLoading);
+
+            case 10:
+              return _context2.abrupt("return");
+
+            case 11:
+              _context2.next = 13;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["uploadCountryThumbnail"])(formData, setIsLoading);
+
+            case 13:
+              _context2.next = 15;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getCountryThumbnails"])(setCountryThumbnails, setIsLoading);
+
+            case 15:
             case "end":
               return _context2.stop();
           }
@@ -185,26 +216,43 @@ var Posts = function Posts(_ref) {
       }, _callee2);
     }));
 
-    return function handleDeletePost(_x) {
-      return _ref3.apply(this, arguments);
+    return function handleFileChange(_x) {
+      return _ref4.apply(this, arguments);
     };
   }();
 
-  var handlePublished = function handlePublished() {};
+  var fileInputRef = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_1__["createRef"])();
 
-  var labelStyle = {
-    fontSize: '1.4em',
-    display: 'block'
-  };
-  var titleStyle = {
-    fontSize: '1.9em',
-    display: 'block',
-    fontStyle: 'bold'
-  };
+  var handleFileDelete = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(id) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["deleteCountryThumbnail"])(id, setIsLoading);
+
+            case 2:
+              _context3.next = 4;
+              return Object(_util_api__WEBPACK_IMPORTED_MODULE_5__["getCountryThumbnails"])(setCountryThumbnails, setIsLoading);
+
+            case 4:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function handleFileDelete(_x2) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
-      margin: 'auto',
-      maxWidth: 800
+      maxWidth: 500,
+      margin: 'auto'
     }
   }, isLoading && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
@@ -214,115 +262,58 @@ var Posts = function Posts(_ref) {
       left: '50%',
       transform: 'translateX(-50%)'
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_admin_Loader_Loader__WEBPACK_IMPORTED_MODULE_6__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h1", null, "Posts"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("table", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_admin_Loader_Loader__WEBPACK_IMPORTED_MODULE_6__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h1", null, "Countries"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
-      margin: 'auto',
-      width: '100%'
+      marginTop: 20
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, winSize > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
-    style: {
-      fontSize: '1.2em'
-    }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
     style: {
       fontSize: '1.2em'
     }
-  }, "Title"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+  }, "Country"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_2__["Dropdown"], {
+    clearable: true,
+    placeholder: "Select Country",
+    fluid: true,
+    search: true,
+    selection: true,
+    options: _util_countries_iso__WEBPACK_IMPORTED_MODULE_4__["countries"],
+    onChange: handleCountry,
+    value: country
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
-      fontSize: '1.2em'
+      marginTop: 20
     }
-  }, "Author"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_3__["StyledThumbnailPreview"], {
+    file: (countryThumbnails.find(function (c) {
+      return c.country === country;
+    }) || {}).image // file={file instanceof File ? URL.createObjectURL(file) : file} 
+
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
-      fontSize: '1.2em'
+      marginTop: 20
     }
-  }, "Published")), posts.map(function (p) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], {
-      key: p.id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, winSize > 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__["StyledThumbnailPreview"], {
-      small: true,
-      file: p.image
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, p.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, p.author), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      style: {
-        display: 'flex',
-        justifyContent: 'space-around'
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__["Checkbox"], {
-      disabled: true,
-      checked: !!p.is_published,
-      onChange: handlePublished
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__["StyledBlueButton"], {
-      onClick: function onClick() {
-        return history.push("/admin/post/".concat(p.id, "/comments"));
-      }
-    }, "Comments ", p.comment_count), " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__["StyledBlueButton"], {
-      onClick: function onClick() {
-        return history.push("/admin/edit-post/".concat(p.id));
-      }
-    }, "Edit"), " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__["StyledRedButton"], {
-      onClick: function onClick() {
-        return handleDeletePost(p.id);
-      }
-    }, " Delete"), " "))), winSize === 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      style: {
-        marginBottom: 20
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__["StyledThumbnailPreview"], {
-      file: p.image
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
-      style: titleStyle
-    }, p.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
-      style: {
-        margin: '5px 0',
-        fontSize: '1.3em'
-      }
-    }, "Posted on ".concat(new Date(p.created_at).toLocaleDateString(), " ").concat(!!p.author ? 'by ' + p.author : '')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      style: {
-        display: 'flex',
-        justifyContent: 'left',
-        alignItems: 'center'
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
-      style: _objectSpread(_objectSpread({}, labelStyle), {}, {
-        marginRight: 10
-      })
-    }, "Published: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__["Checkbox"], {
-      disabled: true,
-      checked: !!p.is_published,
-      onChange: handlePublished
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      style: {
-        display: 'flex',
-        justifyContent: 'space-evenly'
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__["StyledBlueButton"], {
-      maxWidth: true,
-      onClick: function onClick() {
-        return history.push("/admin/post/".concat(p.id, "/comments"));
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__["Icon"], {
-      name: "comment outline",
-      size: "large"
-    }), " ", p.comment_count), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__["StyledBlueButton"], {
-      maxWidth: true,
-      onClick: function onClick() {
-        return history.push("/admin/edit-post/".concat(p.id));
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__["Icon"], {
-      name: "edit outline",
-      size: "large"
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_2__["StyledRedButton"], {
-      maxWidth: true,
-      onClick: function onClick() {
-        return handleDeletePost(p.id);
-      }
-    }, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_4__["Icon"], {
-      name: "trash alternate outline",
-      size: "large"
-    })))));
-  }))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_3__["StyledBlueButton"], {
+    onClick: function onClick() {
+      return fileInputRef.current.click();
+    },
+    icon: "image"
+  }, "Upload Thumbnail"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_blog_StyledComponents__WEBPACK_IMPORTED_MODULE_3__["StyledRedButton"], {
+    onClick: function onClick() {
+      return handleFileDelete((countryThumbnails.find(function (c) {
+        return c.country === country;
+      }) || {}).id);
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+    className: "trash icon"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    ref: fileInputRef,
+    type: "file",
+    hidden: true,
+    onChange: handleFileChange
+  })));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Posts);
+/* harmony default export */ __webpack_exports__["default"] = (Countries);
 
 /***/ })
 
