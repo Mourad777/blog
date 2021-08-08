@@ -110,11 +110,6 @@ Route::post('/api/messages/save', 'MessagesController@store');
 Route::post('/api/upload/store', 'UploadController@upload');
 
 
-Route::get('/{any?}', function () {
-    return view('index');
-})->where('any', '^((?!api).)*$');
-
-
-// Route::get('{reactRoutes}', function () {
-//     return view('welcome'); // your start view
-// })->where('reactRoutes', '^((?!api).)*$'); // except 'api' word
+// Route::get('/{any?}', function () {
+//     return view('index');
+// })->where('any', '^((?!api).)*$');
