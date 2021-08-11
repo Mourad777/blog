@@ -21,94 +21,89 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/home', 'HomeController@index')->name('home');
 
-Route::post('/api/tinymce/upload', 'TinymceImageUploadController@store');
+//public routes
+Route::post('/api/login', 'AuthController@login');
+Route::post('/api/register', 'AuthController@register');
 
 
 Route::get('/api/posts', 'PostsController@index');
-
+Route::get('/api/posts/edit/{id}', 'PostsController@edit');
 Route::get('/api/posts/{id}', 'PostsController@show');
 
-Route::post('/api/posts/save', 'PostsController@store');
-
-Route::post('/api/posts/update/{id}', 'PostsController@update');
-
-Route::get('/api/posts/create/{id}', 'PostsController@create');
-
-Route::get('/api/posts/edit/{id}', 'PostsController@edit');
-
-Route::delete('/api/posts/delete/{id}', 'PostsController@destroy');
-
-
-
 Route::get('/api/categories', 'CategoriesController@index');
-
 Route::get('/api/categories/{category}', 'CategoriesController@show');
 
-Route::post('/api/categories/save', 'CategoriesController@store');
-
-Route::post('/api/categories/update/{id}', 'CategoriesController@update');
-
-Route::delete('/api/categories/delete/{id}', 'CategoriesController@destroy');
-
-
 Route::get('/api/countries', 'CountriesController@index');
-
 Route::get('/api/countries/{country_iso}', 'CountriesController@show');
 
-Route::post('/api/countries/save', 'CountriesController@store');
-
-Route::post('/api/countries/update/{id}', 'CountriesController@update');
-
-Route::delete('/api/countries/delete/{id}', 'CountriesController@destroy');
-
-
 Route::get('/api/comments/{doc_type}/{id}', 'CommentsController@index');
-
 Route::post('/api/comments/save', 'CommentsController@store');
 
-Route::post('/api/comments/{id}/update', 'CommentsController@update');
-
-Route::delete('/api/comments/{id}/delete', 'CommentsController@destroy');
-
-Route::post('/api/comments/approve-comment', 'CommentsController@approve_comment');
-
-
 Route::get('/api/photos', 'PhotosController@index');
-
 Route::get('/api/photo/{id}', 'PhotosController@show');
 
-Route::post('/api/photos/save', 'PhotosController@store');
-
-Route::post('/api/photos/update/{id}', 'PhotosController@update');
-
-Route::delete('/api/photos/delete/{id}', 'PhotosController@destroy');
-
-
 Route::get('/api/videos', 'VideosController@index');
-
 Route::get('/api/videos/{id}', 'VideosController@show');
-
-Route::post('/api/videos/save', 'VideosController@store');
-
-Route::post('/api/videos/update/{id}', 'VideosController@update');
-
-Route::delete('/api/videos/delete/{id}', 'VideosController@destroy');
-
 
 Route::get('/api/configurations', 'ConfigurationsController@index');
 
-Route::post('/api/configurations/update', 'ConfigurationsController@update');
-
-
 Route::get('/api/messages', 'MessagesController@index');
-
-Route::get('/api/message/{id}', 'MessagesController@show');
-
 Route::post('/api/messages/save', 'MessagesController@store');
 
+//protected routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    //editor media upload
+    Route::post('/api/tinymce/upload', 'TinymceImageUploadController@store');
+    //posts
+    Route::post('/api/posts/save', 'PostsController@store');
 
-Route::post('/api/upload/store', 'UploadController@upload');
+    Route::post('/api/posts/update/{id}', 'PostsController@update');
 
+    Route::get('/api/posts/create/{id}', 'PostsController@create');
+
+
+    Route::delete('/api/posts/delete/{id}', 'PostsController@destroy');
+    //categories
+    Route::post('/api/categories/save', 'CategoriesController@store');
+
+    Route::post('/api/categories/update/{id}', 'CategoriesController@update');
+
+    Route::delete('/api/categories/delete/{id}', 'CategoriesController@destroy');
+    //countries
+    Route::post('/api/countries/save', 'CountriesController@store');
+
+    Route::post('/api/countries/update/{id}', 'CountriesController@update');
+
+    Route::delete('/api/countries/delete/{id}', 'CountriesController@destroy');
+    //comments
+    Route::post('/api/comments/{id}/update', 'CommentsController@update');
+
+    Route::delete('/api/comments/{id}/delete', 'CommentsController@destroy');
+
+    Route::post('/api/comments/approve-comment', 'CommentsController@approve_comment');
+    //photos
+    Route::post('/api/photos/save', 'PhotosController@store');
+
+    Route::post('/api/photos/update/{id}', 'PhotosController@update');
+
+    Route::delete('/api/photos/delete/{id}', 'PhotosController@destroy');
+    //videos
+    Route::post('/api/videos/save', 'VideosController@store');
+
+    Route::post('/api/videos/update/{id}', 'VideosController@update');
+
+    Route::delete('/api/videos/delete/{id}', 'VideosController@destroy');
+
+    //configuration
+    Route::post('/api/configurations/update', 'ConfigurationsController@update');
+
+    //messages
+    Route::get('/api/message/{id}', 'MessagesController@show');
+
+    Route::post('/api/upload/store', 'UploadController@upload');
+
+    Route::post('/api/logout', 'AuthController@logout');
+});
 
 // Route::get('/{any?}', function () {
 //     return view('index');

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use App\Post;
 use Intervention\Image\Facades\Image;
 use Storage;
+use App\Events\BlogUpdated;
 
 class PostsController extends Controller
 {
@@ -197,6 +198,8 @@ class PostsController extends Controller
 
         $post->save();
         $post->categories()->sync(json_decode($request->selected_categories));
+
+        BlogUpdated::dispatch('BlogUpdated');
         //
     }
 
