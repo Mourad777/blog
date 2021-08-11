@@ -199,7 +199,7 @@ class PostsController extends Controller
         $post->save();
         $post->categories()->sync(json_decode($request->selected_categories));
 
-        BlogUpdated::dispatch('BlogUpdated');
+        // BlogUpdated::dispatch('BlogUpdated');
         $message = 'The post ' . $request->title . ' was updated';
         event(new BlogUpdated($message));
         //
