@@ -51,7 +51,7 @@ Route::get('/api/messages', 'MessagesController@index');
 Route::post('/api/messages/save', 'MessagesController@store');
 
 //protected routes
-Route::group(['middleware' => ['auth:sanctum']], function () {
+// Route::group(['middleware' => ['auth:sanctum']], function () {
     //editor media upload
     Route::post('/api/tinymce/upload', 'TinymceImageUploadController@store');
     //posts
@@ -103,7 +103,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/api/upload/store', 'UploadController@upload');
 
     Route::post('/api/logout', 'AuthController@logout');
-});
+// });
 
 // Route::get('/{any?}', function () {
 //     return view('index');
