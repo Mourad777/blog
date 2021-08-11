@@ -6,6 +6,7 @@ use App\Post;
 use App\Photo;
 use App\Video;
 use App\Country;
+use App\Events\BlogUpdated;
 use Intervention\Image\Facades\Image;
 use Storage;
 use Illuminate\Http\Request;

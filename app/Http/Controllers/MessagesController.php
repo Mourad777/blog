@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessagesUpdated;
 use Illuminate\Http\Request;
 use App\Message;
 class MessagesController extends Controller

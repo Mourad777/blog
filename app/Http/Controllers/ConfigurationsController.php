@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Configuration;
+use App\Events\BlogUpdated;
 use Illuminate\Support\Facades\Log;
 
 class ConfigurationsController extends Controller
@@ -16,9 +17,9 @@ class ConfigurationsController extends Controller
     public function index()
     {
         //
-   
+
         $config = Configuration::first();
-        if($config){
+        if ($config) {
             return $config;
         } else {
             return 'no_config';
@@ -86,23 +87,23 @@ class ConfigurationsController extends Controller
     public function update(Request $request)
     {
         $config = Configuration::first();
-        if(!$config){
+        if (!$config) {
             $config = new Configuration;
         }
-        if($request->has('photo_gallery_order')){
+        if ($request->has('photo_gallery_order')) {
             $config->photo_gallery_order = $request->photo_gallery_order;
             $config->save();
+            $message = 'The configuration was updated';
+            event(new BlogUpdated($message));
             return 'photo gallery order updated';
         }
-        if($request->has('video_gallery_order')){
+        if ($request->has('video_gallery_order')) {
             $config->video_gallery_order = $request->video_gallery_order;
             $config->save();
+            $message = 'The configuration was updated';
+            event(new BlogUpdated($message));
             return 'video gallery order updated';
-
         }
-        $message = 'The configuration was updated';
-        event(new BlogUpdated($message));
-      
     }
 
     /**

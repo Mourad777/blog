@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Comment;
+use App\Events\CommentsUpdated;
 use App\Post;
 use App\Video;
 use Illuminate\Support\Facades\Log;

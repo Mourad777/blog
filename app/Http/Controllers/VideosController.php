@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BlogUpdated;
 use Illuminate\Http\Request;
 use App\Video;
 use Storage;
