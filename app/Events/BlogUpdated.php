@@ -10,18 +10,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class BlogUpdated
+class BlogUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $message;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($message)
     {
         //
+        $this->message = $message;
     }
 
     /**
@@ -29,6 +31,12 @@ class BlogUpdated
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
+
+    public function broadcastAs()
+    {
+        return 'BlogUpdated';
+    }
+
     public function broadcastOn()
     {
         return new Channel('my-channel');
