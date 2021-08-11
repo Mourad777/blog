@@ -31,6 +31,6 @@ class BlogUpdated
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('my-channel');
+        return new Channel('my-channel');
     }
 }
