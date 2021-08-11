@@ -116,6 +116,8 @@ class CategoriesController extends Controller
         $category = Category::find($id);
         $category->name = $request->name;
         $category->save();
+        $message = 'The category ' . $category->name . ' was updated';
+        event(new BlogUpdated($message));
     }
 
     /**
@@ -131,5 +133,7 @@ class CategoriesController extends Controller
         Category::findOrFail($id)->videos()->detach();
         Category::findOrFail($id)->photos()->detach();
         Category::destroy($id);
+        $message = 'The category with id' . $id . ' was deleted';
+        event(new BlogUpdated($message));
     }
 }

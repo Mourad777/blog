@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BlogUpdated;
 use Illuminate\Http\Request;
 
 use App\Photo;
@@ -83,6 +84,8 @@ class PhotosController extends Controller
             }
             $photo->save();
             $photo->src = Storage::disk(name: 's3')->url($file_key);
+            $message = 'A photo was stored: '.$photo->src;
+            event(new BlogUpdated($message));
             return $photo;
         }
     }
@@ -141,7 +144,8 @@ class PhotosController extends Controller
         $photo->save();
         $photo->categories()->sync(json_decode($request->selected_categories));
 
-
+        $message = 'Photo details was updated: '.$photo->src;
+        event(new BlogUpdated($message));
         return $photo;
     }
 
@@ -154,10 +158,12 @@ class PhotosController extends Controller
     public function destroy($id)
     {
         //
-        $post = Photo::findOrFail($id);
+        $photo = Photo::findOrFail($id);
         $s3 = Storage::disk('s3');
-        $key = $post->url;
+        $key = $photo->url;
         $s3->delete($key);
         Photo::destroy($id);
+        $message = 'A photo details was deleted: '.$photo->src;
+        event(new BlogUpdated($message));
     }
 }

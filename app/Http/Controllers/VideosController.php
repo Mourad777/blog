@@ -93,6 +93,8 @@ class VideosController extends Controller
         // Storage::disk('s3')->put($file_key, file_get_contents($video_file), 'public');
 
         $video->save();
+        $message = 'A video was uploaded: '.$video->url;
+        event(new BlogUpdated($message));
         // $video->src = Storage::disk(name: 's3')->url($video_base_url);
 
         return $video;
@@ -177,7 +179,8 @@ class VideosController extends Controller
         $video->save();
         $video->categories()->sync(json_decode($request->selected_categories));
 
-
+        $message = 'A video was updated: '.$video->url;
+        event(new BlogUpdated($message));
         return $video;
     }
 
@@ -197,5 +200,7 @@ class VideosController extends Controller
         $s3->delete($video_thumbnail_key);
         $s3->delete($video_url_key);
         Video::destroy($id);
+        $message = 'A video was deleted: '.$video->url;
+        event(new BlogUpdated($message));
     }
 }

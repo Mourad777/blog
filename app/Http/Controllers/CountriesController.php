@@ -84,6 +84,9 @@ class CountriesController extends Controller
         $country->image = $file_key;
 
         $country->save();
+
+        $message = 'A country thumbnail was created'.$request->country;
+        event(new BlogUpdated($message));
     }
 
     public function update(Request $request, $id)
@@ -110,6 +113,9 @@ class CountriesController extends Controller
         $country->image = $file_key;
 
         $country->save();
+
+        $message = 'A country thumbnail was updated'.$country->country;
+        event(new BlogUpdated($message));
     }
 
     public function destroy($id)
@@ -119,5 +125,7 @@ class CountriesController extends Controller
         $country_thumbnail_key = $country->image;
         $s3->delete($country_thumbnail_key);
         Country::destroy($id);
+        $message = 'A country thumbnail was updated'.$country->country;
+        event(new BlogUpdated($message));
     }
 }

@@ -113,6 +113,8 @@ class PostsController extends Controller
         $post->is_comments_enabled = $request->is_comments_enabled;
         $post->save();
         $post->categories()->attach(json_decode($request->selected_categories));
+        $message = 'The post ' . $post->title . ' was created';
+        event(new BlogUpdated($message));
     }
 
     /**
@@ -199,10 +201,8 @@ class PostsController extends Controller
         $post->save();
         $post->categories()->sync(json_decode($request->selected_categories));
 
-        // BlogUpdated::dispatch('BlogUpdated');
         $message = 'The post ' . $request->title . ' was updated';
         event(new BlogUpdated($message));
-        //
     }
 
     /**
@@ -219,5 +219,7 @@ class PostsController extends Controller
         $s3 = Storage::disk('s3');
         $s3->delete($post->image);
         Post::destroy($id);
+        $message = 'The post ' . $post->title . ' was deleted';
+        event(new BlogUpdated($message));
     }
 }

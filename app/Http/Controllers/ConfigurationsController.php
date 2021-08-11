@@ -100,6 +100,8 @@ class ConfigurationsController extends Controller
             return 'video gallery order updated';
 
         }
+        $message = 'The configuration was updated';
+        event(new BlogUpdated($message));
       
     }
 

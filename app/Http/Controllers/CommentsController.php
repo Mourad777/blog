@@ -100,6 +100,8 @@ class CommentsController extends Controller
                 $video->comments()->save($comment);
             }
         }
+        $message = 'A comment was posted: ' . $request->content;
+        event(new CommentsUpdated($message));
     }
 
     /**
@@ -134,10 +136,11 @@ class CommentsController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $comment = Comment::find($id);
+        // $comment = Comment::find($id);
 
-        $comment->is_approved = !$comment->is_approved;
-        $comment->save();
+        // $comment->is_approved = !$comment->is_approved;
+        // $comment->save();
+
     }
 
     public function approve_comment(Request $request)
@@ -156,6 +159,14 @@ class CommentsController extends Controller
 
         $comment->is_approved = $is_approved;
         $comment->save();
+
+        if ($is_approved === 1) {
+            $message = 'A comment was approved: ' . $comment->content;
+            event(new CommentsUpdated($message));
+        } else {
+            $message = 'A comment was unapproved: ' . $comment->content;
+            event(new CommentsUpdated($message));
+        }
     }
 
     /**
@@ -190,5 +201,7 @@ class CommentsController extends Controller
 
         Comment::find($commentIds)->delete();
 
+        $message = 'A comment was deleted: ' . $comment->content;
+        event(new CommentsUpdated($message));
     }
 }

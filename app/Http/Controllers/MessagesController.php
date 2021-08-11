@@ -43,6 +43,9 @@ class MessagesController extends Controller
         $message->is_seen = 0;
         $message->message = $request->message;
         $message->save();
+
+        $message = 'A new message was recieved: '.$message->message;
+        event(new MessagesUpdated($message));
         
     }
 
