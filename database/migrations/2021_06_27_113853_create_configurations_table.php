@@ -17,6 +17,8 @@ class CreateConfigurationsTable extends Migration
             $table->id();
             $table->text('photo_gallery_order')->nullable();
             $table->text('video_gallery_order')->nullable();
+            $table->tinyInteger('is_messages_allowed')->default('1');
+            $table->tinyInteger('is_comments_approval_required')->default('1');
             $table->timestamps();
         });
     }

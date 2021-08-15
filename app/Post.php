@@ -19,6 +19,7 @@ class Post extends Model
         'tags',
         'content',
         'image',
+        'created_at',
     ];
 
     // protected $casts = [

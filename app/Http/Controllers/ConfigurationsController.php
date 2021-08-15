@@ -96,13 +96,23 @@ class ConfigurationsController extends Controller
             $message = 'The configuration was updated';
             event(new BlogUpdated($message));
             return 'photo gallery order updated';
-        }
-        if ($request->has('video_gallery_order')) {
+        } else if ($request->has('video_gallery_order')) {
             $config->video_gallery_order = $request->video_gallery_order;
             $config->save();
             $message = 'The configuration was updated';
             event(new BlogUpdated($message));
             return 'video gallery order updated';
+        } else {
+            if($request->has('is_messages_allowed')){
+                $config->is_messages_allowed = $request['is_messages_allowed'];
+            }
+            if($request->has('is_comments_approval_required')){
+                $config->is_comments_approval_required = $request['is_comments_approval_required'];
+            }
+            $config->save();
+            $message = 'The configuration was updated';
+            event(new BlogUpdated($message));
+            return 'Settings updated';
         }
     }
 

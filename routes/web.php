@@ -36,7 +36,7 @@ Route::get('/api/categories/{category}', 'CategoriesController@show');
 Route::get('/api/countries', 'CountriesController@index');
 Route::get('/api/countries/{country_iso}', 'CountriesController@show');
 
-Route::get('/api/comments/{doc_type}/{id}', 'CommentsController@index');
+Route::get('/api/public-comments/{doc_type}/{id}', 'CommentsController@index');
 Route::post('/api/comments/save', 'CommentsController@store');
 
 Route::get('/api/photos', 'PhotosController@index');
@@ -51,7 +51,7 @@ Route::get('/api/messages', 'MessagesController@index');
 Route::post('/api/messages/save', 'MessagesController@store');
 
 //protected routes
-// Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
     //editor media upload
     Route::post('/api/tinymce/upload', 'TinymceImageUploadController@store');
     //posts
@@ -60,6 +60,8 @@ Route::post('/api/messages/save', 'MessagesController@store');
     Route::post('/api/posts/update/{id}', 'PostsController@update');
 
     Route::get('/api/posts/create/{id}', 'PostsController@create');
+
+    Route::get('/api/comments/{doc_type}/{id}', 'CommentsController@index');
 
 
     Route::delete('/api/posts/delete/{id}', 'PostsController@destroy');
@@ -103,7 +105,7 @@ Route::post('/api/messages/save', 'MessagesController@store');
     Route::post('/api/upload/store', 'UploadController@upload');
 
     Route::post('/api/logout', 'AuthController@logout');
-// });
+});
 
 // Route::get('/{any?}', function () {
 //     return view('index');

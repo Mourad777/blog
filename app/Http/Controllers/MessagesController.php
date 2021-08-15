@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\MessagesUpdated;
 use Illuminate\Http\Request;
 use App\Message;
+use App\Configuration;
+
 class MessagesController extends Controller
 {
     /**
@@ -38,16 +40,32 @@ class MessagesController extends Controller
     public function store(Request $request)
     {
         //
-        $message = new Message;
-        $message->email = $request->email;
-        $message->name = $request->name;
-        $message->is_seen = 0;
-        $message->message = $request->message;
-        $message->save();
 
-        $message = 'A new message was recieved: '.$message->message;
-        event(new MessagesUpdated($message));
-        
+        $fields = $request->validate([
+            'name' => 'required',
+            'email' => 'email',
+            'message' => 'required'
+        ]);
+
+        $message = new Message;
+        $message->email = $fields['email'];
+        $message->name = $fields['name'];
+        $message->is_seen = 0;
+        $message->message = $fields['message'];
+        $config = Configuration::first();
+        if (!$config || !!$config->is_messages_allowed) {
+            //messages are allowed by default so if there is no
+            //config table, messages should still be allowed to save
+            $message->save();
+            $message = 'A new message was recieved: ' . $message->message;
+            event(new MessagesUpdated($message));
+        } else {
+            $response = [
+                'Messages' => 'Messages are not allowed',
+            ];
+
+            return response($response, 201);
+        }
     }
 
     /**

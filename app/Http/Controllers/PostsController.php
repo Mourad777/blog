@@ -105,6 +105,7 @@ class PostsController extends Controller
             $post->title = 'Untitled';
         }
         $post->author = $request->author;
+        $post->date_written = $request->date_written;
         $post->summary = $request->summary;
         $post->content = $request->content;
         $post->country = $request->country;
@@ -169,6 +170,7 @@ class PostsController extends Controller
         $post->author = $request->author;
         $post->summary = $request->summary;
         $post->country = $request->country;
+        $post->date_written = $request->date_written;
 
         if ($request->image === 'sameImage') {
             //same image

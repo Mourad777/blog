@@ -24,6 +24,7 @@ class CreatePostsTable extends Migration
             $table->text('content')->nullable();
             $table->string('country')->nullable();
             $table->text('tags')->nullable();
+            $table->date('date_written')->nullable();
             $table->timestamps();
         });
     }
