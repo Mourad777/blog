@@ -80,7 +80,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //comments
     Route::post('/api/comments/{id}/update', 'CommentsController@update');
 
-    Route::delete('/api/comments/{id}/delete', 'CommentsController@destroy');
+    Route::delete('/api/comments/delete/{id}', 'CommentsController@destroy');
 
     Route::post('/api/comments/approve-comment', 'CommentsController@approve_comment');
     //photos

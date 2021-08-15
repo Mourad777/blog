@@ -29,8 +29,14 @@ class CommentsController extends Controller
                 $comm_replies->map(function ($comment) use ($config) {
                     $comment->encryptedEmail = md5($comment->email);
                     $comment->replies = getReplies($comment, $config);
+                    $is_comments_approval_required = null;
+                    if ($config) {
+                        if ($config->is_comments_approval_required) {
+                            $is_comments_approval_required = true;
+                        }
+                    }
 
-                    if ((!$config && !auth()->user() && $comment->is_approved === 0) || ($config->is_comments_approval_required && !auth()->user() && $comment->is_approved === 0)) {
+                    if ((!$config && !auth()->user() && $comment->is_approved === 0) || ($is_comments_approval_required && !auth()->user() && $comment->is_approved === 0)) {
                         return null;
                     } else {
                         return $comment;
@@ -50,13 +56,15 @@ class CommentsController extends Controller
             $comment->replies = getReplies($comment, $config);
             $comment->encryptedEmail = md5($comment->email);
 
-            Log::info((!$config && !auth()->user() && $comment->is_approved === 0) || ($config->is_comments_approval_required && !auth()->user() && $comment->is_approved === 1));
-            if ( (!$config && !auth()->user() && $comment->is_approved === 0) || ($config->is_comments_approval_required && !auth()->user() && $comment->is_approved === 0) ) {
-                Log::info('return null');
+            $is_comments_approval_required = null;
+            if ($config) {
+                if ($config->is_comments_approval_required) {
+                    $is_comments_approval_required = true;
+                }
+            }
+            if ((!$config && !auth()->user() && $comment->is_approved === 0) || ($is_comments_approval_required && !auth()->user() && $comment->is_approved === 0)) {
                 return $comment->content = '';
             } else {
-                Log::info('return comment');
-
                 return $comment;
             }
         });
@@ -217,16 +225,48 @@ class CommentsController extends Controller
     public function destroy($id)
     {
         //
-        $comment = Comment::find($id);
+        // function  increaseCommentCount($comments)
+        // {
+        //     global $comment_count;
 
+        //     if ($comments) {
+        //         $comment_count += count($comments);
+        //     }
+
+        //     foreach ($comments as $comment) {
+        //         if ($comment->replies) {
+        //             increaseCommentCount($comment->replies);
+        //         }
+        //     }
+        //     return $comment_count;
+        // }
+
+
+        $a = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        $t = &$a; //Copy
+        foreach ($t as $b) {
+            echo " $b ";
+            if ($b == 5)
+                $t[] = 11;
+        }
+
+
+        $comment = Comment::find($id);
         $childrenCommentIds = array();
         function getCommentChildren($selectedComment)
         {
             global $childrenCommentIds;
             foreach ($selectedComment->replies as $reply) {
+
                 // array_push($childrenCommentIds, $reply->id);
-                $childrenCommentIds[] = $reply->id;
+                Log::info('push' . $reply->id);
+                // $childrenCommentIds[] = $reply->id;
+                $childrenCommentIds[] = strval($reply->id);
+
+                Log::info('json encode' . json_encode($childrenCommentIds));
+                Log::info(print_r($childrenCommentIds));
                 if ($reply->replies) {
+
                     getCommentChildren($reply);
                 }
             }
@@ -234,11 +274,19 @@ class CommentsController extends Controller
         }
 
         $commentIds = getCommentChildren($comment);
+        // Log::info(print_r($childrenCommentIds));
+        Log::info($childrenCommentIds);
+        Log::info('json encode commentIds-----------------------' . json_encode($commentIds));
 
+        Log::info(print_r($commentIds));
+        Log::info('ids comments');
 
+        Log::info(print_r($commentIds));
         $commentIds[] = $id;
-
-        Comment::find($commentIds)->delete();
+        Log::info('json encode commentIds finalized-----------------------' . json_encode($commentIds));
+        // Comment::whereIn('id', explode(",", $commentIds))->delete();
+        Comment::whereIn('id', $commentIds)->delete(); 
+        // Comment::find($commentIds)->delete();
 
         $message = 'A comment was deleted: ' . $comment->content;
         event(new CommentsUpdated($message));
