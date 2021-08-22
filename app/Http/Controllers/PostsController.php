@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+
+use Illuminate\Support\Arr;
 use App\Post;
 use Intervention\Image\Facades\Image;
 use Storage;
 use App\Events\BlogUpdated;
+use stdClass;
 
 class PostsController extends Controller
 {
@@ -55,11 +58,24 @@ class PostsController extends Controller
             $post->categories = $post->categories()->get();
             $post->comments = $post->comments()->get();
             $post->comment_count = getCommentCount($post->comments);
-
             return $post;
         });
 
-        return $posts;
+        $plain_posts_array = $posts->toArray();
+
+        $filtered_posts = array_filter($plain_posts_array, function ($item) {
+            return $item["is_published"] === 1 || !!auth()->user();
+        });
+
+        return array_values(array_filter($filtered_posts, function ($v) {
+            return !is_null($v);
+        }));
+
+        // $filtered_posts = Arr::where($posts, function ($value, $key) {
+        //     return ($value['value'] === 1) || !!auth()->user();
+        // });
+
+        // return $filtered_posts;
     }
 
     /**
@@ -130,7 +146,11 @@ class PostsController extends Controller
         $post = Post::find($id);
         $post->image = $post->image ? Storage::disk(name: 's3')->url($post->image) : '';
         $post->categories = $post->categories()->get();
-        return $post;
+        if (!!auth()->user() || !!$post->is_published) {
+            return $post;
+        } else {
+            response()->json(new stdClass());
+        }
     }
 
     /**

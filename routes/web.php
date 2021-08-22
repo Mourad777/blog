@@ -26,9 +26,8 @@ Route::post('/api/login', 'AuthController@login');
 Route::post('/api/register', 'AuthController@register');
 
 
-Route::get('/api/posts', 'PostsController@index');
-Route::get('/api/posts/edit/{id}', 'PostsController@edit');
-Route::get('/api/posts/{id}', 'PostsController@show');
+Route::get('/api/public-posts', 'PostsController@index');
+Route::get('/api/public-posts/{id}', 'PostsController@show');
 
 Route::get('/api/categories', 'CategoriesController@index');
 Route::get('/api/categories/{category}', 'CategoriesController@show');
@@ -55,7 +54,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //editor media upload
     Route::post('/api/tinymce/upload', 'TinymceImageUploadController@store');
     //posts
+
+    Route::get('/api/posts/{id}', 'PostsController@show');
+
+    Route::get('/api/posts', 'PostsController@index');
+    
     Route::post('/api/posts/save', 'PostsController@store');
+
+    Route::get('/api/posts/edit/{id}', 'PostsController@edit');
 
     Route::post('/api/posts/update/{id}', 'PostsController@update');
 
