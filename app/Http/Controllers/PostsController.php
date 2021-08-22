@@ -129,6 +129,7 @@ class PostsController extends Controller
         //
         $post = Post::find($id);
         $post->image = $post->image ? Storage::disk(name: 's3')->url($post->image) : '';
+        $post->categories = $post->categories()->get();
         return $post;
     }
 
