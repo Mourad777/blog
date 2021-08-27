@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-use Illuminate\Support\Arr;
 use App\Post;
 use Intervention\Image\Facades\Image;
 use Storage;
 use App\Events\BlogUpdated;
+use App\Subscriber;
 use stdClass;
+use Mail;
 
 class PostsController extends Controller
 {
@@ -132,6 +133,31 @@ class PostsController extends Controller
         $post->categories()->attach(json_decode($request->selected_categories));
         $message = 'The post ' . $post->title . ' was created';
         event(new BlogUpdated($message));
+
+        $data = [
+            'post_title' => $request->title,
+            'post_summary' => $request->summary,
+            'post_image' => $post->image ? Storage::disk(name: 's3')->url($post->image) : '',
+            'post_link' =>  env("PUBLIC_APP_URL") . 'post/' . $post->id,
+        ];
+
+        $subs = Subscriber::all()->toArray();
+
+
+        $emails = array_column($subs, 'email');
+        if (!!$request->is_published) {
+            Mail::send('mail.newpost', ['data' => $data], function ($message) use ($emails) {
+                $message->from('mourad777b@gmail.com', 'New Post!');
+                $message->to($emails)->subject('A hitchhiking adventure across Mexico!');
+            });
+        }
+
+
+        // $emails = ['myoneemail@esomething.com', 'myother@esomething.com', 'myother2@esomething.com'];
+
+        // Mail::send('emails.welcome', [], function ($message) use ($emails) {
+        //     $message->to($emails)->subject('This is test e-mail');
+        // });
     }
 
     /**
@@ -182,7 +208,9 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         $s3 = Storage::disk('s3');
+       
         $post = Post::find($id);
+        $initial_post = clone $post;
         $post->title = $request->title;
         $post->content = $request->content;
         $post->tags = $request->tags;
@@ -192,7 +220,7 @@ class PostsController extends Controller
         $post->summary = $request->summary;
         $post->country = $request->country;
         $post->date_written = $request->date_written;
-
+        
         if ($request->image === 'sameImage') {
             //same image
         } else {
@@ -226,6 +254,30 @@ class PostsController extends Controller
 
         $message = 'The post ' . $request->title . ' was updated';
         event(new BlogUpdated($message));
+
+
+        $data = [
+            'post_title' => $request->title,
+            'post_summary' => $request->summary,
+            'post_image' => $post->image ? Storage::disk(name: 's3')->url($post->image) : '',
+            'post_link' =>  env("PUBLIC_APP_URL") . 'post/' . $post->id,
+        ];
+
+        $subs = Subscriber::all()->toArray();
+
+        Log::info('$request->is_published'.$request->is_published);
+        
+        Log::info(json_encode($request->is_published == 1));
+        Log::info('$initial_post->is_published'.$initial_post->is_published);
+        Log::info(json_encode($initial_post));
+        Log::info(json_encode($initial_post->is_published != 1));
+        $emails = array_column($subs, 'email');
+        if ($request->is_published == 1 && $initial_post->is_published != 1) {
+            Mail::send('mail.newpost', ['data' => $data], function ($message) use ($emails) {
+                $message->from('mourad777b@gmail.com', 'New Post!');
+                $message->to($emails)->subject('A hitchhiking adventure across Mexico!');
+            });
+        }
     }
 
     /**

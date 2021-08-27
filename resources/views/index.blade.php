@@ -14,7 +14,16 @@
 </head>
 
 <body>
-    <div id="app">
+    <div class="header">
+
+    </div>
+    <h2>Hey check out my new post!</h2>
+    <h3 class="title">{{ $data["post_title"] }}</h3>
+    <div class="content">
+        <img class="image" src="{{ $data['post_image'] }}" />
+    </div>
+    <div class="summary-container">
+        <p class="summary yellow">{{ $data["post_summary"] }}</p>
     </div>
     <script src="{{asset('js/app.js')}}"></script>
 </body>

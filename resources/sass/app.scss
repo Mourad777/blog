@@ -12,3 +12,20 @@
 @import '~bootstrap/scss/bootstrap';
 
 // @import "node_modules/font-awesome/scss/font-awesome.scss";
+
+
+.header {
+    background-color: blue;
+    height: 100px;
+    width: 100%;
+  }
+  
+  .image {
+    object-fit: cover;
+    max-width: 300px;
+    height: 300px;
+  }
+  
+  .yellow {
+    color:yellow;
+  }

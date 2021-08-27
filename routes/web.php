@@ -46,15 +46,26 @@ Route::get('/api/videos/{id}', 'VideosController@show');
 
 Route::get('/api/configurations', 'ConfigurationsController@index');
 
-Route::get('/api/messages', 'MessagesController@index');
 Route::post('/api/messages/save', 'MessagesController@store');
+
+Route::get('api/send-mail','MailController@sendMail')->name('mail');
+
+Route::post('/api/subscribe', 'SubscribersController@store');
 
 //protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //editor media upload
     Route::post('/api/tinymce/upload', 'TinymceImageUploadController@store');
-    //posts
 
+    //messages
+    Route::get('/api/messages', 'MessagesController@index');
+
+    //subscribers
+    Route::get('/api/subscribers', 'SubscribersController@index');
+
+    Route::post('/api/subscribers/delete/{id}', 'SubscribersController@destroy');
+
+    //posts
     Route::get('/api/posts/{id}', 'PostsController@show');
 
     Route::get('/api/posts', 'PostsController@index');
