@@ -199,7 +199,7 @@ a[x-apple-data-detectors='true'] {
       <td style="overflow-wrap:break-word;word-break:break-word;padding:0px 10px 15px;font-family:arial,helvetica,sans-serif;" align="left">
         
   <div style="color: #494843; line-height: 170%; text-align: center; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 170%;"><span style="font-family:Arial, Lato, sans-serif; font-size: 14px; line-height: 23.8px; font-weight: 100;">{{ $data['post_summary'] }}</span></p>
+    <p style="font-size: 14px; line-height: 170%; color:#fff;"><span style="font-family:Arial, Lato, sans-serif; font-size: 14px; line-height: 23.8px; font-weight: 100;">{{ $data['post_summary'] }}</span></p>
   </div>
 
       </td>

@@ -146,9 +146,9 @@ class PostsController extends Controller
 
         $emails = array_column($subs, 'email');
         if (!!$request->is_published) {
-            Mail::send('mail.newpost', ['data' => $data], function ($message) use ($emails) {
+            Mail::send('mail.newpost', ['data' => $data], function ($message) use ($emails, $request) {
                 $message->from('mourad777b@gmail.com', 'New Post!');
-                $message->to($emails)->subject('A hitchhiking adventure across Mexico!');
+                $message->to($emails)->subject($request->title);
             });
         }
 
@@ -208,7 +208,7 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         $s3 = Storage::disk('s3');
-       
+
         $post = Post::find($id);
         $initial_post = clone $post;
         $post->title = $request->title;
@@ -220,7 +220,7 @@ class PostsController extends Controller
         $post->summary = $request->summary;
         $post->country = $request->country;
         $post->date_written = $request->date_written;
-        
+
         if ($request->image === 'sameImage') {
             //same image
         } else {
@@ -265,17 +265,17 @@ class PostsController extends Controller
 
         $subs = Subscriber::all()->toArray();
 
-        Log::info('$request->is_published'.$request->is_published);
-        
-        Log::info(json_encode($request->is_published == 1));
-        Log::info('$initial_post->is_published'.$initial_post->is_published);
-        Log::info(json_encode($initial_post));
-        Log::info(json_encode($initial_post->is_published != 1));
+        // Log::info('$request->is_published' . $request->is_published);
+
+        // Log::info(json_encode($request->is_published == 1));
+        // Log::info('$initial_post->is_published' . $initial_post->is_published);
+        // Log::info(json_encode($initial_post));
+        // Log::info(json_encode($initial_post->is_published != 1));
         $emails = array_column($subs, 'email');
         if ($request->is_published == 1 && $initial_post->is_published != 1) {
-            Mail::send('mail.newpost', ['data' => $data], function ($message) use ($emails) {
+            Mail::send('mail.newpost', ['data' => $data], function ($message) use ($emails, $request) {
                 $message->from('mourad777b@gmail.com', 'New Post!');
-                $message->to($emails)->subject('A hitchhiking adventure across Mexico!');
+                $message->to($emails)->subject($request->title);
             });
         }
     }
