@@ -1,10 +1,5 @@
 Features
 
-Design using the Greensock library
--animating the stroke-dash-offset css property on a path element based on scroll to create an effect where a dashed line gets drawn as the user scrolls down, the path coordinates are
-generated using a custom drawn line in adobe illustrator
--snapping the main page sections on scroll
-
 Comments
 -recursive function to infinitly nest comments so that users can reply to others comments any number of times that they want
 
@@ -28,6 +23,4 @@ AWS s3
 -photos are uploaded via the laravel server for the purpose of manipulating the size before storing them in the s3 bucket
 
 Real-time updates using pusher
--pusher v 7 was incompatible with laravel 7 so I had to 
-downgrade pusher to 4.1
 -real-time updates occur when a post,video,photo,category,country thumbnail or comment is updated
