@@ -16,8 +16,8 @@ class AuthController extends Controller
     {
         //
         
-        // Log::info('email' . $request['email']);
-        // Log::info('password' . $request['password']);
+        Log::info('email' . $request['email']);
+        Log::info('password' . $request['password']);
 
         //check if email exists
         $user = User::where('email', $request['email'])->first();
@@ -32,12 +32,11 @@ class AuthController extends Controller
         
         
         $token = $user->createToken('myapptoken')->plainTextToken;
-        return response($token, 201);
         // return response($token, 201);
-        // $response = [
-        //     'user' => $user, 'token' => $token,
-        // ];
-        // return response($response, 201);
+        $response = [
+            'user' => $user, 'token' => $token,
+        ];
+        return response($response, 201);
     }
 
     public function register(Request $request)
