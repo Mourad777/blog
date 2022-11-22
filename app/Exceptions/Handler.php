@@ -34,6 +34,7 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
+    
     public function report(Throwable $exception)
     {
         parent::report($exception);
