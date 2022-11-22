@@ -15,26 +15,28 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         //
-        Log::info('email' . $request['email']);
-        Log::info('password' . $request['password']);
+        
+        // Log::info('email' . $request['email']);
+        // Log::info('password' . $request['password']);
 
         //check if email exists
         $user = User::where('email', $request['email'])->first();
+
+
 
         if (!$user || !Hash::check($request['password'], $user->password)) {
             return response([
                 'message' => 'bad credentials', 401
             ], 401);
         }
-
+        
+  
         $token = $user->createToken('myapptoken')->plainTextToken;
-
-        $response = [
-            'user' => $user, 'token' => $token,
-        ];
-
-
-        return response($response, 201);
+        return response($token, 201);
+        // $response = [
+        //     'user' => $user, 'token' => $token,
+        // ];
+        // return response($response, 201);
     }
 
     public function register(Request $request)

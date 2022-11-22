@@ -62,6 +62,8 @@ class PostsController extends Controller
             return $post;
         });
 
+        Log::info('posts');
+
         $plain_posts_array = $posts->toArray();
 
         $filtered_posts = array_filter($plain_posts_array, function ($item) {
