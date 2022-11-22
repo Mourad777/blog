@@ -30,8 +30,9 @@ class AuthController extends Controller
             ], 401);
         }
         
-        return response($user, 201);
+        
         $token = $user->createToken('myapptoken')->plainTextToken;
+        return response($token, 201);
         // return response($token, 201);
         // $response = [
         //     'user' => $user, 'token' => $token,
