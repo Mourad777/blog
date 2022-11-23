@@ -1,32 +1,20 @@
-FROM webdevops/php-nginx:7.4-alpine
+FROM richarvey/nginx-php-fpm:1.7.2
 
-# Install Laravel framework system requirements (https://laravel.com/docs/8.x/deployment#optimizing-configuration-loading)
-RUN apk add oniguruma-dev postgresql-dev libxml2-dev
-RUN docker-php-ext-install \
-        bcmath \
-        ctype \
-        fileinfo \
-        json \
-        mbstring \
-        pdo_mysql \
-        pdo_pgsql \
-        tokenizer \
-        xml
-
-# Copy Composer binary from the Composer official Docker image
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-ENV WEB_DOCUMENT_ROOT /app/public
-ENV APP_ENV production
-WORKDIR /app
 COPY . .
 
-RUN composer install --no-interaction --optimize-autoloader --no-dev
-# Optimizing Configuration loading
-RUN php artisan config:cache
-# Optimizing Route loading
-RUN php artisan route:cache
-# Optimizing View loading
-RUN php artisan view:cache
+# Image config
+ENV SKIP_COMPOSER 1
+ENV WEBROOT /var/www/html/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
 
-RUN chown -R application:application .
+# Laravel config
+ENV APP_ENV production
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
+
+# Allow composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+CMD ["/start.sh"]
