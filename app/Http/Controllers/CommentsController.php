@@ -37,7 +37,7 @@ class CommentsController extends Controller
                     }
 
                     if ((!$config && !auth()->user() && $comment->is_approved === 0) || ($is_comments_approval_required && !auth()->user() && $comment->is_approved === 0)) {
-                        return $comment->content = '';
+                        return null;
                     } else {
                         return $comment;
                     }
