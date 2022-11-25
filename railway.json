@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "public/",
+    "startCommand": "php artisan serve",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
